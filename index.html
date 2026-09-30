@@ -2895,6 +2895,43 @@
             <button id="openRecoveryModalBtn" class="outline small-btn" style="width:auto;">🔄 Restore from Code</button>
           </div>
         </div>
+
+        <div class="card" id="card-settings-icons">
+          <div class="card-header">
+            <h2><span class="card-icon">🎨</span> App Icons</h2>
+            <div class="header-actions">
+              <button class="expand-btn" onclick="openFullscreen('card-settings-icons','App Icons')">⛶</button>
+              <span class="toggle-icon" onclick="event.stopPropagation();this.closest('.card').classList.toggle('collapsed')">▼</span>
+            </div>
+          </div>
+          <div class="card-body">
+            <p style="font-size:0.8rem;color:var(--text-2);margin-bottom:12px;line-height:1.6;">
+              Download high-resolution app icons. Use these if you want to customize your home screen icon, or rebuild the app on another device.
+            </p>
+            <div id="iconPreviewRow" style="display:flex;gap:16px;justify-content:center;align-items:center;margin-bottom:16px;flex-wrap:wrap;">
+              <div style="display:flex;flex-direction:column;align-items:center;gap:6px;">
+                <div style="background:var(--surface-2);border:1px solid var(--border);border-radius:16px;padding:10px;display:flex;align-items:center;justify-content:center;">
+                  <canvas id="iconPreview192" width="100" height="100" style="display:block;border-radius:12px;"></canvas>
+                </div>
+                <span style="font-size:0.62rem;font-weight:700;color:var(--text-3);text-transform:uppercase;letter-spacing:0.08em;">192 × 192</span>
+              </div>
+              <div style="display:flex;flex-direction:column;align-items:center;gap:6px;">
+                <div style="background:var(--surface-2);border:1px solid var(--border);border-radius:16px;padding:10px;display:flex;align-items:center;justify-content:center;">
+                  <canvas id="iconPreview512" width="140" height="140" style="display:block;border-radius:12px;"></canvas>
+                </div>
+                <span style="font-size:0.62rem;font-weight:700;color:var(--text-3);text-transform:uppercase;letter-spacing:0.08em;">512 × 512</span>
+              </div>
+            </div>
+            <div style="display:flex;gap:10px;flex-wrap:wrap;">
+              <button id="downloadIcon192Btn" class="outline small-btn" style="width:auto;">⬇ 192px</button>
+              <button id="downloadIcon512Btn" class="outline small-btn" style="width:auto;">⬇ 512px</button>
+              <button id="downloadIconBothBtn" class="gold-btn small-btn" style="width:auto;">📦 Download Both</button>
+            </div>
+            <p style="font-size:0.7rem;margin-top:10px;color:var(--text-3);line-height:1.6;">
+              Icons are rendered live and saved as PNG files directly to your device.
+            </p>
+          </div>
+        </div>
       </div>
 
       <footer>PAYPLAN LEDGER v14.0 • OFFLINE-FIRST • ALL DATA STORED LOCALLY</footer>
@@ -3075,7 +3112,6 @@
     let agreements = {};
     let currentAgreementId = null;
     let currentCurrencySymbol = '$';
-    // FIX: renamed from celebShownForAgreement for clarity
     let celebrationShown = {};
     let editRecordTarget = null;
     let fullscreenData = null;
@@ -3129,8 +3165,6 @@
 
     function getTodayDate() { return new Date().toISOString().slice(0, 10); }
 
-    // FIX: Locale-safe currency formatting — always "en-US" style so
-    // "$1,234.56" doesn't become "$1.234,56" on non-English devices.
     function formatCurrency(v) {
       const n = Number(v) || 0;
       return currentCurrencySymbol + n.toLocaleString('en-US', {
@@ -3259,6 +3293,8 @@
       for (const id in agreements) {
         if (!agreements[id].schedule) agreements[id].schedule = { nextDueDate: '', installmentAmount: '', frequency: 'monthly' };
         if (!Array.isArray(agreements[id].records)) agreements[id].records = [];
+        // FIX: normalize legacy agreements that were saved with 5000 default
+        if (typeof agreements[id].totalHireAmount !== 'number') agreements[id].totalHireAmount = 0;
       }
       celebrationShown = {};
     }
@@ -3353,7 +3389,8 @@
     function createNewAgreement() {
       const name = newAgreementNameInput.value.trim() || 'New Agreement';
       const id = Date.now().toString();
-      agreements[id] = { name, records: [], totalHireAmount: 5000, schedule: { nextDueDate: '', installmentAmount: '', frequency: 'monthly' } };
+      // FIX: new agreements start with totalHireAmount = 0, not 5000.
+      agreements[id] = { name, records: [], totalHireAmount: 0, schedule: { nextDueDate: '', installmentAmount: '', frequency: 'monthly' } };
       currentAgreementId = id;
       saveAgreements(); renderAgreementsList(); loadCurrentAgreementData();
       updatePreviewForCurrent(); updateChartForCurrent(); loadScheduleIntoForm();
@@ -3396,7 +3433,9 @@
         return;
       }
       const ag = agreements[currentAgreementId];
-      totalHireAmountInput.value = ag.totalHireAmount || 5000;
+      // FIX: no longer forces 5000 as a fallback. If the agreement has 0
+      // or no value, the field stays empty so the user starts from scratch.
+      totalHireAmountInput.value = (ag.totalHireAmount && ag.totalHireAmount > 0) ? ag.totalHireAmount : '';
       renderHistoryTable(ag.records);
       updatePreviewForCurrent();
       updateChartForCurrent();
@@ -3452,9 +3491,6 @@
       showToast('Record deleted');
     }
 
-    // FIX: empty contract field now shows 0 in preview instead of silently
-    // falling back to the stored value, and celebration tracking uses
-    // celebrationShown instead of the old celebShownForAgreement.
     function updatePreviewForCurrent() {
       if (!currentAgreementId) return;
       const ag = agreements[currentAgreementId];
@@ -3545,7 +3581,10 @@
       const labels = sorted.map(r => r.date);
       let run = 0;
       const runs = sorted.map(r => { run += r.amountPaid; return run; });
-      const target = new Array(sorted.length).fill(ag.totalHireAmount || 5000);
+      // FIX: target line uses the agreement's actual total (or 0 if unset),
+      // not a hardcoded 5000 fallback.
+      const targetValue = (ag.totalHireAmount && ag.totalHireAmount > 0) ? ag.totalHireAmount : 0;
+      const target = new Array(sorted.length).fill(targetValue);
       const ctx = canvasEl.getContext('2d');
       if (!ctx) return;
       const isDark = document.body.classList.contains('dark');
@@ -3854,7 +3893,6 @@
       }
     }
 
-    // FIX: escapeHtml now also handles quotes and single quotes
     function escapeHtml(s) {
       return s ? String(s).replace(/[&<>"']/g, function(m) {
         return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[m];
@@ -3963,9 +4001,6 @@
       reportEndDate.value = new Date(n.getFullYear(), n.getMonth() + 1, 0).toISOString().slice(0, 10);
     }
 
-    /* ============================================================
-       THEME TOGGLE — light / dark mode restored
-       ============================================================ */
     function toggleTheme() {
       const isDark = document.body.classList.toggle('dark');
       themeToggle.textContent = isDark ? '☀️' : '🌙';
@@ -4174,9 +4209,6 @@
     }
     setTimeout(() => { if (!loaderHidden) hideLoader(); }, 3000);
 
-    /* ============================================================
-       SIDEBAR — auto-close after menu selection
-       ============================================================ */
     function toggleSidebar() {
       const isHidden = appSidebar.classList.toggle('sidebar-hidden');
       document.body.classList.toggle('sidebar-closed', isHidden);
@@ -4208,9 +4240,6 @@
       }
     }
 
-    // FIX: openFullscreen now destroys any live chart before moving the
-    // canvas, so a second open — or a section switch — can't orphan
-    // a Chart.js instance.
     function openFullscreen(elementId, title) {
       const card = document.getElementById(elementId);
       if (!card) { showToast('Cannot expand this section'); return; }
@@ -4242,8 +4271,6 @@
       }, 50);
     }
 
-    // FIX: closeFullscreen restores the original canvas id and destroys
-    // the fullscreen chart instance, preventing duplicate Chart objects.
     function closeFullscreen(e) {
       if (e && e.target && e.target !== e.currentTarget) return;
       if (!fullscreenData) return;
@@ -4267,9 +4294,6 @@
       setTimeout(() => { updateChartForCurrent(); }, 30);
     }
 
-    /* ============================================================
-       NAVIGATION — with auto-close on mobile
-       ============================================================ */
     function switchSection(sectionId) {
       document.querySelectorAll('.section').forEach(el => el.classList.remove('active'));
       const target = document.getElementById('section-' + sectionId);
@@ -4292,8 +4316,6 @@
     function bindEvents() {
       const debouncedPreview = debounce(updatePreviewForCurrent, 50);
 
-      // FIX: only persist the contract amount when the field parses to a
-      // positive number. Empty field no longer silently resets to 5000.
       totalHireAmountInput.addEventListener('input', () => {
         debouncedPreview();
         if (currentAgreementId && agreements[currentAgreementId]) {
@@ -4351,7 +4373,8 @@
 
       document.getElementById('welcomeStartFresh').addEventListener('click', () => {
         const id = Date.now().toString();
-        agreements = { [id]: { name: 'My First Agreement', records: [], totalHireAmount: 5000, schedule: { nextDueDate: '', installmentAmount: '', frequency: 'monthly' } } };
+        // FIX: fresh start also begins with totalHireAmount = 0.
+        agreements = { [id]: { name: 'My First Agreement', records: [], totalHireAmount: 0, schedule: { nextDueDate: '', installmentAmount: '', frequency: 'monthly' } } };
         currentAgreementId = id;
         saveAgreements(); renderAgreementsList(); loadCurrentAgreementData();
         updatePreviewForCurrent(); updateChartForCurrent(); loadScheduleIntoForm();
@@ -4411,6 +4434,9 @@
           toggleSidebar();
         }
       });
+
+      // Wire up the icon download buttons
+      initIconDownloadUI();
     }
 
     function initMainApp() {
@@ -4456,6 +4482,164 @@
     document.getElementById('passwordInput').addEventListener('keypress', function(e) {
       if (e.key === 'Enter') handlePasswordSubmit();
     });
+
+    // ============================================================
+    //  APP ICON RENDERER + DOWNLOAD
+    // ============================================================
+    function drawAppIcon(ctx, size) {
+      const r = size;
+
+      const bgGrad = ctx.createRadialGradient(r * 0.3, r * 0.25, 0, r * 0.5, r * 0.5, r * 0.9);
+      bgGrad.addColorStop(0, '#101a30');
+      bgGrad.addColorStop(0.5, '#0a1220');
+      bgGrad.addColorStop(1, '#050812');
+      ctx.fillStyle = bgGrad;
+      ctx.fillRect(0, 0, r, r);
+
+      const glow = ctx.createRadialGradient(r * 0.5, r * 0.5, 0, r * 0.5, r * 0.5, r * 0.7);
+      glow.addColorStop(0, 'rgba(16, 185, 129, 0.35)');
+      glow.addColorStop(0.6, 'rgba(16, 185, 129, 0.08)');
+      glow.addColorStop(1, 'rgba(16, 185, 129, 0)');
+      ctx.fillStyle = glow;
+      ctx.fillRect(0, 0, r, r);
+
+      const pad = r * 0.18;
+      const cardX = pad, cardY = pad;
+      const cardW = r - pad * 2, cardH = r - pad * 2;
+      const cardR = r * 0.14;
+
+      const cardGrad = ctx.createLinearGradient(cardX, cardY, cardX + cardW, cardY + cardH);
+      cardGrad.addColorStop(0, '#10b981');
+      cardGrad.addColorStop(1, '#059669');
+
+      ctx.save();
+      ctx.shadowColor = 'rgba(16, 185, 129, 0.55)';
+      ctx.shadowBlur = r * 0.14;
+      ctx.shadowOffsetY = r * 0.04;
+      appRoundRect(ctx, cardX, cardY, cardW, cardH, cardR);
+      ctx.fillStyle = cardGrad;
+      ctx.fill();
+      ctx.restore();
+
+      const highlight = ctx.createLinearGradient(0, cardY, 0, cardY + cardH * 0.5);
+      highlight.addColorStop(0, 'rgba(255, 255, 255, 0.28)');
+      highlight.addColorStop(1, 'rgba(255, 255, 255, 0)');
+      appRoundRect(ctx, cardX, cardY, cardW, cardH, cardR);
+      ctx.fillStyle = highlight;
+      ctx.fill();
+
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.95)';
+      ctx.lineCap = 'round';
+      ctx.lineWidth = r * 0.045;
+
+      const lineStartX = cardX + cardW * 0.22;
+      const lineEndX   = cardX + cardW * 0.78;
+
+      ctx.beginPath();
+      ctx.moveTo(lineStartX, cardY + cardH * 0.34);
+      ctx.lineTo(lineEndX, cardY + cardH * 0.34);
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.moveTo(lineStartX, cardY + cardH * 0.50);
+      ctx.lineTo(lineEndX - cardW * 0.12, cardY + cardH * 0.50);
+      ctx.stroke();
+
+      ctx.globalAlpha = 0.55;
+      ctx.beginPath();
+      ctx.moveTo(lineStartX, cardY + cardH * 0.66);
+      ctx.lineTo(lineEndX - cardW * 0.28, cardY + cardH * 0.66);
+      ctx.stroke();
+      ctx.globalAlpha = 1;
+
+      const dotR = r * 0.07;
+      const dotX = cardX + cardW - dotR * 1.1;
+      const dotY = cardY + dotR * 1.1;
+
+      const halo = ctx.createRadialGradient(dotX, dotY, 0, dotX, dotY, dotR * 2.2);
+      halo.addColorStop(0, 'rgba(251, 191, 36, 0.6)');
+      halo.addColorStop(1, 'rgba(251, 191, 36, 0)');
+      ctx.fillStyle = halo;
+      ctx.beginPath();
+      ctx.arc(dotX, dotY, dotR * 2.2, 0, Math.PI * 2);
+      ctx.fill();
+
+      const dotGrad = ctx.createRadialGradient(dotX - dotR * 0.3, dotY - dotR * 0.3, 0, dotX, dotY, dotR);
+      dotGrad.addColorStop(0, '#fde68a');
+      dotGrad.addColorStop(1, '#f59e0b');
+      ctx.fillStyle = dotGrad;
+      ctx.beginPath();
+      ctx.arc(dotX, dotY, dotR, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
+      ctx.beginPath();
+      ctx.arc(dotX - dotR * 0.35, dotY - dotR * 0.35, dotR * 0.3, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    function appRoundRect(ctx, x, y, w, h, r) {
+      ctx.beginPath();
+      ctx.moveTo(x + r, y);
+      ctx.lineTo(x + w - r, y);
+      ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+      ctx.lineTo(x + w, y + h - r);
+      ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+      ctx.lineTo(x + r, y + h);
+      ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+      ctx.lineTo(x, y + r);
+      ctx.quadraticCurveTo(x, y, x + r, y);
+      ctx.closePath();
+    }
+
+    function renderIconPreview(canvasId, size) {
+      const c = document.getElementById(canvasId);
+      if (!c) return;
+      const ctx = c.getContext('2d');
+      const dpr = window.devicePixelRatio || 1;
+      c.width = size * dpr;
+      c.height = size * dpr;
+      c.style.width = size + 'px';
+      c.style.height = size + 'px';
+      ctx.scale(dpr, dpr);
+      drawAppIcon(ctx, size);
+    }
+
+    function downloadAppIcon(size) {
+      const c = document.createElement('canvas');
+      c.width = size;
+      c.height = size;
+      const ctx = c.getContext('2d');
+      drawAppIcon(ctx, size);
+      c.toBlob(function(blob) {
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'icon-' + size + '.png';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        setTimeout(function() { URL.revokeObjectURL(url); }, 1000);
+        showToast('✅ icon-' + size + '.png downloaded');
+      }, 'image/png');
+    }
+
+    function initIconDownloadUI() {
+      renderIconPreview('iconPreview192', 100);
+      renderIconPreview('iconPreview512', 140);
+
+      const b192 = document.getElementById('downloadIcon192Btn');
+      const b512 = document.getElementById('downloadIcon512Btn');
+      const bBoth = document.getElementById('downloadIconBothBtn');
+
+      if (b192) b192.addEventListener('click', function() { downloadAppIcon(192); });
+      if (b512) b512.addEventListener('click', function() { downloadAppIcon(512); });
+      if (bBoth) bBoth.addEventListener('click', function() {
+        showToast('Generating both icons...');
+        downloadAppIcon(192);
+        setTimeout(function() { downloadAppIcon(512); }, 400);
+      });
+    }
 
     // =====================================================================
     //  AUTO-DETECTING INSTALL GUIDE
