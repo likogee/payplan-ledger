@@ -1,0 +1,4625 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no" />
+  <title>PayPlan Ledger</title>
+  <meta name="theme-color" content="#070a14" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="PayPlan Ledger" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="application-name" content="PayPlan Ledger" />
+  <meta name="format-detection" content="telephone=no" />
+  <meta name="description" content="Offline hire purchase and installment payment tracker." />
+  <link rel="icon" type="image/png" href="./icon-192.png" />
+  <link rel="apple-touch-icon" href="./icon-192.png" />
+  <link rel="manifest" href="./manifest.json" />
+
+  <script>
+    (function() {
+      var s = document.createElement('script');
+      s.src = 'https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js';
+      s.defer = true;
+      s.onload = function() { window.__chartReady = true; if (window.__chartReadyCallback) window.__chartReadyCallback(); };
+      s.onerror = function() {};
+      document.head.appendChild(s);
+    })();
+
+    (function() {
+      var j = document.createElement('script');
+      j.src = 'https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js';
+      j.defer = true;
+      document.head.appendChild(j);
+
+      var h = document.createElement('script');
+      h.src = 'https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js';
+      h.defer = true;
+      document.head.appendChild(h);
+    })();
+
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', function() {
+        navigator.serviceWorker.register('./sw.js', { scope: './' }).catch(function() {});
+      });
+    }
+  </script>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    /* ============================================================
+       LIGHT THEME (default)
+       ============================================================ */
+    :root {
+      --bg: #f5f7fb;
+      --bg-elevated: #ffffff;
+      --surface: #ffffff;
+      --surface-2: #f8fafc;
+      --surface-3: #eef2f8;
+      --border: rgba(15, 23, 42, 0.08);
+      --border-strong: rgba(15, 23, 42, 0.12);
+      --divider: rgba(15, 23, 42, 0.06);
+
+      --text: #0a0f1f;
+      --text-2: #475569;
+      --text-3: #94a3b8;
+
+      --primary: #10b981;
+      --primary-2: #059669;
+      --primary-soft: rgba(16, 185, 129, 0.1);
+      --primary-gradient: linear-gradient(135deg, #10b981 0%, #059669 100%);
+
+      --accent: #f59e0b;
+      --accent-soft: rgba(245, 158, 11, 0.1);
+      --accent-gradient: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+
+      --danger: #ef4444;
+      --danger-soft: rgba(239, 68, 68, 0.1);
+
+      --info: #3b82f6;
+      --info-soft: rgba(59, 130, 246, 0.1);
+
+      --shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.04), 0 1px 3px rgba(15, 23, 42, 0.03);
+      --shadow-md: 0 4px 12px rgba(15, 23, 42, 0.06), 0 2px 4px rgba(15, 23, 42, 0.04);
+      --shadow-lg: 0 12px 32px rgba(15, 23, 42, 0.1), 0 4px 8px rgba(15, 23, 42, 0.04);
+      --shadow-xl: 0 24px 64px rgba(15, 23, 42, 0.16), 0 8px 16px rgba(15, 23, 42, 0.06);
+      --shadow-primary: 0 8px 24px rgba(16, 185, 129, 0.28);
+
+      --radius-sm: 12px;
+      --radius: 16px;
+      --radius-lg: 20px;
+      --radius-xl: 28px;
+      --radius-full: 999px;
+
+      --sidebar-width: 72px;
+      --transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      --transition-spring: 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    /* ============================================================
+       DARK THEME
+       ============================================================ */
+    body.dark {
+      --bg: #070a14;
+      --bg-elevated: #0d1220;
+      --surface: #131a2c;
+      --surface-2: #182034;
+      --surface-3: #1e283e;
+      --border: rgba(255, 255, 255, 0.08);
+      --border-strong: rgba(255, 255, 255, 0.14);
+      --divider: rgba(255, 255, 255, 0.06);
+
+      --text: #f1f5f9;
+      --text-2: #94a3b8;
+      --text-3: #64748b;
+
+      --primary: #10b981;
+      --primary-2: #34d399;
+      --primary-soft: rgba(16, 185, 129, 0.14);
+      --primary-gradient: linear-gradient(135deg, #10b981 0%, #059669 100%);
+
+      --accent: #fbbf24;
+      --accent-soft: rgba(251, 191, 36, 0.14);
+      --accent-gradient: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+
+      --danger: #f87171;
+      --danger-soft: rgba(248, 113, 113, 0.14);
+
+      --info: #60a5fa;
+      --info-soft: rgba(96, 165, 250, 0.14);
+
+      --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4), 0 1px 3px rgba(0, 0, 0, 0.3);
+      --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.4), 0 2px 4px rgba(0, 0, 0, 0.3);
+      --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.5), 0 4px 8px rgba(0, 0, 0, 0.3);
+      --shadow-xl: 0 24px 64px rgba(0, 0, 0, 0.6), 0 8px 16px rgba(0, 0, 0, 0.4);
+      --shadow-primary: 0 8px 32px rgba(16, 185, 129, 0.4);
+    }
+
+    html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+
+    body {
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      background: var(--bg);
+      min-height: 100vh;
+      min-height: 100dvh;
+      color: var(--text);
+      overflow-x: hidden;
+      padding-top: env(safe-area-inset-top, 0);
+      padding-bottom: env(safe-area-inset-bottom, 0);
+      overscroll-behavior-y: contain;
+      position: relative;
+      transition: background 0.3s ease, color 0.3s ease;
+    }
+
+    input, select, textarea { user-select: auto; -webkit-user-select: text; }
+    ::selection { background: var(--primary); color: white; }
+
+    .ambient-glow {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      display: none;
+    }
+    body.dark .ambient-glow { display: block; }
+    .ambient-glow::before {
+      content: '';
+      position: absolute;
+      top: -40%; left: -20%;
+      width: 80%; height: 80%;
+      background: radial-gradient(circle, rgba(16, 185, 129, 0.1), transparent 70%);
+    }
+    .ambient-glow::after {
+      content: '';
+      position: absolute;
+      bottom: -30%; right: -20%;
+      width: 70%; height: 70%;
+      background: radial-gradient(circle, rgba(251, 191, 36, 0.06), transparent 70%);
+    }
+
+    body.standalone-mode .pwa-install-overlay { display: none !important; }
+
+    /* ============================================================
+       SIDEBAR BACKDROP (mobile)
+       ============================================================ */
+    .sidebar-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(4px);
+      z-index: 998;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.3s ease, visibility 0.3s ease;
+    }
+    .sidebar-backdrop.visible {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    /* ============================================================
+       PWA INSTALL OVERLAY
+       ============================================================ */
+    .pwa-install-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 99999;
+      background: radial-gradient(ellipse at 30% 20%, #0a0f1f, #050812 70%);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+    .pwa-install-overlay.visible { display: flex; }
+    .pwa-install-box {
+      background: linear-gradient(180deg, rgba(19, 26, 44, 0.98) 0%, rgba(13, 18, 32, 0.98) 100%);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 32px;
+      padding: 40px 32px 32px;
+      max-width: 440px;
+      width: 100%;
+      text-align: center;
+      box-shadow: 0 32px 96px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+      color: #f1f5f9;
+      position: relative;
+      overflow: hidden;
+    }
+    .pwa-install-box::before {
+      content: '';
+      position: absolute;
+      top: -50%; left: -50%;
+      width: 200%; height: 200%;
+      background: radial-gradient(circle, rgba(16, 185, 129, 0.15), transparent 40%);
+      pointer-events: none;
+    }
+    .pwa-install-box .pwa-logo {
+      width: 96px; height: 96px;
+      background: var(--primary-gradient);
+      border-radius: 28px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3rem;
+      color: white;
+      margin-bottom: 20px;
+      box-shadow: 0 16px 48px rgba(16, 185, 129, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+      animation: logoPulse 3s ease-in-out infinite;
+      position: relative;
+    }
+    @keyframes logoPulse {
+      0%, 100% { box-shadow: 0 16px 48px rgba(16, 185, 129, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.2); }
+      50% { box-shadow: 0 20px 60px rgba(16, 185, 129, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.2); }
+    }
+    .pwa-install-box h2 {
+      font-size: 1.6rem;
+      font-weight: 800;
+      margin-bottom: 8px;
+      background: linear-gradient(135deg, #ffffff 0%, #94a3b8 100%);
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+      letter-spacing: -0.02em;
+    }
+    .pwa-install-box p {
+      font-size: 0.88rem;
+      color: #94a3b8;
+      line-height: 1.6;
+      margin-bottom: 24px;
+    }
+    .pwa-install-box .pwa-install-cta {
+      background: var(--primary-gradient);
+      color: #fff;
+      border: none;
+      border-radius: 999px;
+      padding: 18px 28px;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      width: 100%;
+      margin-bottom: 12px;
+      box-shadow: 0 12px 32px rgba(16, 185, 129, 0.4);
+      transition: transform 0.2s, box-shadow 0.2s;
+      font-family: inherit;
+    }
+    .pwa-install-box .pwa-install-cta:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 16px 40px rgba(16, 185, 129, 0.5);
+    }
+    .pwa-install-box .pwa-skip-btn {
+      background: transparent;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      color: #94a3b8;
+      border-radius: 999px;
+      padding: 12px 20px;
+      font-size: 0.82rem;
+      cursor: pointer;
+      width: 100%;
+      font-weight: 600;
+      font-family: inherit;
+      transition: all 0.2s;
+    }
+    .pwa-install-box .pwa-instructions {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 16px;
+      padding: 14px 16px;
+      margin-top: 16px;
+      text-align: left;
+      font-size: 0.75rem;
+      color: #94a3b8;
+      line-height: 1.7;
+    }
+    .pwa-install-box .pwa-instructions strong { color: #fbbf24; }
+
+    /* ============================================================
+       SIDEBAR
+       ============================================================ */
+    .app-sidebar {
+      position: fixed;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: var(--sidebar-width);
+      background: var(--bg-elevated);
+      border-right: 1px solid var(--border);
+      z-index: 999;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 16px 0 20px;
+      transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+      will-change: transform;
+      overflow-y: auto;
+    }
+    .app-sidebar.sidebar-hidden { transform: translateX(-100%); }
+
+    .app-sidebar .logo {
+      width: 42px;
+      height: 42px;
+      background: var(--primary-gradient);
+      border-radius: 13px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.25rem;
+      color: white;
+      margin-bottom: 20px;
+      cursor: pointer;
+      transition: var(--transition-spring);
+      box-shadow: var(--shadow-primary);
+      flex-shrink: 0;
+    }
+    .app-sidebar .logo:hover { transform: scale(1.08) rotate(-3deg); }
+
+    .sidebar-close-btn {
+      position: absolute;
+      top: 8px;
+      right: 6px;
+      width: 28px;
+      height: 28px;
+      border-radius: 9px;
+      background: var(--danger-soft);
+      border: 1px solid rgba(239, 68, 68, 0.2);
+      color: var(--danger);
+      font-size: 0.9rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.25s;
+      outline: none;
+      font-family: inherit;
+      z-index: 10;
+    }
+    .sidebar-close-btn:hover,
+    .sidebar-close-btn:active {
+      background: var(--danger);
+      color: white;
+      transform: rotate(90deg) scale(1.05);
+    }
+
+    .app-sidebar .nav-icons {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      flex: 1;
+      width: 100%;
+      padding: 0 8px;
+      align-items: center;
+    }
+    .app-sidebar .nav-icons button {
+      background: transparent;
+      border: none;
+      border-radius: 13px;
+      padding: 10px 0;
+      width: 100%;
+      color: var(--text-3);
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: var(--transition);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2px;
+      outline: none;
+      font-family: inherit;
+    }
+    .app-sidebar .nav-icons button .nav-icon-emoji {
+      font-size: 1.1rem;
+      line-height: 1;
+    }
+    .app-sidebar .nav-icons button .nav-icon-label {
+      font-size: 0.52rem;
+      font-weight: 700;
+      letter-spacing: 0.3px;
+      opacity: 0;
+      transition: var(--transition);
+      text-transform: uppercase;
+    }
+    .app-sidebar .nav-icons button.active {
+      color: white;
+      background: var(--primary-gradient);
+      box-shadow: 0 6px 16px rgba(16, 185, 129, 0.35);
+    }
+    .app-sidebar .nav-icons button.active .nav-icon-label { opacity: 1; }
+    .app-sidebar .nav-icons button:hover:not(.active) {
+      color: var(--text);
+      background: var(--surface-3);
+    }
+    .app-sidebar .nav-icons button:hover:not(.active) .nav-icon-label { opacity: 1; }
+
+    .app-sidebar .sidebar-footer {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      padding-top: 12px;
+      border-top: 1px solid var(--divider);
+      width: 60%;
+      flex-shrink: 0;
+    }
+    .app-sidebar .sidebar-footer .theme-toggle-btn {
+      background: var(--surface-3);
+      border: none;
+      color: var(--text-2);
+      font-size: 0.95rem;
+      cursor: pointer;
+      padding: 9px;
+      border-radius: 11px;
+      transition: var(--transition);
+      outline: none;
+      width: 100%;
+      font-family: inherit;
+    }
+    .app-sidebar .sidebar-footer .theme-toggle-btn:hover {
+      background: var(--accent-soft);
+      color: var(--accent);
+      transform: scale(1.05);
+    }
+
+    .floating-menu-btn {
+      position: fixed;
+      top: 12px;
+      left: 12px;
+      width: 44px;
+      height: 44px;
+      border-radius: 13px;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-lg);
+      color: var(--text);
+      font-size: 1.1rem;
+      cursor: pointer;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      transition: var(--transition);
+      z-index: 1001;
+      outline: none;
+      font-family: inherit;
+    }
+    .floating-menu-btn.visible { display: flex; }
+    .floating-menu-btn:hover {
+      transform: scale(1.05);
+      background: var(--surface-3);
+    }
+
+    /* ============================================================
+       MAIN CONTENT
+       ============================================================ */
+    .main-content {
+      margin-left: var(--sidebar-width);
+      padding: 20px 24px 100px;
+      max-width: 720px;
+      transition: margin-left 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      z-index: 1;
+    }
+    body.sidebar-closed .main-content {
+      margin-left: 0;
+      padding-left: 24px;
+    }
+    body.sidebar-closed .sticky-header .greeting {
+      padding-left: 56px;
+    }
+
+    /* ============================================================
+       STICKY HEADER
+       ============================================================ */
+    .sticky-header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--bg);
+      padding: 8px 0 16px;
+      margin: -8px 0 16px;
+      border-bottom: 1px solid var(--divider);
+    }
+    .sticky-header .top-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .sticky-header .greeting {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      transition: padding-left 0.35s;
+      min-width: 0;
+      flex: 1;
+    }
+    .sticky-header .greeting h1 {
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: var(--text);
+      letter-spacing: -0.02em;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+      min-width: 0;
+    }
+    .sticky-header .greeting h1 .highlight {
+      background: var(--primary-gradient);
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+      font-weight: 900;
+      flex-shrink: 0;
+    }
+    .sticky-header .greeting .app-logo-sm {
+      font-size: 1.3rem;
+      width: 38px;
+      height: 38px;
+      background: var(--primary-gradient);
+      border-radius: 11px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: var(--shadow-primary);
+      flex-shrink: 0;
+      color: white;
+    }
+    #headerAgreementName {
+      font-weight: 600;
+      color: var(--text-2);
+      cursor: pointer;
+      border-bottom: 2px dashed var(--accent);
+      padding: 0 4px;
+      transition: var(--transition);
+      display: inline-block;
+      font-size: 0.95rem;
+      max-width: 100%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    #headerAgreementName:hover {
+      color: var(--accent);
+      background: var(--accent-soft);
+      border-radius: 6px;
+    }
+
+    /* ============================================================
+       SECTIONS & CARDS
+       ============================================================ */
+    .section { display: none; }
+    .section.active {
+      display: block;
+      animation: sectionFade 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    @keyframes sectionFade {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .card {
+      background: var(--surface);
+      border-radius: var(--radius-lg);
+      padding: 1.35rem 1.35rem 1.5rem;
+      margin-bottom: 16px;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-sm);
+      transition: box-shadow 0.3s, transform 0.3s, border-color 0.3s, background 0.3s;
+      position: relative;
+      overflow: hidden;
+    }
+    .card:hover {
+      box-shadow: var(--shadow-md);
+      border-color: var(--border-strong);
+    }
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--primary), transparent);
+      opacity: 0.4;
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      padding-bottom: 4px;
+      gap: 10px;
+    }
+    .card-header h2 {
+      font-size: 0.92rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--text);
+      letter-spacing: -0.01em;
+      flex-wrap: wrap;
+    }
+    .card-header h2 .card-icon {
+      width: 30px;
+      height: 30px;
+      background: var(--primary-soft);
+      color: var(--primary);
+      border-radius: 9px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.9rem;
+      flex-shrink: 0;
+    }
+    .card-header .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-shrink: 0;
+    }
+    .card-header .expand-btn {
+      font-size: 0.8rem;
+      color: var(--text-3);
+      transition: var(--transition);
+      width: 30px;
+      height: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 9px;
+      cursor: pointer;
+      border: none;
+      padding: 0;
+      margin: 0;
+      background: transparent;
+      outline: none;
+      font-family: inherit;
+    }
+    .card-header .expand-btn:hover {
+      background: var(--primary-soft);
+      color: var(--primary);
+      transform: scale(1.05);
+    }
+    .card-header .toggle-icon {
+      font-size: 0.7rem;
+      color: var(--text-3);
+      transition: transform 0.3s;
+      width: 30px;
+      height: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 9px;
+      background: var(--surface-3);
+      cursor: pointer;
+    }
+    .card-body { margin-top: 1rem; }
+    .card.collapsed .card-body { display: none; }
+    .card.collapsed .toggle-icon { transform: rotate(-90deg); }
+
+    /* ============================================================
+       FULLSCREEN OVERLAY
+       ============================================================ */
+    .fullscreen-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(5, 8, 18, 0.75);
+      z-index: 15000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .fullscreen-overlay.active {
+      display: flex;
+      animation: fadeIn 0.25s ease;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    .fullscreen-card {
+      background: var(--bg-elevated);
+      border-radius: var(--radius-xl);
+      padding: 2rem 2rem 2.5rem;
+      max-width: 720px;
+      width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-xl);
+      position: relative;
+      animation: slideUp 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    @keyframes slideUp {
+      from { transform: translateY(30px) scale(0.96); opacity: 0; }
+      to { transform: translateY(0) scale(1); opacity: 1; }
+    }
+    .fullscreen-card .fs-close-btn {
+      position: sticky;
+      top: 0;
+      float: right;
+      background: var(--surface-3);
+      border: none;
+      border-radius: 12px;
+      width: 38px;
+      height: 38px;
+      font-size: 1.05rem;
+      color: var(--text-2);
+      cursor: pointer;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 12px;
+      z-index: 10;
+      outline: none;
+      font-family: inherit;
+    }
+    .fullscreen-card .fs-close-btn:hover {
+      background: var(--danger-soft);
+      color: var(--danger);
+      transform: rotate(90deg);
+    }
+    .fullscreen-card .fs-title {
+      font-size: 1.3rem;
+      font-weight: 800;
+      color: var(--text);
+      margin-bottom: 1.25rem;
+      letter-spacing: -0.02em;
+      clear: both;
+    }
+    .fullscreen-card .fs-body {
+      color: var(--text);
+      font-size: 1rem;
+      line-height: 1.7;
+    }
+    .fullscreen-card .fs-body .card-body { margin-top: 0; padding: 0; }
+    .fullscreen-card .fs-body .card {
+      box-shadow: none;
+      border: none;
+      padding: 0;
+      margin: 0;
+      background: transparent;
+    }
+    .fullscreen-card .fs-body .card::before { display: none; }
+
+    /* ============================================================
+       MODALS
+       ============================================================ */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(5, 8, 18, 0.75);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 20000;
+      visibility: hidden;
+      opacity: 0;
+      transition: opacity 0.25s ease;
+      pointer-events: none;
+      padding: 20px;
+      overflow-y: auto;
+    }
+    .modal-overlay.active {
+      visibility: visible;
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .modal-card {
+      background: var(--bg-elevated);
+      border-radius: var(--radius-xl);
+      padding: 32px 28px 28px;
+      max-width: 440px;
+      width: 100%;
+      max-height: 88vh;
+      overflow-y: auto;
+      text-align: center;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-xl);
+      transform: scale(0.94);
+      transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.25s;
+      opacity: 0;
+      position: relative;
+    }
+    .modal-overlay.active .modal-card {
+      transform: scale(1);
+      opacity: 1;
+    }
+    .modal-card .modal-close-btn {
+      position: sticky;
+      top: 0;
+      float: right;
+      background: var(--surface-3);
+      border: none;
+      border-radius: 12px;
+      width: 34px;
+      height: 34px;
+      font-size: 0.95rem;
+      color: var(--text-2);
+      cursor: pointer;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 8px;
+      z-index: 10;
+      outline: none;
+      font-family: inherit;
+    }
+    .modal-card .modal-close-btn:hover {
+      background: var(--danger-soft);
+      color: var(--danger);
+      transform: rotate(90deg);
+    }
+    .modal-title {
+      font-size: 1.3rem;
+      font-weight: 800;
+      margin-bottom: 6px;
+      color: var(--text);
+      clear: both;
+      letter-spacing: -0.02em;
+    }
+    .modal-sub {
+      font-size: 0.85rem;
+      color: var(--text-2);
+      margin-bottom: 18px;
+      line-height: 1.6;
+    }
+    .modal-input {
+      margin: 6px 0;
+      width: 100%;
+      padding: 13px 16px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+      background: var(--surface-2);
+      color: var(--text);
+      font-size: 0.92rem;
+      transition: var(--transition);
+      font-family: inherit;
+      -webkit-appearance: none;
+      appearance: none;
+    }
+    .modal-input:focus {
+      outline: none;
+      border-color: var(--primary);
+      background: var(--bg-elevated);
+      box-shadow: 0 0 0 4px var(--primary-soft);
+    }
+    .modal-buttons {
+      display: flex;
+      gap: 10px;
+      margin-top: 18px;
+    }
+    .modal-buttons button {
+      margin-top: 0;
+      padding: 11px;
+      font-size: 0.85rem;
+      flex: 1;
+    }
+    .modal-error {
+      color: var(--danger);
+      font-size: 0.75rem;
+      margin-top: 6px;
+      min-height: 16px;
+      font-weight: 600;
+    }
+    .alert-icon {
+      font-size: 2.6rem;
+      margin-bottom: 10px;
+      display: inline-block;
+    }
+    .alert-message {
+      font-size: 0.87rem;
+      color: var(--text-2);
+      margin-bottom: 18px;
+      line-height: 1.6;
+    }
+    .alert-buttons { display: flex; gap: 10px; }
+    .alert-buttons button {
+      margin-top: 0;
+      padding: 11px;
+      flex: 1;
+    }
+    .alert-confirm {
+      background: var(--primary-gradient);
+      color: white;
+    }
+    .alert-cancel {
+      background: transparent;
+      border: 1px solid var(--danger);
+      color: var(--danger);
+    }
+
+    /* ============================================================
+       FORMS
+       ============================================================ */
+    .form-group { margin-bottom: 0.9rem; }
+    label {
+      font-weight: 600;
+      font-size: 0.68rem;
+      color: var(--text-2);
+      margin-bottom: 5px;
+      display: block;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+    input, select {
+      width: 100%;
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 12px 14px;
+      font-size: 0.9rem;
+      color: var(--text);
+      outline: none;
+      transition: var(--transition);
+      font-family: inherit;
+      -webkit-appearance: none;
+      appearance: none;
+      font-weight: 500;
+    }
+    input::placeholder { color: var(--text-3); font-weight: 400; }
+    input:focus, select:focus {
+      border-color: var(--primary);
+      background: var(--bg-elevated);
+      box-shadow: 0 0 0 4px var(--primary-soft);
+    }
+    select {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 14px center;
+      padding-right: 40px;
+    }
+    .row-2col {
+      display: flex;
+      gap: 10px;
+      flex-wrap: nowrap;
+    }
+    .row-2col .form-group { flex: 1; min-width: 0; }
+
+    /* ============================================================
+       BUTTONS
+       ============================================================ */
+    button {
+      background: var(--primary-gradient);
+      border: none;
+      color: white;
+      font-weight: 700;
+      padding: 12px 20px;
+      border-radius: var(--radius-sm);
+      font-size: 0.85rem;
+      cursor: pointer;
+      width: 100%;
+      margin-top: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: transform 0.15s, box-shadow 0.2s, opacity 0.15s;
+      letter-spacing: -0.01em;
+      outline: none;
+      font-family: inherit;
+      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.25);
+      position: relative;
+      overflow: hidden;
+    }
+    button::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 50%;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.15), transparent);
+      pointer-events: none;
+      border-radius: inherit;
+    }
+    button:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px rgba(16, 185, 129, 0.35);
+    }
+    button:active { transform: scale(0.98); }
+    button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+    button.outline {
+      background: transparent;
+      border: 1.5px solid var(--border-strong);
+      color: var(--text);
+      box-shadow: none;
+    }
+    button.outline::before { display: none; }
+    button.outline:hover {
+      background: var(--surface-3);
+      border-color: var(--primary);
+      color: var(--primary);
+      box-shadow: 0 4px 12px var(--primary-soft);
+    }
+    button.warning {
+      background: var(--danger);
+      box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+    }
+    button.small-btn {
+      padding: 8px 14px;
+      font-size: 0.75rem;
+      width: auto;
+      margin-top: 0;
+      border-radius: var(--radius-full);
+    }
+    button.gold-btn {
+      background: var(--accent-gradient);
+      color: #1a1a1a;
+      box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+    }
+    button.pdf-btn {
+      background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+    }
+
+    /* ============================================================
+       AGREEMENT ITEMS
+       ============================================================ */
+    .agreement-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 16px;
+      background: var(--surface-2);
+      border-radius: var(--radius);
+      margin-bottom: 8px;
+      transition: var(--transition);
+      border: 1px solid var(--border);
+      color: var(--text);
+      gap: 10px;
+    }
+    .agreement-item:hover {
+      border-color: var(--primary);
+      background: var(--primary-soft);
+      transform: translateX(2px);
+    }
+    .agreement-name-wrap {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      min-width: 0;
+    }
+    .agreement-name {
+      font-weight: 600;
+      cursor: pointer;
+      font-size: 0.9rem;
+      color: var(--text);
+      transition: var(--transition);
+      flex: 1;
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      letter-spacing: -0.01em;
+    }
+    .agreement-name.active {
+      color: var(--primary);
+      font-weight: 700;
+    }
+    .agreement-name-input-edit {
+      background: transparent;
+      border: none;
+      border-bottom: 2px solid var(--primary);
+      font-weight: 600;
+      font-size: 0.9rem;
+      color: var(--text);
+      padding: 2px 4px;
+      outline: none;
+      flex: 1;
+      min-width: 60px;
+      font-family: inherit;
+    }
+    .agreement-actions {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+      flex-shrink: 0;
+    }
+    .agreement-actions button {
+      margin: 0;
+      padding: 6px 10px;
+      font-size: 0.72rem;
+      width: auto;
+      border-radius: var(--radius-sm);
+      background: var(--surface-3);
+      color: var(--text-2);
+      border: 1px solid transparent;
+      box-shadow: none;
+      font-weight: 600;
+    }
+    .agreement-actions button::before { display: none; }
+    .agreement-actions button:hover {
+      background: var(--danger-soft);
+      color: var(--danger);
+      transform: none;
+      box-shadow: none;
+    }
+    .agreement-actions .edit-name-btn {
+      background: var(--accent-soft);
+      color: var(--accent);
+    }
+    .agreement-actions .edit-name-btn:hover {
+      background: var(--accent);
+      color: white;
+    }
+
+    /* ============================================================
+       RESULT PANEL
+       ============================================================ */
+    .result-panel {
+      background: var(--surface-2);
+      border-radius: var(--radius);
+      padding: 18px;
+      margin: 14px 0;
+      text-align: center;
+      border: 1px solid var(--border);
+    }
+    .result-panel > div {
+      margin-bottom: 5px;
+      color: var(--text-2);
+      font-size: 0.82rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-weight: 500;
+    }
+    .result-panel > div strong {
+      color: var(--text);
+      font-weight: 700;
+      font-variant-numeric: tabular-nums;
+    }
+    .balance-display {
+      background: var(--primary-gradient);
+      color: white !important;
+      padding: 16px;
+      border-radius: var(--radius);
+      font-size: 1.5rem;
+      font-weight: 800;
+      margin-top: 12px;
+      transition: background 0.4s, box-shadow 0.4s;
+      letter-spacing: -0.03em;
+      font-variant-numeric: tabular-nums;
+      box-shadow: 0 8px 24px rgba(16, 185, 129, 0.35);
+      text-align: center;
+      display: block !important;
+    }
+    .balance-display.zero-balance {
+      background: var(--accent-gradient);
+      box-shadow: 0 8px 32px rgba(245, 158, 11, 0.5);
+      color: #1a1a1a !important;
+      animation: celebrate 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    @keyframes celebrate {
+      0% { transform: scale(0.95); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
+
+    /* ============================================================
+       TABLE
+       ============================================================ */
+    .history-table {
+      overflow-x: auto;
+      margin-top: 8px;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      background: var(--surface-2);
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.8rem;
+    }
+    th, td {
+      padding: 11px 12px;
+      text-align: left;
+      border-bottom: 1px solid var(--divider);
+      color: var(--text);
+      white-space: nowrap;
+    }
+    th {
+      color: var(--text-2);
+      font-weight: 700;
+      font-size: 0.64rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      background: var(--surface-3);
+      position: sticky;
+      top: 0;
+    }
+    tbody tr { transition: background 0.15s; }
+    tbody tr:last-child td { border-bottom: none; }
+    tbody tr:hover { background: var(--primary-soft); }
+    td { font-variant-numeric: tabular-nums; }
+
+    .total-summary {
+      background: var(--surface-2);
+      border-radius: var(--radius);
+      padding: 14px 18px;
+      margin-top: 14px;
+      font-weight: 700;
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.85rem;
+      color: var(--text);
+      border: 1px solid var(--border);
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .total-summary .paid-complete { color: var(--primary); }
+    .total-summary span { font-variant-numeric: tabular-nums; }
+
+    .search-wrap {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 14px;
+      align-items: center;
+    }
+    .search-wrap .search-text-input {
+      flex: 2;
+      min-width: 160px;
+      position: relative;
+    }
+    .search-wrap .search-text-input input {
+      padding-left: 38px;
+      border-radius: var(--radius-full);
+      background: var(--surface-2);
+    }
+    .search-wrap .search-text-input .search-icon {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-3);
+      font-size: 0.85rem;
+      pointer-events: none;
+    }
+    .search-wrap .date-range {
+      display: flex;
+      gap: 6px;
+      flex: 2;
+      min-width: 200px;
+    }
+    .search-wrap .date-range input {
+      padding: 10px 12px;
+      font-size: 0.78rem;
+      border-radius: var(--radius-full);
+      background: var(--surface-2);
+      flex: 1;
+      min-width: 80px;
+    }
+    .search-wrap .search-clear-btn {
+      padding: 9px 16px;
+      font-size: 0.75rem;
+      width: auto;
+      margin: 0;
+      border-radius: var(--radius-full);
+      background: var(--surface-3);
+      color: var(--text-2);
+      border: 1px solid var(--border);
+      flex-shrink: 0;
+      cursor: pointer;
+      box-shadow: none;
+      font-weight: 600;
+    }
+    .search-wrap .search-clear-btn::before { display: none; }
+    .search-wrap .search-clear-btn:hover {
+      background: var(--danger-soft);
+      color: var(--danger);
+      border-color: transparent;
+      transform: none;
+    }
+
+    /* ============================================================
+       REMINDER
+       ============================================================ */
+    .reminder-card {
+      background: linear-gradient(135deg, var(--accent-soft), rgba(245, 158, 11, 0.05));
+      border-left: 4px solid var(--accent);
+      padding: 16px 18px;
+      border-radius: var(--radius);
+      margin-top: 10px;
+      font-size: 0.87rem;
+      line-height: 1.7;
+      color: var(--text);
+    }
+    .reminder-card strong { color: var(--text); font-weight: 700; }
+    .reminder-warning { color: var(--danger); font-weight: 700; }
+
+    /* ============================================================
+       CHART
+       ============================================================ */
+    .chart-wrapper {
+      position: relative;
+      width: 100%;
+      height: 260px;
+      min-height: 260px;
+    }
+    .chart-wrapper canvas {
+      position: absolute;
+      inset: 0;
+      width: 100% !important;
+      height: 100% !important;
+      max-height: 100% !important;
+      border-radius: var(--radius);
+    }
+
+    .chart-fallback {
+      display: none;
+      padding: 40px 20px;
+      text-align: center;
+      color: var(--text-3);
+      font-size: 0.85rem;
+      background: var(--surface-2);
+      border-radius: var(--radius);
+      border: 1px dashed var(--border);
+    }
+    .chart-fallback .fallback-icon {
+      font-size: 2.5rem;
+      margin-bottom: 8px;
+      opacity: 0.5;
+    }
+    .chart-fallback.visible { display: block; }
+    .chart-wrapper.hidden-when-no-chart { display: none; }
+
+    /* ============================================================
+       RANGE BUTTONS
+       ============================================================ */
+    .range-buttons {
+      display: flex;
+      gap: 8px;
+      margin-top: 8px;
+      flex-wrap: wrap;
+    }
+    .range-buttons button {
+      margin-top: 0;
+      font-size: 0.72rem;
+      padding: 9px 14px;
+      flex: 1;
+      min-width: 70px;
+      border-radius: var(--radius-full);
+    }
+
+    /* ============================================================
+       ACTION BUTTONS IN TABLE
+       ============================================================ */
+    .action-row-btns {
+      display: flex;
+      gap: 4px;
+      align-items: center;
+    }
+    .action-row-btns .edit-btn,
+    .action-row-btns .delete-btn {
+      padding: 5px 7px;
+      font-size: 0.75rem;
+      border-radius: var(--radius-sm);
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      transition: var(--transition);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 30px;
+      min-height: 30px;
+      outline: none;
+      box-shadow: none;
+    }
+    .action-row-btns .edit-btn::before,
+    .action-row-btns .delete-btn::before { display: none; }
+    .action-row-btns .edit-btn {
+      color: var(--accent);
+      background: var(--accent-soft);
+    }
+    .action-row-btns .edit-btn:hover {
+      background: var(--accent);
+      color: white;
+      transform: scale(1.05);
+      box-shadow: none;
+    }
+    .action-row-btns .delete-btn {
+      color: var(--danger);
+      background: var(--danger-soft);
+    }
+    .action-row-btns .delete-btn:hover {
+      background: var(--danger);
+      color: white;
+      transform: scale(1.05);
+      box-shadow: none;
+    }
+
+    /* ============================================================
+       CELEBRATION
+       ============================================================ */
+    #celebrationModal .modal-card {
+      background: linear-gradient(180deg, var(--bg-elevated) 0%, rgba(245, 158, 11, 0.1) 100%);
+      border: 1px solid rgba(245, 158, 11, 0.3);
+      max-width: 420px;
+    }
+    #celebrationModal .confetti-icon {
+      font-size: 4.5rem;
+      margin-bottom: 12px;
+      display: block;
+      animation: celebrateBounce 1.2s ease-in-out infinite;
+    }
+    @keyframes celebrateBounce {
+      0%, 100% { transform: scale(1) rotate(-5deg); }
+      50% { transform: scale(1.12) rotate(5deg); }
+    }
+    .celebration-title {
+      font-size: 1.55rem;
+      font-weight: 900;
+      background: var(--accent-gradient);
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+      margin-bottom: 6px;
+      letter-spacing: -0.02em;
+    }
+    .celebration-sub {
+      font-size: 0.9rem;
+      color: var(--text-2);
+      line-height: 1.6;
+    }
+    .celebration-sub strong { color: var(--text); font-weight: 700; }
+    .celebration-amount {
+      font-size: 2.2rem;
+      font-weight: 900;
+      color: var(--primary);
+      margin: 14px 0;
+      padding: 10px 24px;
+      background: var(--primary-soft);
+      border-radius: var(--radius-full);
+      display: inline-block;
+      letter-spacing: -0.03em;
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* ============================================================
+       LOCK SCREEN
+       ============================================================ */
+    #lockScreen {
+      position: fixed;
+      inset: 0;
+      z-index: 5000;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 32px 24px;
+      background: radial-gradient(ellipse at 30% 20%, #0a0f1f, #050812 70%);
+      overflow: hidden;
+    }
+    #lockScreen.hidden { display: none; }
+
+    .lock-orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(100px);
+      opacity: 0.4;
+      pointer-events: none;
+      animation: orbFloat 18s ease-in-out infinite;
+    }
+    .lock-orb-1 {
+      background: radial-gradient(circle, #10b981, transparent 70%);
+      width: 420px;
+      height: 420px;
+      top: -160px;
+      left: -120px;
+    }
+    .lock-orb-2 {
+      background: radial-gradient(circle, #fbbf24, transparent 70%);
+      width: 360px;
+      height: 360px;
+      bottom: -120px;
+      right: -100px;
+      animation-delay: -6s;
+    }
+    .lock-orb-3 {
+      background: radial-gradient(circle, #3b82f6, transparent 70%);
+      width: 280px;
+      height: 280px;
+      bottom: 15%;
+      left: -70px;
+      animation-delay: -12s;
+      opacity: 0.25;
+    }
+    @keyframes orbFloat {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      50% { transform: translate(-30px, 40px) scale(1.1); }
+    }
+    .lock-content {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      max-width: 360px;
+      text-align: center;
+    }
+    .lock-logo-wrap {
+      position: relative;
+      display: inline-block;
+      margin-bottom: 24px;
+    }
+    .lock-logo {
+      width: 92px;
+      height: 92px;
+      background: var(--primary-gradient);
+      border-radius: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.8rem;
+      color: white;
+      box-shadow: 0 20px 60px rgba(16, 185, 129, 0.5), inset 0 2px 0 rgba(255, 255, 255, 0.15);
+      animation: logoPulse 4s ease-in-out infinite;
+      position: relative;
+    }
+    .lock-logo .lock-icon-svg {
+      font-size: 2.8rem;
+      transition: transform 0.4s;
+      line-height: 1;
+    }
+    .lock-logo .lock-icon-svg.unlocking { transform: scale(1.2) rotate(-10deg); }
+    .lock-app-name {
+      font-size: 2.2rem;
+      font-weight: 900;
+      letter-spacing: -0.04em;
+      background: linear-gradient(135deg, #ffffff 0%, #94a3b8 100%);
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+      margin-bottom: 4px;
+    }
+    .lock-app-sub {
+      font-size: 0.78rem;
+      color: rgba(255, 255, 255, 0.4);
+      margin-bottom: 30px;
+      letter-spacing: 0.14em;
+      font-weight: 500;
+      text-transform: uppercase;
+    }
+    .lock-setup-badge {
+      display: inline-block;
+      background: rgba(251, 191, 36, 0.12);
+      border: 1px solid rgba(251, 191, 36, 0.25);
+      border-radius: var(--radius-full);
+      padding: 6px 20px;
+      color: #fbbf24;
+      font-size: 0.7rem;
+      font-weight: 700;
+      margin-bottom: 24px;
+      letter-spacing: 0.06em;
+    }
+    .lock-input-wrap {
+      position: relative;
+      margin-bottom: 14px;
+    }
+    .lock-input {
+      width: 100%;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1.5px solid rgba(255, 255, 255, 0.08);
+      border-radius: 18px;
+      padding: 18px 52px 18px 22px;
+      font-size: 1rem;
+      color: #fff;
+      outline: none;
+      transition: all 0.25s;
+      letter-spacing: 0.02em;
+      font-family: inherit;
+      -webkit-appearance: none;
+    }
+    .lock-input::placeholder { color: rgba(255, 255, 255, 0.25); }
+    .lock-input:focus {
+      border-color: #10b981;
+      background: rgba(16, 185, 129, 0.06);
+      box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.15);
+    }
+    .lock-input.error {
+      border-color: #ef4444;
+      box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.15);
+      animation: lockShake 0.4s ease;
+    }
+    @keyframes lockShake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-8px); }
+      75% { transform: translateX(8px); }
+    }
+    .lock-eye {
+      position: absolute;
+      right: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: rgba(255, 255, 255, 0.35);
+      font-size: 1.05rem;
+      padding: 8px;
+      margin: 0;
+      width: auto;
+      border-radius: 50%;
+      outline: none;
+      line-height: 1;
+      transition: var(--transition);
+    }
+    .lock-eye:hover {
+      color: rgba(255, 255, 255, 0.7);
+      background: rgba(255, 255, 255, 0.05);
+    }
+    .lock-error {
+      color: #f87171;
+      font-size: 0.78rem;
+      min-height: 20px;
+      margin-bottom: 10px;
+      font-weight: 600;
+    }
+    .lock-btn {
+      width: 100%;
+      background: var(--primary-gradient);
+      border: none;
+      border-radius: 18px;
+      padding: 18px;
+      color: #fff;
+      font-size: 1rem;
+      font-weight: 800;
+      cursor: pointer;
+      letter-spacing: 0.02em;
+      box-shadow: 0 12px 40px rgba(16, 185, 129, 0.4);
+      margin-bottom: 18px;
+      outline: none;
+      font-family: inherit;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .lock-btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 50%;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.15), transparent);
+      pointer-events: none;
+    }
+    .lock-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 16px 48px rgba(16, 185, 129, 0.5);
+    }
+    .lock-btn:active { transform: scale(0.98); }
+    .lock-btn.loading { opacity: 0.7; pointer-events: none; }
+
+    .lock-footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin-top: 4px;
+    }
+    .lock-change, .lock-forgot {
+      color: rgba(255, 255, 255, 0.35);
+      font-size: 0.72rem;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 6px 10px;
+      margin: 0;
+      width: auto;
+      border-radius: 8px;
+      outline: none;
+      font-family: inherit;
+      font-weight: 600;
+      transition: color 0.2s;
+    }
+    .lock-change:hover { color: rgba(255, 255, 255, 0.7); }
+    .lock-forgot { color: rgba(248, 113, 113, 0.5); }
+    .lock-forgot:hover { color: #f87171; }
+    .lock-footer {
+      position: absolute;
+      bottom: 24px;
+      left: 0;
+      right: 0;
+      text-align: center;
+      color: rgba(255, 255, 255, 0.15);
+      font-size: 0.66rem;
+      letter-spacing: 0.1em;
+      z-index: 1;
+    }
+
+    /* ============================================================
+       TOAST
+       ============================================================ */
+    .toast-container {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 16000;
+      pointer-events: none;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+    }
+    .toast {
+      background: var(--bg-elevated);
+      color: var(--text);
+      padding: 12px 22px;
+      border-radius: var(--radius-full);
+      font-size: 0.82rem;
+      font-weight: 600;
+      box-shadow: var(--shadow-xl);
+      border: 1px solid var(--border);
+      pointer-events: auto;
+      max-width: 90vw;
+      text-align: center;
+      animation: toastIn 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    @keyframes toastIn {
+      from { opacity: 0; transform: translateY(20px) scale(0.94); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    /* ============================================================
+       PDF OVERLAY
+       ============================================================ */
+    .pdf-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(5, 8, 18, 0.96);
+      z-index: 17000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      animation: fadeIn 0.3s ease;
+    }
+    .pdf-overlay-inner {
+      text-align: center;
+      max-width: 360px;
+      width: 100%;
+    }
+
+    /* ============================================================
+       LOADER
+       ============================================================ */
+    .loader-overlay {
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(ellipse at 30% 20%, #0a0f1f, #050812 70%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 3000;
+      transition: opacity 0.6s ease;
+      opacity: 1;
+      visibility: visible;
+    }
+    .loader-overlay.fade-out {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+    .loader-spinner { text-align: center; }
+    .app-loader {
+      width: 88px;
+      height: 88px;
+      background: var(--primary-gradient);
+      border-radius: 26px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.8rem;
+      color: white;
+      animation: loaderPulse 1.6s ease-in-out infinite;
+      box-shadow: 0 20px 60px rgba(16, 185, 129, 0.5);
+      margin-bottom: 18px;
+    }
+    @keyframes loaderPulse {
+      0%, 100% { transform: scale(1); box-shadow: 0 20px 60px rgba(16, 185, 129, 0.5); }
+      50% { transform: scale(1.06); box-shadow: 0 24px 72px rgba(16, 185, 129, 0.7); }
+    }
+    .loader-text {
+      color: white;
+      font-weight: 900;
+      font-size: 1.4rem;
+      letter-spacing: -0.02em;
+      margin-bottom: 6px;
+    }
+    .loader-sub {
+      color: rgba(255, 255, 255, 0.4);
+      font-size: 0.8rem;
+      font-weight: 500;
+    }
+
+    /* ============================================================
+       RECOVERY CODE
+       ============================================================ */
+    .recovery-code-box {
+      background: var(--surface-2);
+      border-radius: var(--radius);
+      padding: 14px 16px;
+      margin: 12px 0;
+      border: 2px dashed var(--accent);
+      text-align: center;
+      font-family: 'Courier New', monospace;
+      font-size: 0.7rem;
+      font-weight: 600;
+      color: var(--text);
+      letter-spacing: 0.04em;
+      word-break: break-all;
+      max-height: 180px;
+      overflow-y: auto;
+      line-height: 1.6;
+    }
+    .recovery-code-box span {
+      background: var(--bg-elevated);
+      padding: 6px 12px;
+      border-radius: var(--radius-sm);
+      display: inline-block;
+      border: 1px solid var(--border);
+    }
+
+    .welcome-options {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin: 20px 0;
+    }
+    .welcome-options button {
+      margin: 0;
+      padding: 16px;
+      font-size: 0.9rem;
+      border-radius: var(--radius);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      font-weight: 700;
+    }
+    .welcome-options .welcome-icon { font-size: 1.4rem; }
+    .welcome-options small {
+      font-weight: 400 !important;
+      font-size: 0.7rem !important;
+      display: block;
+      margin-top: 2px;
+      opacity: 0.7;
+    }
+
+    /* ============================================================
+       ABOUT / LICENSE CARD
+       ============================================================ */
+    .about-card {
+      background: linear-gradient(135deg, var(--primary-soft), var(--accent-soft));
+      border: 1px solid var(--border-strong);
+      border-radius: var(--radius-lg);
+      padding: 22px 18px;
+      text-align: center;
+      margin-bottom: 16px;
+    }
+    .about-logo {
+      width: 68px;
+      height: 68px;
+      background: var(--primary-gradient);
+      border-radius: 19px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.9rem;
+      color: white;
+      margin-bottom: 12px;
+      box-shadow: var(--shadow-primary);
+    }
+    .about-title {
+      font-size: 1.3rem;
+      font-weight: 900;
+      letter-spacing: -0.03em;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+    .about-version {
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: var(--text-2);
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+    .about-license-badge {
+      display: inline-block;
+      background: var(--primary-gradient);
+      color: #fff;
+      padding: 7px 18px;
+      border-radius: var(--radius-full);
+      font-size: 0.7rem;
+      font-weight: 800;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+      margin-bottom: 12px;
+    }
+    .about-features {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+      margin-top: 12px;
+      text-align: left;
+    }
+    .about-feature {
+      background: var(--bg-elevated);
+      padding: 9px 12px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: var(--text-2);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .about-feature .feat-icon { font-size: 0.95rem; }
+    .about-tagline {
+      font-size: 0.76rem;
+      color: var(--text-2);
+      line-height: 1.6;
+      padding: 0 8px;
+    }
+
+    footer {
+      text-align: center;
+      font-size: 0.68rem;
+      margin-top: 20px;
+      color: var(--text-3);
+      letter-spacing: 0.04em;
+      padding-bottom: 20px;
+      font-weight: 500;
+    }
+
+    .backup-download-link { display: none; }
+
+    /* ============================================================
+       RESPONSIVE — narrow phones
+       ============================================================ */
+    @media (max-width: 640px) {
+      :root { --sidebar-width: 62px; }
+
+      .main-content {
+        padding: 16px 16px 100px;
+        max-width: 100%;
+      }
+      body.sidebar-closed .main-content { padding-left: 16px; }
+
+      .sticky-header { padding: 6px 0 14px; }
+      .sticky-header .greeting h1 { font-size: 1rem; }
+      .sticky-header .greeting .app-logo-sm {
+        width: 34px;
+        height: 34px;
+        font-size: 1.15rem;
+      }
+      #headerAgreementName { font-size: 0.88rem; }
+
+      .card {
+        padding: 1.15rem 1.15rem 1.25rem;
+        border-radius: var(--radius);
+        margin-bottom: 14px;
+      }
+      .card-header h2 { font-size: 0.88rem; }
+      .card-header h2 .card-icon {
+        width: 28px;
+        height: 28px;
+        font-size: 0.85rem;
+      }
+
+      .row-2col { flex-wrap: wrap; }
+      .row-2col .form-group { flex: 1 1 100%; }
+
+      .balance-display { font-size: 1.35rem; padding: 14px; }
+
+      .modal-card { padding: 26px 20px; max-width: 95%; }
+      .fullscreen-card { padding: 1.25rem; max-height: 95vh; }
+
+      .search-wrap { flex-direction: column; }
+      .search-wrap .date-range { width: 100%; }
+      .search-wrap .date-range input { flex: 1; min-width: 70px; }
+      .search-wrap .search-clear-btn { width: 100%; }
+
+      .toast-container { bottom: 80px; }
+      table { font-size: 0.72rem; }
+      th, td { padding: 9px 8px; }
+      .about-features { grid-template-columns: 1fr; }
+
+      .chart-wrapper { height: 220px; min-height: 220px; }
+    }
+
+    @media (max-width: 400px) {
+      .lock-logo { width: 78px; height: 78px; font-size: 2.4rem; }
+      .lock-app-name { font-size: 1.9rem; }
+      .lock-input { padding: 14px 44px 14px 18px; font-size: 0.94rem; }
+      .lock-btn { padding: 16px; font-size: 0.94rem; }
+
+      .modal-card .modal-close-btn {
+        width: 30px;
+        height: 30px;
+        font-size: 0.9rem;
+      }
+
+      .range-buttons button {
+        font-size: 0.68rem;
+        padding: 7px 10px;
+      }
+
+      .sticky-header .top-bar {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 8px;
+      }
+
+      .recovery-code-box { font-size: 0.6rem; }
+      .welcome-options button { font-size: 0.82rem; padding: 14px; }
+
+      .floating-menu-btn {
+        width: 40px;
+        height: 40px;
+        font-size: 1.05rem;
+        top: 10px;
+        left: 10px;
+      }
+      body.sidebar-closed .sticky-header .greeting { padding-left: 52px; }
+    }
+
+    @media (min-width: 641px) and (max-width: 900px) {
+      .main-content {
+        padding: 22px 28px 100px;
+        max-width: 720px;
+      }
+      .chart-wrapper { height: 280px; min-height: 280px; }
+    }
+
+    @media (min-width: 901px) {
+      .main-content {
+        padding: 24px 32px 100px;
+        max-width: 780px;
+      }
+      .chart-wrapper { height: 300px; min-height: 300px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb {
+      background: var(--border-strong);
+      border-radius: 10px;
+    }
+    ::-webkit-scrollbar-thumb:hover { background: var(--text-3); }
+
+    /* ============================================================
+       INSTALL GUIDE POPUP — auto-detects user's device
+       ============================================================ */
+    .install-guide-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 45000;
+      background: rgba(5, 8, 18, 0.75);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      animation: fadeIn 0.3s ease;
+    }
+    .install-guide-overlay.visible { display: flex; }
+
+    .install-guide-card {
+      background: var(--bg-elevated);
+      border-radius: var(--radius-xl);
+      padding: 32px 26px 26px;
+      max-width: 440px;
+      width: 100%;
+      max-height: 85vh;
+      overflow-y: auto;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-xl);
+      position: relative;
+      animation: slideUp 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+      color: var(--text);
+    }
+    .install-guide-card .close-btn {
+      position: sticky;
+      top: 0;
+      float: right;
+      background: var(--surface-3);
+      border: none;
+      border-radius: 12px;
+      width: 34px;
+      height: 34px;
+      font-size: 1rem;
+      color: var(--text-2);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: var(--transition);
+      outline: none;
+      font-family: inherit;
+      z-index: 10;
+    }
+    .install-guide-card .close-btn:hover {
+      background: var(--danger-soft);
+      color: var(--danger);
+      transform: rotate(90deg);
+    }
+    .install-guide-card .guide-icon {
+      font-size: 3rem;
+      text-align: center;
+      display: block;
+      margin-bottom: 12px;
+      clear: both;
+      -webkit-user-select: none;
+      user-select: none;
+    }
+    .install-guide-card h2 {
+      font-size: 1.3rem;
+      font-weight: 800;
+      text-align: center;
+      margin-bottom: 6px;
+      letter-spacing: -0.02em;
+      color: var(--text);
+    }
+    .install-guide-card .guide-sub {
+      text-align: center;
+      font-size: 0.85rem;
+      color: var(--text-2);
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    .install-guide-card .guide-step {
+      display: flex;
+      gap: 14px;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--divider);
+      align-items: flex-start;
+    }
+    .install-guide-card .guide-step:last-of-type {
+      border-bottom: none;
+    }
+    .install-guide-card .step-num {
+      flex-shrink: 0;
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: var(--primary-gradient);
+      color: white;
+      font-size: 0.75rem;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 2px;
+    }
+    .install-guide-card .step-text {
+      font-size: 0.85rem;
+      color: var(--text);
+      line-height: 1.65;
+      flex: 1;
+    }
+    .install-guide-card .step-text strong {
+      color: var(--primary);
+      font-weight: 700;
+    }
+    .install-guide-card .guide-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 20px;
+    }
+    .install-guide-card .guide-actions button {
+      margin-top: 0;
+      flex: 1;
+      padding: 12px;
+      font-size: 0.85rem;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="ambient-glow"></div>
+
+  <!-- ============================================================
+       AUTO-DETECTING INSTALL GUIDE POPUP
+       ============================================================ -->
+  <div class="install-guide-overlay" id="installGuideOverlay">
+    <div class="install-guide-card" id="installGuideCard">
+      <button class="close-btn" onclick="dismissInstallGuide()" aria-label="Close">✕</button>
+      <span class="guide-icon" id="guideIcon">📱</span>
+      <h2 id="guideTitle">Install PayPlan Ledger</h2>
+      <p class="guide-sub" id="guideSubtitle">Get the full app experience — no browser bar, works offline.</p>
+      <div id="guideSteps">
+        <!-- Filled dynamically by JavaScript -->
+      </div>
+      <div class="guide-actions">
+        <button id="guidePrimaryBtn" onclick="handleGuidePrimary()" style="background:var(--primary-gradient);color:white;">
+          Install Now
+        </button>
+        <button class="outline" onclick="dismissInstallGuide()">
+          Not Now
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="sidebar-backdrop" id="sidebarBackdrop" onclick="toggleSidebar()"></div>
+
+  <div class="pwa-install-overlay" id="pwaInstallOverlay">
+    <div class="pwa-install-box">
+      <div class="pwa-logo">💼</div>
+      <h2>Install PayPlan Ledger</h2>
+      <p>Install to your device for the full-screen app experience — no browser bars, no distractions.</p>
+      <button class="pwa-install-cta" id="pwaInstallCTA">📲 Install App</button>
+      <button class="pwa-skip-btn" id="pwaSkipBtn">Continue in browser</button>
+      <div class="pwa-instructions" id="pwaInstructions" style="display:none;">
+        <strong>📖 How to install manually:</strong><br>
+        <span id="pwaInstructionsText">Tap your browser menu (⋮ or ⋯) and choose <strong>"Add to Home screen"</strong> or <strong>"Install app"</strong>.</span>
+      </div>
+    </div>
+  </div>
+
+  <div id="loaderOverlay" class="loader-overlay">
+    <div class="loader-spinner">
+      <div class="app-loader">💼</div>
+      <div class="loader-text">PayPlan Ledger</div>
+      <div class="loader-sub">Loading your data...</div>
+    </div>
+  </div>
+
+  <div id="lockScreen">
+    <div class="lock-orb lock-orb-1"></div>
+    <div class="lock-orb lock-orb-2"></div>
+    <div class="lock-orb lock-orb-3"></div>
+    <div class="lock-content">
+      <div class="lock-logo-wrap">
+        <div class="lock-logo">
+          <span class="lock-icon-svg" id="lockIconSvg">🔒</span>
+        </div>
+      </div>
+      <div class="lock-app-name">PayPlan Ledger</div>
+      <div class="lock-app-sub" id="lockSubtitle">Hire Purchase Tracker</div>
+      <div class="lock-setup-badge" id="lockSetupBadge" style="display:none;">✦ First time? Create your password</div>
+      <div class="lock-input-wrap">
+        <input type="password" id="passwordInput" class="lock-input" placeholder="Enter your password" autocomplete="current-password" maxlength="32">
+        <button class="lock-eye" id="lockEyeBtn" onclick="toggleLockEye()" type="button">👁</button>
+      </div>
+      <div class="lock-error" id="passwordError"></div>
+      <button class="lock-btn" id="passwordSubmitBtn" onclick="handlePasswordSubmit()">Unlock</button>
+      <div class="lock-footer-links">
+        <button class="lock-change" id="passwordChangeBtn" onclick="openChangePasswordModal()">Change password</button>
+        <button class="lock-forgot" id="forgotPasswordBtn" onclick="openForgotPasswordModal()">Forgot password?</button>
+      </div>
+      <p style="color:rgba(255,255,255,0.1);font-size:0.6rem;margin-top:12px;letter-spacing:0.05em;">Your data is stored securely on this device only.</p>
+    </div>
+    <div class="lock-footer">PAYPLAN LEDGER • OFFLINE-FIRST</div>
+  </div>
+
+  <div id="changePasswordModal" class="modal-overlay">
+    <div class="modal-card">
+      <button class="modal-close-btn" onclick="document.getElementById('changePasswordModal').classList.remove('active')">✕</button>
+      <div style="font-size:2.2rem;margin-bottom:10px;">🔐</div>
+      <div class="modal-title">Change Password</div>
+      <p style="color:var(--text-2);font-size:0.8rem;margin-bottom:12px;">You must know your <strong>current password</strong> to change it.</p>
+      <input type="password" id="cpCurrent" class="modal-input" placeholder="Current password">
+      <input type="password" id="cpNew" class="modal-input" placeholder="New password (min 3 chars)">
+      <input type="password" id="cpConfirm" class="modal-input" placeholder="Confirm new password">
+      <div class="modal-error" id="cpError"></div>
+      <div class="modal-buttons">
+        <button id="cpConfirmBtn">Update</button>
+        <button id="cpCancelBtn" class="outline">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="forgotPasswordModal" class="modal-overlay">
+    <div class="modal-card">
+      <button class="modal-close-btn" onclick="document.getElementById('forgotPasswordModal').classList.remove('active')">✕</button>
+      <div style="font-size:2.8rem;margin-bottom:10px;">⚠️</div>
+      <div class="modal-title" style="color:var(--danger);">Reset App</div>
+      <p style="color:var(--text-2);font-size:0.84rem;margin-bottom:14px;line-height:1.6;">
+        This will <strong>permanently delete</strong> all your agreements and payment history.
+      </p>
+      <p style="color:var(--accent);font-size:0.78rem;margin-bottom:14px;font-weight:600;">You'll be able to set a new password afterwards.</p>
+      <p style="color:var(--danger);font-size:0.8rem;margin-bottom:14px;font-weight:600;">Are you absolutely sure?</p>
+      <div class="modal-buttons">
+        <button id="fpConfirmBtn" class="warning">Yes, Reset Everything</button>
+        <button id="fpCancelBtn" class="outline">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="celebrationModal" class="modal-overlay" style="z-index:21000;">
+    <div class="modal-card">
+      <button class="modal-close-btn" onclick="closeCelebration()">✕</button>
+      <span class="confetti-icon">🎉</span>
+      <div class="celebration-title">Congratulations!</div>
+      <div class="celebration-sub">
+        You've fully paid for <strong id="celebAgreementName">this agreement</strong>
+      </div>
+      <div class="celebration-amount" id="celebAmount">$0</div>
+      <p style="color:var(--text-2);font-size:0.84rem;margin-top:8px;line-height:1.6;">
+        All payments are now settled. Well done! 👏
+      </p>
+      <button onclick="closeCelebration()" class="gold-btn" style="margin-top:14px;">
+        🎊 Awesome!
+      </button>
+    </div>
+  </div>
+
+  <div id="editRecordModal" class="modal-overlay" style="z-index:21000;">
+    <div class="modal-card">
+      <button class="modal-close-btn" onclick="closeEditRecordModal()">✕</button>
+      <div style="font-size:2.2rem;margin-bottom:10px;">✏️</div>
+      <div class="modal-title">Edit Payment</div>
+      <p class="modal-sub">Update the details of this payment entry.</p>
+      <div class="form-group" style="text-align:left;">
+        <label>📅 Payment Date</label>
+        <input type="date" id="editRecordDate" class="modal-input" />
+      </div>
+      <div class="form-group" style="text-align:left;">
+        <label>🏷️ Total Contract Amount</label>
+        <input type="number" id="editRecordHire" class="modal-input" step="any" placeholder="0.00" />
+      </div>
+      <div class="form-group" style="text-align:left;">
+        <label>💵 Amount Paid</label>
+        <input type="number" id="editRecordPaid" class="modal-input" step="any" placeholder="0.00" />
+      </div>
+      <div class="modal-error" id="editRecordError"></div>
+      <div class="modal-buttons">
+        <button id="editRecordSaveBtn">💾 Save Changes</button>
+        <button id="editRecordCancelBtn" class="outline">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="welcomeModal" class="modal-overlay" style="z-index:4000;">
+    <div class="modal-card">
+      <button class="modal-close-btn" onclick="document.getElementById('welcomeModal').classList.remove('active')">✕</button>
+      <div style="font-size:2.8rem;margin-bottom:10px;">💼</div>
+      <div class="modal-title">Welcome to PayPlan Ledger</div>
+      <p class="modal-sub">Professional hire purchase tracking — get started in seconds.</p>
+      <div class="welcome-options">
+        <button class="gold-btn" id="welcomeStartFresh">
+          <span class="welcome-icon">✨</span>
+          <div>Start Fresh
+            <small style="color:rgba(0,0,0,0.5);">Create your first agreement</small>
+          </div>
+        </button>
+        <button class="outline" id="welcomeRestoreData">
+          <span class="welcome-icon">🔄</span>
+          <div>Restore Data
+            <small>Use a recovery code</small>
+          </div>
+        </button>
+        <button class="outline" id="welcomeImportBackup">
+          <span class="welcome-icon">📂</span>
+          <div>Import Backup File
+            <small>Restore from a saved file</small>
+          </div>
+        </button>
+      </div>
+      <input type="file" id="welcomeFileInput" accept=".json,application/json" style="display:none;">
+      <p style="font-size:0.66rem;color:var(--text-3);margin-top:8px;">All data is stored locally on your device.</p>
+    </div>
+  </div>
+
+  <div id="recoveryModal" class="modal-overlay" style="z-index:21000;">
+    <div class="modal-card">
+      <button class="modal-close-btn" onclick="document.getElementById('recoveryModal').classList.remove('active')">✕</button>
+      <div style="font-size:2.8rem;margin-bottom:10px;">🔄</div>
+      <div class="modal-title">Restore Your Data</div>
+      <p class="modal-sub">Enter your recovery code and the password you set when generating it.</p>
+      <div class="form-group" style="text-align:left;">
+        <label>📋 Recovery Code</label>
+        <input type="text" id="recoveryCodeInput" class="modal-input" placeholder="Paste your recovery code here" style="font-family:monospace;font-size:0.82rem;">
+      </div>
+      <div class="form-group" style="text-align:left;">
+        <label>🔐 Recovery Password</label>
+        <input type="password" id="recoveryPasswordInput" class="modal-input" placeholder="Enter the recovery password">
+      </div>
+      <div class="modal-error" id="recoveryError"></div>
+      <div class="modal-buttons">
+        <button id="recoveryConfirmBtn">🔄 Restore Data</button>
+        <button id="recoveryCancelBtn" class="outline">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="recoveryPasswordModal" class="modal-overlay" style="z-index:22000;">
+    <div class="modal-card">
+      <button class="modal-close-btn" onclick="document.getElementById('recoveryPasswordModal').classList.remove('active')">✕</button>
+      <div style="font-size:2.8rem;margin-bottom:10px;">🔐</div>
+      <div class="modal-title">Set Recovery Password</div>
+      <p class="modal-sub">Choose a password to encrypt your recovery data. You'll need this to restore your data on any device.</p>
+      <div class="form-group" style="text-align:left;">
+        <label>🔑 Recovery Password</label>
+        <input type="password" id="rpNewPassword" class="modal-input" placeholder="Min 4 characters" minlength="4">
+      </div>
+      <div class="form-group" style="text-align:left;">
+        <label>✅ Confirm Password</label>
+        <input type="password" id="rpConfirmPassword" class="modal-input" placeholder="Re-enter password">
+      </div>
+      <div class="modal-error" id="rpError"></div>
+      <div class="modal-buttons">
+        <button id="rpConfirmBtn">🔒 Generate Code</button>
+        <button id="rpCancelBtn" class="outline">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="exceedWarningModal" class="modal-overlay" style="z-index: 25000;">
+    <div class="modal-card">
+      <button class="modal-close-btn" onclick="document.getElementById('exceedWarningModal').classList.remove('active')">✕</button>
+      <div class="alert-icon">⚠️</div>
+      <div class="modal-title">Payment Exceeds Balance</div>
+      <div class="alert-message" id="exceedWarningMessage"></div>
+      <div class="alert-buttons">
+        <button id="exceedConfirmBtn" class="alert-confirm">Continue Anyway</button>
+        <button id="exceedCancelBtn" class="alert-cancel">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="confirmModal" class="modal-overlay" style="z-index: 25000;">
+    <div class="modal-card">
+      <button class="modal-close-btn" onclick="document.getElementById('confirmModal').classList.remove('active')">✕</button>
+      <div class="alert-icon">🤔</div>
+      <div class="modal-title">Confirm Action</div>
+      <div class="alert-message" id="confirmMessage">Are you sure?</div>
+      <div class="alert-buttons">
+        <button id="modalConfirm" class="alert-confirm">Yes, Confirm</button>
+        <button id="modalCancel" class="outline">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="newAgreementModal" class="modal-overlay">
+    <div class="modal-card">
+      <button class="modal-close-btn" onclick="document.getElementById('newAgreementModal').classList.remove('active')">✕</button>
+      <div style="font-size:2.2rem;margin-bottom:10px;">📋</div>
+      <div class="modal-title">New Agreement</div>
+      <input type="text" id="newAgreementName" class="modal-input" placeholder="e.g. Toyota Corolla, Laptop, Land">
+      <div class="modal-buttons">
+        <button id="createAgreementBtn">Create</button>
+        <button id="cancelNewAgreementBtn" class="outline">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="nameModal" class="modal-overlay">
+    <div class="modal-card">
+      <button class="modal-close-btn" onclick="document.getElementById('nameModal').classList.remove('active')">✕</button>
+      <div style="font-size:2.2rem;margin-bottom:10px;">📊</div>
+      <div class="modal-title">Report Details</div>
+      <p class="modal-sub">Customize your PDF report</p>
+      <div class="form-group" style="text-align:left;">
+        <label>📄 Report Title</label>
+        <input type="text" id="pdfReportTitle" class="modal-input" placeholder="e.g. Payment Report" />
+      </div>
+      <div class="form-group" style="text-align:left;">
+        <label>📋 Agreement Name</label>
+        <input type="text" id="agreementNameInput" class="modal-input" placeholder="Agreement Name / Number" />
+      </div>
+      <div class="row-2col">
+        <div class="form-group" style="text-align:left;">
+          <label>👤 Seller</label>
+          <input type="text" id="sellerNameInput" class="modal-input" placeholder="Seller" />
+        </div>
+        <div class="form-group" style="text-align:left;">
+          <label>👤 Buyer</label>
+          <input type="text" id="buyerNameInput" class="modal-input" placeholder="Buyer" />
+        </div>
+      </div>
+      <div class="modal-buttons">
+        <button id="nameModalConfirm">Generate PDF</button>
+        <button id="nameModalCancel" class="outline">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="fullscreenOverlay" class="fullscreen-overlay" onclick="closeFullscreen(event)">
+    <div class="fullscreen-card" id="fullscreenCard" onclick="event.stopPropagation();">
+      <button class="fs-close-btn" onclick="closeFullscreen()">✕</button>
+      <div class="fs-title" id="fsTitle">Card Title</div>
+      <div class="fs-body" id="fsBody"></div>
+    </div>
+  </div>
+
+  <button class="floating-menu-btn" id="floatingMenuBtn" onclick="toggleSidebar()" aria-label="Open menu">☰</button>
+
+  <div id="mainAppContainer" style="display:none;">
+
+    <nav class="app-sidebar" id="appSidebar">
+      <button class="sidebar-close-btn" onclick="toggleSidebar()" aria-label="Close menu">✕</button>
+      <div class="logo" onclick="switchSection('dashboard')">💼</div>
+      <div class="nav-icons">
+        <button class="active" data-section="dashboard" onclick="switchSection('dashboard')">
+          <span class="nav-icon-emoji">📊</span>
+          <span class="nav-icon-label">Home</span>
+        </button>
+        <button data-section="agreements" onclick="switchSection('agreements')">
+          <span class="nav-icon-emoji">📋</span>
+          <span class="nav-icon-label">Plans</span>
+        </button>
+        <button data-section="payment" onclick="switchSection('payment')">
+          <span class="nav-icon-emoji">💳</span>
+          <span class="nav-icon-label">Pay</span>
+        </button>
+        <button data-section="history" onclick="switchSection('history')">
+          <span class="nav-icon-emoji">📜</span>
+          <span class="nav-icon-label">History</span>
+        </button>
+        <button data-section="pdf" onclick="switchSection('pdf')">
+          <span class="nav-icon-emoji">📊</span>
+          <span class="nav-icon-label">Reports</span>
+        </button>
+        <button data-section="settings" onclick="switchSection('settings')">
+          <span class="nav-icon-emoji">⚙️</span>
+          <span class="nav-icon-label">Settings</span>
+        </button>
+      </div>
+      <div class="sidebar-footer">
+        <button class="theme-toggle-btn" id="themeToggle" onclick="toggleTheme()" aria-label="Toggle theme">🌙</button>
+      </div>
+    </nav>
+
+    <div class="main-content">
+
+      <div class="sticky-header">
+        <div class="top-bar">
+          <div class="greeting">
+            <span class="app-logo-sm">💼</span>
+            <h1><span class="highlight">PayPlan Ledger</span> <span id="headerAgreementName">— Select</span></h1>
+          </div>
+        </div>
+      </div>
+
+      <div class="section active" id="section-dashboard">
+        <div class="card" id="card-dashboard-overview">
+          <div class="card-header">
+            <h2><span class="card-icon">📈</span> Overview</h2>
+            <div class="header-actions">
+              <button class="expand-btn" onclick="openFullscreen('card-dashboard-overview','Overview')">⛶</button>
+              <span class="toggle-icon" onclick="event.stopPropagation();this.closest('.card').classList.toggle('collapsed')">▼</span>
+            </div>
+          </div>
+          <div class="card-body">
+            <div id="dashboardSummary" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-bottom:12px;">
+              <div style="background:var(--surface-2);padding:18px 14px;border-radius:var(--radius);text-align:center;border:1px solid var(--border);">
+                <div style="font-size:0.66rem;color:var(--text-3);font-weight:700;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:6px;">Plans</div>
+                <div style="font-size:1.7rem;font-weight:900;color:var(--primary);letter-spacing:-0.03em;font-variant-numeric:tabular-nums;" id="dashTotalAgreements">0</div>
+              </div>
+              <div style="background:var(--surface-2);padding:18px 14px;border-radius:var(--radius);text-align:center;border:1px solid var(--border);">
+                <div style="font-size:0.66rem;color:var(--text-3);font-weight:700;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:6px;">Total Paid</div>
+                <div style="font-size:1.4rem;font-weight:900;color:var(--accent);letter-spacing:-0.03em;font-variant-numeric:tabular-nums;" id="dashTotalPaid">$0</div>
+              </div>
+              <div style="background:var(--surface-2);padding:18px 14px;border-radius:var(--radius);text-align:center;border:1px solid var(--border);">
+                <div style="font-size:0.66rem;color:var(--text-3);font-weight:700;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:6px;">Active</div>
+                <div style="font-size:1.7rem;font-weight:900;color:var(--info);letter-spacing:-0.03em;font-variant-numeric:tabular-nums;" id="dashActiveAgreements">0</div>
+              </div>
+            </div>
+            <div style="text-align:center;padding:12px;background:var(--surface-2);border-radius:var(--radius);color:var(--text-2);font-size:0.85rem;font-weight:600;border:1px solid var(--border);">
+              <span id="dashCurrentAgreement">No agreement selected</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="card" id="card-dashboard-reminders">
+          <div class="card-header">
+            <h2><span class="card-icon">⏰</span> Reminders</h2>
+            <div class="header-actions">
+              <button class="expand-btn" onclick="openFullscreen('card-dashboard-reminders','Reminders')">⛶</button>
+              <span class="toggle-icon" onclick="event.stopPropagation();this.closest('.card').classList.toggle('collapsed')">▼</span>
+            </div>
+          </div>
+          <div class="card-body">
+            <div id="reminderDisplay" class="reminder-card"><p>Set a schedule to see payment reminders.</p></div>
+          </div>
+        </div>
+
+        <div class="card" id="card-dashboard-chart">
+          <div class="card-header">
+            <h2><span class="card-icon">📈</span> Payment Progress</h2>
+            <div class="header-actions">
+              <button class="expand-btn" onclick="openFullscreen('card-dashboard-chart','Progress')">⛶</button>
+              <span class="toggle-icon" onclick="event.stopPropagation();this.closest('.card').classList.toggle('collapsed')">▼</span>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="chart-wrapper" id="chartWrapper">
+              <canvas id="progressChart"></canvas>
+            </div>
+            <div class="chart-fallback" id="chartFallback">
+              <div class="fallback-icon">📈</div>
+              <div>Charts will appear here once you add payments.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section" id="section-agreements">
+        <div class="card" id="card-agreements">
+          <div class="card-header">
+            <h2><span class="card-icon">📋</span> Your Agreements</h2>
+            <div class="header-actions">
+              <button class="expand-btn" onclick="openFullscreen('card-agreements','Agreements')">⛶</button>
+              <span class="toggle-icon" onclick="event.stopPropagation();this.closest('.card').classList.toggle('collapsed')">▼</span>
+            </div>
+          </div>
+          <div class="card-body">
+            <div id="agreementsList"></div>
+            <button id="addAgreementBtn" class="outline small-btn" style="width:auto;margin-top:8px;">➕ New Agreement</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="section" id="section-payment">
+        <div class="card" id="card-payment">
+          <div class="card-header">
+            <h2><span class="card-icon">💳</span> <span id="currentAgreementNameDisplay">Select Agreement</span></h2>
+            <div class="header-actions">
+              <button class="expand-btn" onclick="openFullscreen('card-payment','Payment')">⛶</button>
+              <span class="toggle-icon" onclick="event.stopPropagation();this.closest('.card').classList.toggle('collapsed')">▼</span>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="form-group">
+              <label>📅 Payment Date</label>
+              <input type="date" id="workDate" />
+            </div>
+            <div class="row-2col">
+              <div class="form-group">
+                <label>🏷️ Total Contract</label>
+                <input type="number" id="totalHireAmount" step="any" placeholder="0.00" />
+              </div>
+              <div class="form-group">
+                <label>💵 Amount Paid</label>
+                <input type="number" id="amountPaid" step="any" placeholder="0.00" />
+              </div>
+            </div>
+            <div class="result-panel">
+              <div>🏷️ Contract Amount <strong id="totalHireDisplay">0</strong></div>
+              <div>✅ Total Paid <strong id="totalPaidDisplay">0</strong></div>
+              <div class="balance-display" id="balancePreview">Balance: —</div>
+            </div>
+            <button id="saveRecordBtn">💾 Save Payment</button>
+            <button id="resetFormBtn" class="outline small-btn" style="width:auto;margin-top:8px;">↩ Reset</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="section" id="section-history">
+        <div class="card" id="card-history">
+          <div class="card-header">
+            <h2><span class="card-icon">📜</span> Payment History</h2>
+            <div class="header-actions">
+              <button class="expand-btn" onclick="openFullscreen('card-history','History')">⛶</button>
+              <span class="toggle-icon" onclick="event.stopPropagation();this.closest('.card').classList.toggle('collapsed')">▼</span>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="search-wrap">
+              <div class="search-text-input">
+                <span class="search-icon">🔍</span>
+                <input type="text" id="searchHistoryInput" placeholder="Search payments..." />
+              </div>
+              <div class="date-range">
+                <input type="date" id="searchDateFrom" title="From" />
+                <input type="date" id="searchDateTo" title="To" />
+              </div>
+              <button class="search-clear-btn" id="searchClearBtn">✕ Clear</button>
+            </div>
+            <div class="history-table">
+              <table>
+                <thead><tr><th>Date</th><th>Contract</th><th>Paid</th><th>Total</th><th>Balance</th><th></th></tr></thead>
+                <tbody id="historyBody"><tr><td colspan="6" style="text-align:center;color:var(--text-3);padding:28px;">Select an agreement</td></tr></tbody>
+              </table>
+            </div>
+            <div id="summaryStats" class="total-summary"><span>Total Paid: 0</span><span>Remaining: 0</span></div>
+            <button id="clearCurrentHistoryBtn" class="warning small-btn" style="width:auto;margin-top:12px;">🗑️ Clear All History</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="section" id="section-pdf">
+        <div class="card" id="card-pdf">
+          <div class="card-header">
+            <h2><span class="card-icon">📊</span> PDF Reports</h2>
+            <div class="header-actions">
+              <button class="expand-btn" onclick="openFullscreen('card-pdf','Reports')">⛶</button>
+              <span class="toggle-icon" onclick="event.stopPropagation();this.closest('.card').classList.toggle('collapsed')">▼</span>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="row-2col">
+              <div class="form-group"><label>Start Date</label><input type="date" id="reportStartDate" /></div>
+              <div class="form-group"><label>End Date</label><input type="date" id="reportEndDate" /></div>
+            </div>
+            <div class="range-buttons">
+              <button id="todayBtn" class="outline small-btn">Today</button>
+              <button id="weekBtn" class="outline small-btn">This Week</button>
+              <button id="monthBtn" class="outline small-btn">This Month</button>
+            </div>
+            <button id="downloadFullBtn" class="pdf-btn" style="margin-top:14px;">📥 Full History PDF</button>
+            <button id="downloadRangeBtn" class="pdf-btn">📅 Date Range PDF</button>
+            <p style="font-size:0.7rem;margin-top:10px;color:var(--text-3);line-height:1.6;text-align:center;">
+              PDF reports generate directly in your browser<br>
+              <span style="color:var(--primary);font-weight:700;">Works completely offline</span>
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="section" id="section-settings">
+
+        <div class="about-card">
+          <div class="about-logo">💼</div>
+          <div class="about-title">PayPlan Ledger</div>
+          <div class="about-version">Version 14.0 • Single-User License</div>
+          <div class="about-license-badge">✓ Offline-First</div>
+          <p class="about-tagline">All your data stays on your device. No cloud, no subscriptions, no tracking.</p>
+          <div class="about-features">
+            <div class="about-feature"><span class="feat-icon">📋</span> Unlimited agreements</div>
+            <div class="about-feature"><span class="feat-icon">💳</span> Unlimited payments</div>
+            <div class="about-feature"><span class="feat-icon">📊</span> Offline PDF reports</div>
+            <div class="about-feature"><span class="feat-icon">💾</span> Manual backup & restore</div>
+            <div class="about-feature"><span class="feat-icon">🔄</span> Encrypted recovery codes</div>
+            <div class="about-feature"><span class="feat-icon">🔒</span> Password protected</div>
+          </div>
+        </div>
+
+        <div class="card" id="card-settings-main">
+          <div class="card-header">
+            <h2><span class="card-icon">⚙️</span> Preferences</h2>
+            <div class="header-actions">
+              <button class="expand-btn" onclick="openFullscreen('card-settings-main','Preferences')">⛶</button>
+              <span class="toggle-icon" onclick="event.stopPropagation();this.closest('.card').classList.toggle('collapsed')">▼</span>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="form-group">
+              <label>💱 Currency Symbol</label>
+              <select id="currencySelect">
+                <option value="$">$ US Dollar (USD)</option>
+                <option value="€">€ Euro (EUR)</option>
+                <option value="£">£ British Pound (GBP)</option>
+                <option value="₦">₦ Nigerian Naira (NGN)</option>
+                <option value="₵">₵ Ghana Cedi (GHS)</option>
+                <option value="¥">¥ Japanese Yen (JPY)</option>
+                <option value="₹">₹ Indian Rupee (INR)</option>
+                <option value="R">R South African Rand (ZAR)</option>
+                <option value="KSh">KSh Kenyan Shilling (KES)</option>
+                <option value="AED">AED UAE Dirham</option>
+                <option value="C$">C$ Canadian Dollar</option>
+                <option value="A$">A$ Australian Dollar</option>
+              </select>
+            </div>
+            <button id="saveCurrencyBtn" class="outline small-btn" style="width:auto;">💾 Apply Currency</button>
+          </div>
+        </div>
+
+        <div class="card" id="card-settings-schedule">
+          <div class="card-header">
+            <h2><span class="card-icon">⏰</span> Payment Schedule</h2>
+            <div class="header-actions">
+              <button class="expand-btn" onclick="openFullscreen('card-settings-schedule','Schedule')">⛶</button>
+              <span class="toggle-icon" onclick="event.stopPropagation();this.closest('.card').classList.toggle('collapsed')">▼</span>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="row-2col">
+              <div class="form-group"><label>📅 Next Due</label><input type="date" id="nextDueDate" /></div>
+              <div class="form-group"><label>💰 Installment</label><input type="number" id="installmentAmount" step="any" placeholder="0.00" /></div>
+            </div>
+            <div class="form-group">
+              <label>🔄 Frequency</label>
+              <select id="frequencySelect">
+                <option value="weekly">Weekly</option>
+                <option value="monthly">Monthly</option>
+              </select>
+            </div>
+            <button id="saveScheduleBtn" class="outline small-btn" style="width:auto;">💾 Save Schedule</button>
+          </div>
+        </div>
+
+        <div class="card" id="card-settings-manual">
+          <div class="card-header">
+            <h2><span class="card-icon">💾</span> Manual Backup</h2>
+            <div class="header-actions">
+              <button class="expand-btn" onclick="openFullscreen('card-settings-manual','Backup')">⛶</button>
+              <span class="toggle-icon" onclick="event.stopPropagation();this.closest('.card').classList.toggle('collapsed')">▼</span>
+            </div>
+          </div>
+          <div class="card-body">
+            <p style="font-size:0.8rem;color:var(--text-2);margin-bottom:10px;line-height:1.6;">
+              Export your data to a file. Use it to restore on a new device.
+            </p>
+            <button id="exportBackupBtn" class="outline small-btn" style="width:auto;">📤 Export Backup</button>
+            <a id="backupDownloadLink" class="backup-download-link" download></a>
+          </div>
+        </div>
+
+        <div class="card" id="card-settings-recovery">
+          <div class="card-header">
+            <h2><span class="card-icon">🔄</span> Data Recovery</h2>
+            <div class="header-actions">
+              <button class="expand-btn" onclick="openFullscreen('card-settings-recovery','Data Recovery')">⛶</button>
+              <span class="toggle-icon" onclick="event.stopPropagation();this.closest('.card').classList.toggle('collapsed')">▼</span>
+            </div>
+          </div>
+          <div class="card-body">
+            <p style="font-size:0.8rem;color:var(--text-2);margin-bottom:10px;line-height:1.6;">
+              Generate a recovery code to restore your data on any device. <strong>Keep this code safe!</strong>
+            </p>
+            <button id="generateRecoveryBtn" class="gold-btn small-btn" style="width:auto;">🔑 Generate Recovery Code</button>
+            <div id="recoveryCodeDisplay" style="display:none;margin-top:12px;">
+              <p style="font-size:0.7rem;color:var(--text-3);margin-bottom:6px;">Your recovery code:</p>
+              <div class="recovery-code-box"><span id="recoveryCodeText"></span></div>
+              <button id="copyRecoveryBtn" class="outline small-btn" style="width:auto;">📋 Copy Code</button>
+            </div>
+            <hr style="margin:16px 0;border:none;border-top:1px solid var(--divider);">
+            <p style="font-size:0.8rem;color:var(--text-2);margin-bottom:10px;line-height:1.6;">
+              Already have a recovery code and password? Restore your data on any device.
+            </p>
+            <button id="openRecoveryModalBtn" class="outline small-btn" style="width:auto;">🔄 Restore from Code</button>
+          </div>
+        </div>
+      </div>
+
+      <footer>PAYPLAN LEDGER v14.0 • OFFLINE-FIRST • ALL DATA STORED LOCALLY</footer>
+    </div>
+  </div>
+
+  <div id="toastContainer" class="toast-container"></div>
+
+  <script>
+    function isStandalone() {
+      return window.matchMedia('(display-mode: standalone)').matches ||
+             window.matchMedia('(display-mode: fullscreen)').matches ||
+             window.matchMedia('(display-mode: minimal-ui)').matches ||
+             window.navigator.standalone === true ||
+             document.referrer.includes('android-app://');
+    }
+
+    function applyStandaloneMode() {
+      if (isStandalone()) {
+        document.body.classList.add('standalone-mode');
+        const overlay = document.getElementById('pwaInstallOverlay');
+        if (overlay) overlay.classList.remove('visible');
+      } else {
+        document.body.classList.remove('standalone-mode');
+      }
+    }
+
+    let deferredPrompt = null;
+    const pwaInstallOverlay = document.getElementById('pwaInstallOverlay');
+    const pwaInstallCTA = document.getElementById('pwaInstallCTA');
+    const pwaSkipBtn = document.getElementById('pwaSkipBtn');
+    const pwaInstructions = document.getElementById('pwaInstructions');
+    const pwaInstructionsText = document.getElementById('pwaInstructionsText');
+
+    function showInstallOverlay() {
+      if (isStandalone()) return;
+      pwaInstallOverlay.classList.add('visible');
+    }
+
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+      if (!isStandalone()) setTimeout(showInstallOverlay, 800);
+    });
+
+    pwaInstallCTA.addEventListener('click', async () => {
+      if (deferredPrompt) {
+        deferredPrompt.prompt();
+        const { outcome } = await deferredPrompt.userChoice;
+        if (outcome === 'accepted') {
+          showToast('🎉 Installing...');
+          setTimeout(() => { pwaInstallOverlay.classList.remove('visible'); }, 800);
+        } else {
+          showToast('You can install anytime.');
+        }
+        deferredPrompt = null;
+      } else {
+        pwaInstructions.style.display = 'block';
+        const ua = navigator.userAgent;
+        if (/iPhone|iPad|iPod/i.test(ua)) {
+          pwaInstructionsText.innerHTML = 'Tap <strong>Share (⬆️)</strong> in Safari → <strong>"Add to Home Screen"</strong>.';
+        } else if (/Android/i.test(ua)) {
+          pwaInstructionsText.innerHTML = 'Tap <strong>menu (⋮)</strong> → <strong>"Install app"</strong>.';
+        } else {
+          pwaInstructionsText.innerHTML = 'Look for the <strong>install icon</strong> in your browser address bar.';
+        }
+      }
+    });
+
+    pwaSkipBtn.addEventListener('click', () => {
+      pwaInstallOverlay.classList.remove('visible');
+      localStorage.setItem('pmInstallSkipped', 'true');
+    });
+
+    window.addEventListener('appinstalled', () => {
+      pwaInstallOverlay.classList.remove('visible');
+      deferredPrompt = null;
+      document.body.classList.add('standalone-mode');
+      showToast('🎉 Installed successfully!');
+    });
+
+    window.matchMedia('(display-mode: standalone)').addEventListener('change', applyStandaloneMode);
+    window.matchMedia('(display-mode: fullscreen)').addEventListener('change', applyStandaloneMode);
+
+    const agreementsListDiv = document.getElementById('agreementsList');
+    const addAgreementBtn = document.getElementById('addAgreementBtn');
+    const currentAgreementNameDisplay = document.getElementById('currentAgreementNameDisplay');
+    const headerAgreementName = document.getElementById('headerAgreementName');
+    const dateInput = document.getElementById('workDate');
+    const totalHireAmountInput = document.getElementById('totalHireAmount');
+    const amountPaidInput = document.getElementById('amountPaid');
+    const totalHireDisplay = document.getElementById('totalHireDisplay');
+    const totalPaidDisplay = document.getElementById('totalPaidDisplay');
+    const balancePreviewSpan = document.getElementById('balancePreview');
+    const saveBtn = document.getElementById('saveRecordBtn');
+    const resetFormBtn = document.getElementById('resetFormBtn');
+    const clearCurrentHistoryBtn = document.getElementById('clearCurrentHistoryBtn');
+    const downloadFullBtn = document.getElementById('downloadFullBtn');
+    const downloadRangeBtn = document.getElementById('downloadRangeBtn');
+    const reportStartDate = document.getElementById('reportStartDate');
+    const reportEndDate = document.getElementById('reportEndDate');
+    const todayBtn = document.getElementById('todayBtn');
+    const weekBtn = document.getElementById('weekBtn');
+    const monthBtn = document.getElementById('monthBtn');
+    const historyBody = document.getElementById('historyBody');
+    const summaryStats = document.getElementById('summaryStats');
+    const themeToggle = document.getElementById('themeToggle');
+    const loader = document.getElementById('loaderOverlay');
+    const mainAppContainer = document.getElementById('mainAppContainer');
+    const nextDueDateInput = document.getElementById('nextDueDate');
+    const installmentAmountInput = document.getElementById('installmentAmount');
+    const frequencySelect = document.getElementById('frequencySelect');
+    const saveScheduleBtn = document.getElementById('saveScheduleBtn');
+    const reminderDisplay = document.getElementById('reminderDisplay');
+    const currencySelect = document.getElementById('currencySelect');
+    const saveCurrencyBtn = document.getElementById('saveCurrencyBtn');
+    const nameModal = document.getElementById('nameModal');
+    const agreementNameInput = document.getElementById('agreementNameInput');
+    const pdfReportTitle = document.getElementById('pdfReportTitle');
+    const sellerNameInput = document.getElementById('sellerNameInput');
+    const buyerNameInput = document.getElementById('buyerNameInput');
+    const nameModalConfirm = document.getElementById('nameModalConfirm');
+    const nameModalCancel = document.getElementById('nameModalCancel');
+    const exceedWarningModal = document.getElementById('exceedWarningModal');
+    const exceedWarningMessage = document.getElementById('exceedWarningMessage');
+    const exceedConfirmBtn = document.getElementById('exceedConfirmBtn');
+    const exceedCancelBtn = document.getElementById('exceedCancelBtn');
+    const confirmModal = document.getElementById('confirmModal');
+    const confirmMessage = document.getElementById('confirmMessage');
+    const modalConfirmBtn = document.getElementById('modalConfirm');
+    const modalCancelBtn = document.getElementById('modalCancel');
+    const newAgreementModal = document.getElementById('newAgreementModal');
+    const newAgreementNameInput = document.getElementById('newAgreementName');
+    const createAgreementBtn = document.getElementById('createAgreementBtn');
+    const cancelNewAgreementBtn = document.getElementById('cancelNewAgreementBtn');
+    const welcomeModal = document.getElementById('welcomeModal');
+    const exportBackupBtn = document.getElementById('exportBackupBtn');
+    const backupDownloadLink = document.getElementById('backupDownloadLink');
+    const changePasswordModal = document.getElementById('changePasswordModal');
+    const forgotPasswordModal = document.getElementById('forgotPasswordModal');
+    const searchHistoryInput = document.getElementById('searchHistoryInput');
+    const searchDateFrom = document.getElementById('searchDateFrom');
+    const searchDateTo = document.getElementById('searchDateTo');
+    const searchClearBtn = document.getElementById('searchClearBtn');
+    const celebrationModal = document.getElementById('celebrationModal');
+    const celebAgreementName = document.getElementById('celebAgreementName');
+    const celebAmount = document.getElementById('celebAmount');
+    const fullscreenOverlay = document.getElementById('fullscreenOverlay');
+    const fsTitle = document.getElementById('fsTitle');
+    const fsBody = document.getElementById('fsBody');
+    const recoveryModal = document.getElementById('recoveryModal');
+    const recoveryCodeInput = document.getElementById('recoveryCodeInput');
+    const recoveryPasswordInput = document.getElementById('recoveryPasswordInput');
+    const recoveryError = document.getElementById('recoveryError');
+    const recoveryConfirmBtn = document.getElementById('recoveryConfirmBtn');
+    const recoveryCancelBtn = document.getElementById('recoveryCancelBtn');
+    const recoveryPasswordModal = document.getElementById('recoveryPasswordModal');
+    const rpNewPassword = document.getElementById('rpNewPassword');
+    const rpConfirmPassword = document.getElementById('rpConfirmPassword');
+    const rpError = document.getElementById('rpError');
+    const rpConfirmBtn = document.getElementById('rpConfirmBtn');
+    const rpCancelBtn = document.getElementById('rpCancelBtn');
+    const appSidebar = document.getElementById('appSidebar');
+    const floatingMenuBtn = document.getElementById('floatingMenuBtn');
+    const sidebarBackdrop = document.getElementById('sidebarBackdrop');
+
+    const editRecordModal = document.getElementById('editRecordModal');
+    const editRecordDate = document.getElementById('editRecordDate');
+    const editRecordHire = document.getElementById('editRecordHire');
+    const editRecordPaid = document.getElementById('editRecordPaid');
+    const editRecordError = document.getElementById('editRecordError');
+    const editRecordSaveBtn = document.getElementById('editRecordSaveBtn');
+    const editRecordCancelBtn = document.getElementById('editRecordCancelBtn');
+
+    let progressChart = null;
+    const chartCanvas = document.getElementById('progressChart');
+    const chartWrapper = document.getElementById('chartWrapper');
+    let agreements = {};
+    let currentAgreementId = null;
+    let currentCurrencySymbol = '$';
+    // FIX: renamed from celebShownForAgreement for clarity
+    let celebrationShown = {};
+    let editRecordTarget = null;
+    let fullscreenData = null;
+
+    const rafSchedule = (() => {
+      let scheduled = new Map();
+      return function(key, fn) {
+        if (scheduled.has(key)) return;
+        scheduled.set(key, true);
+        requestAnimationFrame(() => {
+          scheduled.delete(key);
+          try { fn(); } catch (e) { console.warn(e); }
+        });
+      };
+    })();
+
+    function debounce(fn, wait) {
+      let t;
+      return function(...args) {
+        clearTimeout(t);
+        t = setTimeout(() => fn.apply(this, args), wait);
+      };
+    }
+
+    function getDeviceId() {
+      let id = localStorage.getItem('pmDeviceId');
+      if (!id) {
+        id = 'PM-' + Date.now().toString(36).toUpperCase() + '-' + Math.random().toString(36).slice(2, 8).toUpperCase();
+        localStorage.setItem('pmDeviceId', id);
+      }
+      return id;
+    }
+
+    function showToast(msg) {
+      const t = document.createElement('div');
+      t.className = 'toast';
+      t.innerText = msg;
+      document.getElementById('toastContainer').appendChild(t);
+      setTimeout(() => t.remove(), 3000);
+    }
+
+    function showConfirm(msg, cb) {
+      confirmMessage.innerText = msg;
+      confirmModal.classList.add('active');
+      const yes = () => { confirmModal.classList.remove('active'); clean(); cb(true); };
+      const no = () => { confirmModal.classList.remove('active'); clean(); cb(false); };
+      function clean() { modalConfirmBtn.removeEventListener('click', yes); modalCancelBtn.removeEventListener('click', no); }
+      modalConfirmBtn.addEventListener('click', yes);
+      modalCancelBtn.addEventListener('click', no);
+    }
+
+    function getTodayDate() { return new Date().toISOString().slice(0, 10); }
+
+    // FIX: Locale-safe currency formatting — always "en-US" style so
+    // "$1,234.56" doesn't become "$1.234,56" on non-English devices.
+    function formatCurrency(v) {
+      const n = Number(v) || 0;
+      return currentCurrencySymbol + n.toLocaleString('en-US', {
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 2
+      });
+    }
+
+    function calcTotals(recs) {
+      if (!recs.length) return { totalPaid: 0, finalBalance: 0, lastHire: 0 };
+      const s = [...recs].sort((a, b) => new Date(a.date) - new Date(b.date));
+      let paid = 0, hire = 0;
+      for (const r of s) { hire = r.totalHireAmount; paid += r.amountPaid; }
+      return { totalPaid: paid, finalBalance: hire - paid, lastHire: hire };
+    }
+
+    async function encryptData(data, password) {
+      const encoder = new TextEncoder();
+      const salt = crypto.getRandomValues(new Uint8Array(16));
+      const keyMaterial = await crypto.subtle.importKey("raw", encoder.encode(password), "PBKDF2", false, ["deriveKey"]);
+      const key = await crypto.subtle.deriveKey({ name: "PBKDF2", salt, iterations: 100000, hash: "SHA-256" }, keyMaterial, { name: "AES-GCM", length: 256 }, false, ["encrypt"]);
+      const iv = crypto.getRandomValues(new Uint8Array(12));
+      const encrypted = await crypto.subtle.encrypt({ name: "AES-GCM", iv }, key, encoder.encode(JSON.stringify(data)));
+      const combined = new Uint8Array(salt.length + iv.length + encrypted.byteLength);
+      combined.set(salt, 0); combined.set(iv, salt.length);
+      combined.set(new Uint8Array(encrypted), salt.length + iv.length);
+      return btoa(String.fromCharCode(...combined));
+    }
+    async function decryptData(encoded, password) {
+      try {
+        const combined = Uint8Array.from(atob(encoded), c => c.charCodeAt(0));
+        const salt = combined.slice(0, 16);
+        const iv = combined.slice(16, 28);
+        const encrypted = combined.slice(28);
+        const encoder = new TextEncoder();
+        const keyMaterial = await crypto.subtle.importKey("raw", encoder.encode(password), "PBKDF2", false, ["deriveKey"]);
+        const key = await crypto.subtle.deriveKey({ name: "PBKDF2", salt, iterations: 100000, hash: "SHA-256" }, keyMaterial, { name: "AES-GCM", length: 256 }, false, ["decrypt"]);
+        const decrypted = await crypto.subtle.decrypt({ name: "AES-GCM", iv }, key, encrypted);
+        return JSON.parse(new TextDecoder().decode(decrypted));
+      } catch (e) { throw new Error('Decryption failed.'); }
+    }
+
+    async function generateRecoveryCode(password) {
+      const data = { a: agreements, c: currentAgreementId, s: currentCurrencySymbol, t: document.body.classList.contains('dark') ? 'd' : 'l' };
+      try { return 'PMR2:' + await encryptData(data, password); }
+      catch (e) { showToast('Error: ' + e.message); return null; }
+    }
+    async function decodeRecoveryCode(code, password) {
+      try {
+        if (!code || typeof code !== 'string') throw new Error('Invalid recovery code');
+        const parts = code.split(':');
+        if (parts.length !== 2) throw new Error('Invalid format');
+        const version = parts[0], encoded = parts[1];
+        if (version === 'PMR1') {
+          const data = JSON.parse(decodeURIComponent(escape(atob(encoded))));
+          if (!data.a) throw new Error('Invalid data');
+          return { agreements: data.a, currentAgreementId: data.c, currencySymbol: data.s || '$', theme: data.t === 'd' ? 'dark' : 'light' };
+        } else if (version === 'PMR2') {
+          const data = await decryptData(encoded, password);
+          if (!data.a) throw new Error('Invalid data');
+          return { agreements: data.a, currentAgreementId: data.c, currencySymbol: data.s || '$', theme: data.t === 'd' ? 'dark' : 'light' };
+        } else throw new Error('Unsupported version');
+      } catch (e) { throw new Error('Invalid recovery code: ' + e.message); }
+    }
+    async function showRecoveryCode() {
+      recoveryPasswordModal.classList.add('active');
+      rpNewPassword.value = ''; rpConfirmPassword.value = ''; rpError.textContent = '';
+    }
+    async function handleGenerateRecoveryCode() {
+      const password = rpNewPassword.value.trim();
+      const confirm = rpConfirmPassword.value.trim();
+      if (password.length < 4) { rpError.textContent = 'Password must be at least 4 characters.'; return; }
+      if (password !== confirm) { rpError.textContent = 'Passwords do not match.'; return; }
+      rpError.textContent = '';
+      const code = await generateRecoveryCode(password);
+      if (code) {
+        document.getElementById('recoveryCodeText').textContent = code;
+        document.getElementById('recoveryCodeDisplay').style.display = 'block';
+        recoveryPasswordModal.classList.remove('active');
+        showToast('Recovery code generated!');
+      }
+    }
+    function copyRecoveryCode() {
+      const text = document.getElementById('recoveryCodeText').textContent;
+      if (navigator.clipboard) { navigator.clipboard.writeText(text).then(() => showToast('Code copied!')).catch(() => fallbackCopy2(text)); }
+      else fallbackCopy2(text);
+    }
+    function fallbackCopy2(text) {
+      const ta = document.createElement('textarea');
+      ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
+      document.body.appendChild(ta); ta.select();
+      try { document.execCommand('copy'); showToast('Copied!'); } catch (e) {}
+      document.body.removeChild(ta);
+    }
+    async function restoreFromRecoveryCode(code, password) {
+      try {
+        const data = await decodeRecoveryCode(code, password);
+        showConfirm('This will replace all your current data. Continue?', (ok) => {
+          if (!ok) return;
+          agreements = data.agreements;
+          currentAgreementId = data.currentAgreementId || Object.keys(agreements)[0];
+          currentCurrencySymbol = data.currencySymbol || '$';
+          if (data.theme) { document.body.classList.toggle('dark', data.theme === 'dark'); localStorage.setItem('pmTheme', data.theme); }
+          saveAgreements(); renderAgreementsList(); loadCurrentAgreementData();
+          updatePreviewForCurrent(); updateChartForCurrent(); loadScheduleIntoForm();
+          updateReminderDisplay(); refreshAllCurrencyDisplays();
+          updateDashboardStats(); updateStickyHeader();
+          document.getElementById('recoveryModal').classList.remove('active');
+          showToast('✅ Data restored!');
+        });
+      } catch (e) {
+        recoveryError.textContent = e.message;
+        recoveryError.style.display = 'block';
+      }
+    }
+
+    function saveAgreements() {
+      localStorage.setItem('pmAgreements', JSON.stringify(agreements));
+      localStorage.setItem('pmCurrentId', currentAgreementId);
+    }
+    function loadAgreements() {
+      const raw = localStorage.getItem('pmAgreements');
+      if (raw) { try { agreements = JSON.parse(raw); } catch (e) { agreements = {}; } } else { agreements = {}; }
+      const cur = localStorage.getItem('pmCurrentId');
+      currentAgreementId = (cur && agreements[cur]) ? cur : Object.keys(agreements)[0];
+      for (const id in agreements) {
+        if (!agreements[id].schedule) agreements[id].schedule = { nextDueDate: '', installmentAmount: '', frequency: 'monthly' };
+        if (!Array.isArray(agreements[id].records)) agreements[id].records = [];
+      }
+      celebrationShown = {};
+    }
+
+    function renderAgreementsList() {
+      if (!agreementsListDiv) return;
+      if (Object.keys(agreements).length === 0) {
+        agreementsListDiv.innerHTML = `<div style="text-align:center;padding:22px 16px;color:var(--text-2);"><div style="font-size:2.2rem;margin-bottom:6px;">📋</div><div style="font-weight:600;">No agreements yet</div><div style="font-size:0.72rem;margin-top:4px;color:var(--text-3);">Tap "New Agreement" to start</div></div>`;
+        return;
+      }
+      const frag = document.createDocumentFragment();
+      for (const [id, ag] of Object.entries(agreements)) {
+        const div = document.createElement('div');
+        div.className = 'agreement-item';
+        const nameWrap = document.createElement('div');
+        nameWrap.className = 'agreement-name-wrap';
+        const nameSpan = document.createElement('span');
+        nameSpan.className = 'agreement-name' + (currentAgreementId === id ? ' active' : '');
+        nameSpan.textContent = ag.name;
+        nameSpan.dataset.id = id;
+        nameSpan.onclick = () => switchAgreement(id);
+        nameWrap.appendChild(nameSpan);
+        const acts = document.createElement('div');
+        acts.className = 'agreement-actions';
+        const editBtn = document.createElement('button');
+        editBtn.textContent = '✏️';
+        editBtn.className = 'edit-name-btn';
+        editBtn.onclick = (e) => { e.stopPropagation(); startInlineEdit(id, nameSpan); };
+        acts.appendChild(editBtn);
+        const delBtn = document.createElement('button');
+        delBtn.textContent = 'Delete';
+        delBtn.onclick = e => { e.stopPropagation(); deleteAgreement(id); };
+        acts.appendChild(delBtn);
+        div.appendChild(nameWrap);
+        div.appendChild(acts);
+        frag.appendChild(div);
+      }
+      agreementsListDiv.innerHTML = '';
+      agreementsListDiv.appendChild(frag);
+      currentAgreementNameDisplay.textContent = (currentAgreementId && agreements[currentAgreementId]) ? agreements[currentAgreementId].name : 'Select Agreement';
+      updateStickyHeader();
+    }
+    function startInlineEdit(id, nameSpan) {
+      const ag = agreements[id];
+      if (!ag) return;
+      const currentName = ag.name;
+      const input = document.createElement('input');
+      input.type = 'text';
+      input.className = 'agreement-name-input-edit';
+      input.value = currentName;
+      input.maxLength = 60;
+      nameSpan.parentNode.replaceChild(input, nameSpan);
+      input.focus(); input.select();
+      const saveEdit = () => {
+        agreements[id].name = input.value.trim() || currentName;
+        saveAgreements(); renderAgreementsList();
+        if (currentAgreementId === id) updateStickyHeader();
+        showToast('Agreement name updated');
+      };
+      input.addEventListener('blur', saveEdit, { once: true });
+      input.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') input.blur();
+        if (e.key === 'Escape') { input.value = currentName; input.blur(); }
+      });
+    }
+    function switchAgreement(id) {
+      if (!agreements[id]) return;
+      currentAgreementId = id;
+      saveAgreements(); renderAgreementsList(); loadCurrentAgreementData();
+      updatePreviewForCurrent(); updateChartForCurrent(); loadScheduleIntoForm();
+      updateReminderDisplay(); refreshAllCurrencyDisplays();
+      updateDashboardStats(); updateStickyHeader();
+      celebrationShown[id] = false;
+    }
+    function deleteAgreement(id) {
+      if (Object.keys(agreements).length === 1) { showToast('Cannot delete the only agreement.'); return; }
+      showConfirm(`Delete "${agreements[id].name}"? All records will be lost.`, ok => {
+        if (!ok) return;
+        delete agreements[id];
+        if (currentAgreementId === id) currentAgreementId = Object.keys(agreements)[0];
+        saveAgreements(); renderAgreementsList(); loadCurrentAgreementData();
+        updatePreviewForCurrent(); updateChartForCurrent(); loadScheduleIntoForm();
+        updateReminderDisplay(); refreshAllCurrencyDisplays();
+        updateDashboardStats(); updateStickyHeader();
+        showToast('Agreement deleted');
+      });
+    }
+    function addNewAgreement() {
+      newAgreementNameInput.value = '';
+      newAgreementModal.classList.add('active');
+    }
+    function createNewAgreement() {
+      const name = newAgreementNameInput.value.trim() || 'New Agreement';
+      const id = Date.now().toString();
+      agreements[id] = { name, records: [], totalHireAmount: 5000, schedule: { nextDueDate: '', installmentAmount: '', frequency: 'monthly' } };
+      currentAgreementId = id;
+      saveAgreements(); renderAgreementsList(); loadCurrentAgreementData();
+      updatePreviewForCurrent(); updateChartForCurrent(); loadScheduleIntoForm();
+      updateReminderDisplay(); refreshAllCurrencyDisplays();
+      updateDashboardStats(); updateStickyHeader();
+      newAgreementModal.classList.remove('active');
+      showToast(`"${name}" created`);
+      celebrationShown[id] = false;
+    }
+    function updateStickyHeader() {
+      if (currentAgreementId && agreements[currentAgreementId]) {
+        headerAgreementName.textContent = '— ' + agreements[currentAgreementId].name;
+      } else {
+        headerAgreementName.textContent = '— Select';
+      }
+    }
+
+    function updateDashboardStats() {
+      document.getElementById('dashTotalAgreements').textContent = Object.keys(agreements).length;
+      let totalPaid = 0, active = 0;
+      for (const id in agreements) {
+        const { totalPaid: tp } = calcTotals(agreements[id].records);
+        totalPaid += tp;
+        if (tp > 0) active++;
+      }
+      document.getElementById('dashTotalPaid').textContent = formatCurrency(totalPaid);
+      document.getElementById('dashActiveAgreements').textContent = active;
+      if (currentAgreementId && agreements[currentAgreementId]) {
+        document.getElementById('dashCurrentAgreement').textContent = 'Current: ' + agreements[currentAgreementId].name;
+      } else {
+        document.getElementById('dashCurrentAgreement').textContent = 'No agreement selected';
+      }
+    }
+
+    function loadCurrentAgreementData() {
+      if (!currentAgreementId || !agreements[currentAgreementId]) {
+        historyBody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--text-3);padding:28px;">Select an agreement</td></tr>';
+        summaryStats.innerHTML = '<span>Total Paid: 0</span><span>Remaining: 0</span>';
+        totalHireAmountInput.value = '';
+        return;
+      }
+      const ag = agreements[currentAgreementId];
+      totalHireAmountInput.value = ag.totalHireAmount || 5000;
+      renderHistoryTable(ag.records);
+      updatePreviewForCurrent();
+      updateChartForCurrent();
+    }
+    function renderHistoryTable(records) {
+      const searchTerm = searchHistoryInput ? searchHistoryInput.value.toLowerCase().trim() : '';
+      const fromDate = searchDateFrom ? searchDateFrom.value : '';
+      const toDate = searchDateTo ? searchDateTo.value : '';
+      let filtered = records;
+      if (searchTerm) {
+        const numSearch = parseFloat(searchTerm);
+        if (!isNaN(numSearch)) {
+          filtered = filtered.filter(r => Math.abs(r.amountPaid - numSearch) < 0.01 || Math.abs(r.totalHireAmount - numSearch) < 0.01 || String(r.amountPaid).includes(searchTerm) || String(r.totalHireAmount).includes(searchTerm));
+        } else {
+          filtered = filtered.filter(r => r.date.includes(searchTerm) || String(r.amountPaid).includes(searchTerm) || String(r.totalHireAmount).includes(searchTerm));
+        }
+      }
+      if (fromDate) filtered = filtered.filter(r => r.date >= fromDate);
+      if (toDate) filtered = filtered.filter(r => r.date <= toDate);
+      if (!filtered.length) {
+        historyBody.innerHTML = `<tr><td colspan="6" style="text-align:center;color:var(--text-3);padding:32px 16px;"><div style="font-size:2.4rem;margin-bottom:6px;opacity:0.5;">📭</div><div style="font-weight:600;">${records.length ? 'No matching records' : 'No payments yet'}</div></td></tr>`;
+        summaryStats.innerHTML = `<span>Total Paid: ${formatCurrency(0)}</span><span>Remaining: ${formatCurrency(0)}</span>`;
+        return;
+      }
+      const sorted = [...filtered].sort((a, b) => new Date(a.date) - new Date(b.date));
+      let run = 0, html = '', sum = 0, bal = 0, hire = 0;
+      for (const r of sorted) {
+        run += r.amountPaid; sum = run; hire = r.totalHireAmount; bal = hire - run;
+        html += `<tr><td>${r.date}</td><td>${formatCurrency(r.totalHireAmount)}</td><td>${formatCurrency(r.amountPaid)}</td><td>${formatCurrency(run)}</td><td style="color:${bal<0?'var(--danger)':'var(--text)'}">${formatCurrency(bal)}</td><td><div class="action-row-btns"><button class="edit-btn" data-id="${r.id}" title="Edit">✏️</button><button class="delete-btn" data-id="${r.id}" title="Delete">🗑️</button></div></td></tr>`;
+      }
+      historyBody.innerHTML = html;
+      const isComplete = bal <= 0 && sum > 0;
+      summaryStats.innerHTML = `<span class="${isComplete ? 'paid-complete' : ''}">Total Paid: ${formatCurrency(sum)} ${isComplete ? '🎉' : ''}</span><span>${isComplete ? '✅ Completed!' : 'Remaining: ' + formatCurrency(bal)}</span>`;
+      document.querySelectorAll('.edit-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+          const id = parseInt(this.dataset.id);
+          if (currentAgreementId) openEditRecordModal(currentAgreementId, id);
+        });
+      });
+      document.querySelectorAll('.delete-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+          const id = parseInt(this.dataset.id);
+          showConfirm('Delete this record?', ok => { if (ok) deleteRecord(id); });
+        });
+      });
+    }
+    function deleteRecord(id) {
+      if (!currentAgreementId) return;
+      agreements[currentAgreementId].records = agreements[currentAgreementId].records.filter(r => r.id !== id);
+      saveAgreements(); renderHistoryTable(agreements[currentAgreementId].records);
+      updatePreviewForCurrent(); updateChartForCurrent(); updateReminderDisplay();
+      refreshAllCurrencyDisplays(); updateDashboardStats();
+      showToast('Record deleted');
+    }
+
+    // FIX: empty contract field now shows 0 in preview instead of silently
+    // falling back to the stored value, and celebration tracking uses
+    // celebrationShown instead of the old celebShownForAgreement.
+    function updatePreviewForCurrent() {
+      if (!currentAgreementId) return;
+      const ag = agreements[currentAgreementId];
+      const rawHire = totalHireAmountInput.value.trim();
+      const hire = rawHire === '' ? 0 : (parseFloat(rawHire) || 0);
+      const add = parseFloat(amountPaidInput.value) || 0;
+      const { totalPaid } = calcTotals(ag.records);
+      const all = totalPaid + add, bal = hire - all;
+      totalHireDisplay.innerText = formatCurrency(hire);
+      totalPaidDisplay.innerText = formatCurrency(all);
+      balancePreviewSpan.innerText = formatCurrency(bal);
+      if (bal <= 0 && all > 0) {
+        balancePreviewSpan.style.background = 'var(--accent-gradient)';
+        balancePreviewSpan.classList.add('zero-balance');
+      } else {
+        balancePreviewSpan.style.background = 'var(--primary-gradient)';
+        balancePreviewSpan.classList.remove('zero-balance');
+      }
+      if (bal <= 0 && all > 0 && currentAgreementId && !celebrationShown[currentAgreementId]) {
+        celebrationShown[currentAgreementId] = true;
+        showCelebration(ag.name || 'Agreement', all);
+      }
+    }
+
+    function showCelebration(name, amount) {
+      celebAgreementName.textContent = name || 'this agreement';
+      celebAmount.textContent = formatCurrency(amount);
+      celebrationModal.classList.add('active');
+      if (currentAgreementId) celebrationShown[currentAgreementId] = true;
+      if (navigator.vibrate) navigator.vibrate([50, 100, 50]);
+    }
+    function closeCelebration() { celebrationModal.classList.remove('active'); }
+
+    function openEditRecordModal(agreementId, recordId) {
+      const ag = agreements[agreementId];
+      if (!ag) return;
+      const record = ag.records.find(r => r.id === recordId);
+      if (!record) return;
+      editRecordTarget = { agreementId, recordId };
+      editRecordDate.value = record.date || '';
+      editRecordHire.value = record.totalHireAmount || '';
+      editRecordPaid.value = record.amountPaid || '';
+      editRecordError.textContent = '';
+      editRecordModal.classList.add('active');
+    }
+    function closeEditRecordModal() { editRecordTarget = null; editRecordModal.classList.remove('active'); }
+    function saveEditedRecord() {
+      if (!editRecordTarget) return;
+      const { agreementId, recordId } = editRecordTarget;
+      const ag = agreements[agreementId];
+      if (!ag) return;
+      const date = editRecordDate.value.trim();
+      const hire = parseFloat(editRecordHire.value);
+      const paid = parseFloat(editRecordPaid.value);
+      if (!date) { editRecordError.textContent = 'Please select a date.'; return; }
+      if (isNaN(hire) || hire <= 0) { editRecordError.textContent = 'Enter a valid contract amount.'; return; }
+      if (isNaN(paid) || paid <= 0) { editRecordError.textContent = 'Enter a valid amount paid.'; return; }
+      editRecordError.textContent = '';
+      const record = ag.records.find(r => r.id === recordId);
+      if (record) {
+        record.date = date; record.totalHireAmount = hire; record.amountPaid = paid;
+        ag.totalHireAmount = hire;
+        ag.records.sort((a, b) => new Date(a.date) - new Date(b.date));
+        saveAgreements(); renderHistoryTable(ag.records);
+        updatePreviewForCurrent(); updateChartForCurrent(); updateReminderDisplay();
+        refreshAllCurrencyDisplays();
+        showToast('✅ Record updated');
+      }
+      closeEditRecordModal();
+    }
+    editRecordCancelBtn.addEventListener('click', closeEditRecordModal);
+    editRecordSaveBtn.addEventListener('click', saveEditedRecord);
+    editRecordModal.addEventListener('click', function(e) { if (e.target === this) closeEditRecordModal(); });
+
+    function drawChart(canvasEl) {
+      if (!currentAgreementId || !agreements[currentAgreementId]) return;
+      if (typeof Chart === 'undefined') {
+        showChartFallback();
+        return;
+      }
+      const ag = agreements[currentAgreementId];
+      if (ag.records.length === 0) {
+        showChartFallback();
+        return;
+      }
+      hideChartFallback();
+      const sorted = [...ag.records].sort((a, b) => new Date(a.date) - new Date(b.date));
+      const labels = sorted.map(r => r.date);
+      let run = 0;
+      const runs = sorted.map(r => { run += r.amountPaid; return run; });
+      const target = new Array(sorted.length).fill(ag.totalHireAmount || 5000);
+      const ctx = canvasEl.getContext('2d');
+      if (!ctx) return;
+      const isDark = document.body.classList.contains('dark');
+      const textColor = isDark ? '#94a3b8' : '#475569';
+      const gridColor = isDark ? 'rgba(255,255,255,0.05)' : 'rgba(15,23,42,0.06)';
+      const gradient = ctx.createLinearGradient(0, 0, 0, 260);
+      gradient.addColorStop(0, 'rgba(16, 185, 129, 0.9)');
+      gradient.addColorStop(0.6, 'rgba(16, 185, 129, 0.5)');
+      gradient.addColorStop(1, 'rgba(16, 185, 129, 0.1)');
+      return new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels,
+          datasets: [
+            { label: 'Paid (' + currentCurrencySymbol + ')', data: runs, backgroundColor: gradient, borderColor: '#10b981', borderWidth: 0, borderRadius: 8, barPercentage: 0.65 },
+            { label: 'Contract (' + currentCurrencySymbol + ')', data: target, type: 'line', borderColor: '#fbbf24', backgroundColor: 'transparent', borderWidth: 2, borderDash: [6, 4], pointRadius: 0, tension: 0, fill: false }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          animation: { duration: 500, easing: 'easeOutQuart' },
+          plugins: {
+            tooltip: {
+              backgroundColor: isDark ? 'rgba(19,26,44,0.95)' : 'rgba(255,255,255,0.95)',
+              titleColor: isDark ? '#f1f5f9' : '#0a0f1f',
+              bodyColor: isDark ? '#f1f5f9' : '#0a0f1f',
+              borderColor: isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)',
+              borderWidth: 1,
+              cornerRadius: 10,
+              padding: 10,
+              titleFont: { weight: '700', size: 12 },
+              bodyFont: { weight: '600', size: 12 },
+              callbacks: {
+                label: function(c) {
+                  let l = c.dataset.label || '';
+                  if (l) l += ': ';
+                  return l + currentCurrencySymbol + c.raw.toLocaleString('en-US');
+                }
+              }
+            },
+            legend: {
+              labels: {
+                color: textColor,
+                font: { weight: '700', size: 11 },
+                boxWidth: 10,
+                padding: 12,
+                usePointStyle: true,
+                pointStyle: 'circle'
+              }
+            }
+          },
+          scales: {
+            y: {
+              beginAtZero: true,
+              grid: { color: gridColor, drawBorder: false },
+              ticks: {
+                color: textColor,
+                callback: v => currentCurrencySymbol + v.toLocaleString('en-US'),
+                font: { size: 10, weight: '600' },
+                maxTicksLimit: 5
+              }
+            },
+            x: {
+              grid: { display: false },
+              ticks: {
+                color: textColor,
+                maxTicksLimit: 6,
+                maxRotation: 45,
+                minRotation: 20,
+                font: { size: 9, weight: '600' }
+              }
+            }
+          },
+          interaction: { intersect: false, mode: 'index' }
+        }
+      });
+    }
+
+    function showChartFallback() {
+      const fb = document.getElementById('chartFallback');
+      if (fb) fb.classList.add('visible');
+      if (chartWrapper) chartWrapper.classList.add('hidden-when-no-chart');
+    }
+    function hideChartFallback() {
+      const fb = document.getElementById('chartFallback');
+      if (fb) fb.classList.remove('visible');
+      if (chartWrapper) chartWrapper.classList.remove('hidden-when-no-chart');
+    }
+
+    function updateChartForCurrent() {
+      if (!currentAgreementId || !agreements[currentAgreementId]) return;
+      if (typeof Chart === 'undefined') {
+        window.__chartReadyCallback = () => { updateChartForCurrent(); };
+        showChartFallback();
+        return;
+      }
+      const ag = agreements[currentAgreementId];
+      if (ag.records.length === 0) {
+        if (progressChart) { progressChart.destroy(); progressChart = null; }
+        showChartFallback();
+        return;
+      }
+      if (progressChart) { progressChart.destroy(); progressChart = null; }
+      if (!chartCanvas) return;
+      progressChart = drawChart(chartCanvas);
+    }
+
+    function loadScheduleIntoForm() {
+      if (!currentAgreementId || !agreements[currentAgreementId]) return;
+      const s = agreements[currentAgreementId].schedule;
+      nextDueDateInput.value = s.nextDueDate || '';
+      installmentAmountInput.value = s.installmentAmount || '';
+      frequencySelect.value = s.frequency || 'monthly';
+      updateReminderDisplay();
+    }
+    function saveSchedule() {
+      if (!currentAgreementId) { showToast('No agreement selected'); return; }
+      const nd = nextDueDateInput.value, ia = parseFloat(installmentAmountInput.value);
+      if (!nd || isNaN(ia) || ia <= 0) { showToast('Enter valid due date and amount'); return; }
+      agreements[currentAgreementId].schedule = { nextDueDate: nd, installmentAmount: ia, frequency: frequencySelect.value };
+      saveAgreements(); updateReminderDisplay();
+      showToast('Schedule saved');
+    }
+    function updateReminderDisplay() {
+      if (!currentAgreementId || !agreements[currentAgreementId]) {
+        reminderDisplay.innerHTML = '<p>Select an agreement to see reminders.</p>';
+        return;
+      }
+      const ag = agreements[currentAgreementId], s = ag.schedule;
+      if (!s.nextDueDate || !s.installmentAmount) {
+        reminderDisplay.innerHTML = '<p>No schedule set. Use settings to set up reminders.</p>';
+        return;
+      }
+      const today = new Date(); today.setHours(0, 0, 0, 0);
+      const due = new Date(s.nextDueDate); due.setHours(0, 0, 0, 0);
+      const diff = Math.ceil((due - today) / 86400000);
+      const bal = calcTotals(ag.records).finalBalance;
+      const left = Math.max(0, Math.ceil(bal / s.installmentAmount));
+      let h = `<div style="margin-bottom:4px;"><strong>Next Payment:</strong> ${formatCurrency(s.installmentAmount)} on ${s.nextDueDate}</div>`;
+      if (diff < 0) h += `<div class="reminder-warning">⚠️ Overdue by ${Math.abs(diff)} days!</div>`;
+      else if (diff === 0) h += `<div class="reminder-warning">⚠️ Due today!</div>`;
+      else if (diff <= 3) h += `<div class="reminder-warning">⏰ Due in ${diff} days!</div>`;
+      else h += `<div>📅 Due in ${diff} days</div>`;
+      h += `<div>💰 Remaining: ${formatCurrency(bal)}</div><div>🔄 Est. installments left: ${left}</div>`;
+      reminderDisplay.innerHTML = h;
+    }
+
+    function loadCurrency() {
+      const saved = localStorage.getItem('pmCurrencySymbol');
+      const valid = ['$', '€', '£', '₦', '₵', '¥', '₹', 'R', 'KSh', 'AED', 'C$', 'A$'];
+      currentCurrencySymbol = (saved && valid.includes(saved)) ? saved : '$';
+      currencySelect.value = currentCurrencySymbol;
+      refreshAllCurrencyDisplays();
+    }
+    function saveCurrency() {
+      currentCurrencySymbol = currencySelect.value;
+      localStorage.setItem('pmCurrencySymbol', currentCurrencySymbol);
+      refreshAllCurrencyDisplays();
+      showToast(`Currency set to ${currentCurrencySymbol}`);
+    }
+    function refreshAllCurrencyDisplays() {
+      if (!currentAgreementId) return;
+      updatePreviewForCurrent();
+      const ag = agreements[currentAgreementId];
+      if (ag) { renderHistoryTable(ag.records); updateChartForCurrent(); updateReminderDisplay(); }
+      updateDashboardStats();
+    }
+
+    function resetForm() { dateInput.value = getTodayDate(); amountPaidInput.value = ''; updatePreviewForCurrent(); showToast('Form reset'); }
+    function saveRecord() {
+      if (!currentAgreementId) { showToast('No agreement selected'); return; }
+      const date = dateInput.value || getTodayDate();
+      const hire = parseFloat(totalHireAmountInput.value) || 0;
+      const paid = parseFloat(amountPaidInput.value) || 0;
+      if (hire <= 0) { showToast('Enter a valid Contract Amount'); return; }
+      if (paid <= 0) { showToast('Enter a valid Amount Paid'); return; }
+      proceedWithSave(date, hire, paid);
+    }
+    function proceedWithSave(date, hire, paid) {
+      const { totalPaid } = calcTotals(agreements[currentAgreementId].records);
+      if (totalPaid + paid > hire) {
+        const over = (totalPaid + paid) - hire;
+        exceedWarningMessage.innerHTML = `⚠️ Exceeds contract by <strong>${formatCurrency(over)}</strong>.<br><br>Continue anyway?`;
+        exceedWarningModal.classList.add('active');
+        const yes = () => { exceedWarningModal.classList.remove('active'); clean(); performSave(date, hire, paid); };
+        const no = () => { exceedWarningModal.classList.remove('active'); clean(); showToast('Payment cancelled'); };
+        function clean() { exceedConfirmBtn.removeEventListener('click', yes); exceedCancelBtn.removeEventListener('click', no); }
+        exceedConfirmBtn.addEventListener('click', yes);
+        exceedCancelBtn.addEventListener('click', no);
+      } else { performSave(date, hire, paid); }
+    }
+    function performSave(date, hire, paid) {
+      const ag = agreements[currentAgreementId];
+      ag.records.push({ id: Date.now(), date, totalHireAmount: hire, amountPaid: paid });
+      ag.records.sort((a, b) => new Date(a.date) - new Date(b.date));
+      ag.totalHireAmount = hire;
+      saveAgreements(); renderHistoryTable(ag.records);
+      updatePreviewForCurrent(); updateChartForCurrent(); updateReminderDisplay();
+      refreshAllCurrencyDisplays(); updateDashboardStats();
+      showToast(`✅ Saved — ${formatCurrency(paid)} on ${date}`);
+      if (navigator.vibrate) navigator.vibrate(20);
+    }
+    function clearCurrentHistory() {
+      if (!currentAgreementId) { showToast('No agreement selected'); return; }
+      showConfirm('Delete ALL payment records? This cannot be undone.', ok => {
+        if (!ok) return;
+        agreements[currentAgreementId].records = [];
+        saveAgreements(); renderHistoryTable([]);
+        updatePreviewForCurrent(); updateChartForCurrent(); updateReminderDisplay();
+        refreshAllCurrencyDisplays(); updateDashboardStats();
+        showToast('History cleared');
+      });
+    }
+
+    function showPDFProgress(message) {
+      var existing = document.getElementById('pdfProgressOverlay');
+      if (existing) existing.remove();
+      var ov = document.createElement('div');
+      ov.id = 'pdfProgressOverlay';
+      ov.className = 'pdf-overlay';
+      ov.innerHTML = '<div class="pdf-overlay-inner"><div style="font-size:3.8rem;color:#10b981;margin-bottom:14px;">📄</div><div style="color:#10b981;font-size:1.1rem;font-weight:800;margin-bottom:6px;">' + message + '</div><div style="color:#94a3b8;font-size:0.8rem;">Generating PDF in your browser...</div></div>';
+      document.body.appendChild(ov);
+    }
+
+    function hidePDFProgress() {
+      var ov = document.getElementById('pdfProgressOverlay');
+      if (ov) ov.remove();
+    }
+
+    async function generatePDF(htmlContent, fileName) {
+      if (typeof window.jspdf === 'undefined' || typeof window.html2canvas === 'undefined') {
+        showToast('⚠️ Using browser print fallback (Save as PDF)');
+        var printWindow = window.open('', '_blank');
+        if (!printWindow) { showToast('❌ Popup blocked. Please allow popups.'); return; }
+        printWindow.document.write(htmlContent);
+        printWindow.document.close();
+        printWindow.onload = function() {
+          setTimeout(function() { printWindow.print(); }, 500);
+        };
+        return;
+      }
+
+      showPDFProgress('Preparing report');
+
+      try {
+        var container = document.createElement('div');
+        container.style.position = 'fixed';
+        container.style.left = '-99999px';
+        container.style.top = '0';
+        container.style.width = '794px';
+        container.style.background = '#ffffff';
+        container.style.padding = '0';
+        container.innerHTML = htmlContent;
+        document.body.appendChild(container);
+
+        await new Promise(function(r) { setTimeout(r, 250); });
+
+        var canvas = await html2canvas(container, {
+          scale: 2,
+          backgroundColor: '#ffffff',
+          logging: false,
+          useCORS: true,
+          windowWidth: 794
+        });
+
+        document.body.removeChild(container);
+
+        var { jsPDF } = window.jspdf;
+        var pdf = new jsPDF({ orientation: 'portrait', unit: 'pt', format: 'a4' });
+
+        var pageWidth = pdf.internal.pageSize.getWidth();
+        var pageHeight = pdf.internal.pageSize.getHeight();
+        var imgWidth = pageWidth;
+        var imgHeight = (canvas.height * imgWidth) / canvas.width;
+
+        if (imgHeight <= pageHeight) {
+          pdf.addImage(canvas.toDataURL('image/jpeg', 0.92), 'JPEG', 0, 0, imgWidth, imgHeight);
+        } else {
+          var pageCanvasHeight = Math.floor((pageHeight * canvas.width) / pageWidth);
+          var yOffset = 0;
+          while (yOffset < canvas.height) {
+            var sliceHeight = Math.min(pageCanvasHeight, canvas.height - yOffset);
+            var pageCanvas = document.createElement('canvas');
+            pageCanvas.width = canvas.width;
+            pageCanvas.height = sliceHeight;
+            var pctx = pageCanvas.getContext('2d');
+            pctx.fillStyle = '#ffffff';
+            pctx.fillRect(0, 0, pageCanvas.width, pageCanvas.height);
+            pctx.drawImage(canvas, 0, yOffset, canvas.width, sliceHeight, 0, 0, canvas.width, sliceHeight);
+            var sliceData = pageCanvas.toDataURL('image/jpeg', 0.92);
+            var sliceHeightPt = (sliceHeight * imgWidth) / canvas.width;
+            if (yOffset > 0) pdf.addPage();
+            pdf.addImage(sliceData, 'JPEG', 0, 0, imgWidth, sliceHeightPt);
+            yOffset += sliceHeight;
+          }
+        }
+
+        pdf.save(fileName || ('PayPlan_Ledger_Report_' + new Date().toISOString().slice(0, 10) + '.pdf'));
+        hidePDFProgress();
+        showToast('✅ PDF downloaded');
+      } catch (err) {
+        hidePDFProgress();
+        console.error('PDF error:', err);
+        showToast('❌ PDF failed: ' + err.message);
+      }
+    }
+
+    // FIX: escapeHtml now also handles quotes and single quotes
+    function escapeHtml(s) {
+      return s ? String(s).replace(/[&<>"']/g, function(m) {
+        return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[m];
+      }) : '';
+    }
+
+    function buildPDF(records, mainTitle, period, agree, seller, buyer) {
+      const sorted = [...records].sort((a, b) => new Date(a.date) - new Date(b.date));
+      let run = 0, rows = '', paid = 0, bal = 0, hire = 0;
+      for (const r of sorted) {
+        run += r.amountPaid; paid = run; hire = r.totalHireAmount; bal = hire - run;
+        rows += '<tr><td>' + r.date + '</td><td style="text-align:right">' + formatCurrency(r.totalHireAmount) + '</td><td style="text-align:right">' + formatCurrency(r.amountPaid) + '</td><td style="text-align:right">' + formatCurrency(run) + '</td><td style="text-align:right;' + (bal < 0 ? 'color:#c2410c' : '') + '">' + formatCurrency(bal) + '</td></tr>';
+      }
+      return '<!DOCTYPE html><html><head><meta charset="UTF-8"><title>PayPlan Ledger Report</title><style>' +
+        'body{font-family:Arial,Helvetica,sans-serif;margin:0;padding:40px 32px;color:#14212b;background:#fff;width:730px}' +
+        'h1{color:#10b981;text-align:center;font-size:24px;border-bottom:3px solid #fbbf24;padding-bottom:12px;margin:0 0 8px 0}' +
+        '.sub{text-align:center;color:#666;font-size:12px;margin-bottom:18px}' +
+        'hr{border:none;border-top:2px solid #10b981;margin:12px 0}' +
+        '.meta{font-size:12px;margin-bottom:16px;line-height:1.8;color:#334155}' +
+        'table{width:100%;border-collapse:collapse;margin-bottom:18px;font-size:12px}' +
+        'th{background:#10b981;color:white;padding:10px;text-align:right;font-weight:700}' +
+        'th:first-child{text-align:left}' +
+        'td{border:1px solid #e2e8f0;padding:9px;color:#1e293b}' +
+        'td:not(:first-child){text-align:right}' +
+        'tr:nth-child(even){background:#f8fafc}' +
+        '.sum{width:45%;margin-left:auto;font-size:13px;border-collapse:collapse}' +
+        '.sum td{padding:8px 12px;border:none;font-weight:600}' +
+        '.sum tr:last-child{background:#e8f3ee;font-weight:bold;color:#10b981}' +
+        '.footer{text-align:center;margin-top:32px;font-size:10px;color:#94a3b8;border-top:1px solid #e2e8f0;padding-top:16px}' +
+        '</style></head><body>' +
+        '<h1>💼 ' + escapeHtml(mainTitle) + '</h1>' +
+        '<div class="sub">' + escapeHtml(agree) + ' • Hire Purchase Report</div>' +
+        '<hr>' +
+        '<div class="meta">' +
+          '<strong>Period:</strong> ' + escapeHtml(period) + '<br>' +
+          '<strong>Agreement:</strong> ' + escapeHtml(agree) + '<br>' +
+          '<strong>Seller:</strong> ' + escapeHtml(seller) + ' &nbsp;&nbsp; <strong>Buyer:</strong> ' + escapeHtml(buyer) + '<br>' +
+          '<strong>Generated:</strong> ' + new Date().toLocaleString('en-US') +
+        '</div>' +
+        '<table><thead><tr><th>Date</th><th>Contract</th><th>Paid</th><th>Total</th><th>Balance</th></tr></thead><tbody>' + rows + '</tbody></table>' +
+        '<table class="sum">' +
+          '<tr><td>Total Contract:</td><td>' + formatCurrency(hire) + '</td></tr>' +
+          '<tr><td>Total Paid:</td><td>' + formatCurrency(paid) + '</td></tr>' +
+          '<tr><td>Remaining:</td><td>' + formatCurrency(bal) + '</td></tr>' +
+        '</table>' +
+        '<div class="footer">PayPlan Ledger • Hire Purchase Tracker • ' + new Date().toLocaleDateString('en-US') + '</div>' +
+        '</body></html>';
+    }
+
+    async function requestPDF(records, baseTitle) {
+      if (!currentAgreementId) { showToast('No agreement selected'); return; }
+      const ag = agreements[currentAgreementId];
+      const currentName = ag.name;
+      pdfReportTitle.value = localStorage.getItem('pmPdfTitle') || 'Payment Report';
+      agreementNameInput.value = localStorage.getItem('pmPrintAgreement') || currentName;
+      sellerNameInput.value = localStorage.getItem('pmPrintSeller') || 'Seller';
+      buyerNameInput.value = localStorage.getItem('pmPrintBuyer') || 'Buyer';
+      nameModal.classList.add('active');
+      const yes = async () => {
+        nameModal.classList.remove('active');
+        const reportTitle = pdfReportTitle.value.trim() || 'Payment Report';
+        const newAgreementName = agreementNameInput.value.trim() || currentName;
+        const seller = sellerNameInput.value.trim() || 'Seller';
+        const buyer = buyerNameInput.value.trim() || 'Buyer';
+        localStorage.setItem('pmPdfTitle', reportTitle);
+        localStorage.setItem('pmPrintAgreement', newAgreementName);
+        localStorage.setItem('pmPrintSeller', seller);
+        localStorage.setItem('pmPrintBuyer', buyer);
+        if (newAgreementName !== currentName) {
+          agreements[currentAgreementId].name = newAgreementName;
+          saveAgreements(); renderAgreementsList(); updateStickyHeader();
+        }
+        await generatePDF(buildPDF(records, reportTitle, baseTitle, newAgreementName, seller, buyer), 'PayPlan_' + newAgreementName.replace(/[^a-z0-9]/gi, '_') + '.pdf');
+        cl();
+      };
+      const no = () => { nameModal.classList.remove('active'); cl(); };
+      function cl() { nameModalConfirm.removeEventListener('click', yes); nameModalCancel.removeEventListener('click', no); }
+      nameModalConfirm.addEventListener('click', yes);
+      nameModalCancel.addEventListener('click', no);
+    }
+    async function handleDownloadFull() {
+      if (!currentAgreementId) { showToast('No agreement selected'); return; }
+      const r = agreements[currentAgreementId].records;
+      if (!r.length) { showToast('No records to export'); return; }
+      await requestPDF(r, 'Full Payment History');
+    }
+    async function handleDownloadRange() {
+      if (!currentAgreementId) { showToast('No agreement selected'); return; }
+      const s = reportStartDate.value, e = reportEndDate.value;
+      if (!s || !e) { showToast('Select a date range'); return; }
+      const f = agreements[currentAgreementId].records.filter(r => r.date >= s && r.date <= e);
+      if (!f.length) { showToast('No records in that range'); return; }
+      await requestPDF(f, s + ' to ' + e);
+    }
+    function setToday() { const d = getTodayDate(); reportStartDate.value = d; reportEndDate.value = d; }
+    function setThisWeek() {
+      const t = new Date(), day = t.getDay(), diff = day === 0 ? 6 : day - 1;
+      const mon = new Date(t); mon.setDate(t.getDate() - diff);
+      const sun = new Date(mon); sun.setDate(mon.getDate() + 6);
+      reportStartDate.value = mon.toISOString().slice(0, 10);
+      reportEndDate.value = sun.toISOString().slice(0, 10);
+    }
+    function setThisMonth() {
+      const n = new Date();
+      reportStartDate.value = new Date(n.getFullYear(), n.getMonth(), 1).toISOString().slice(0, 10);
+      reportEndDate.value = new Date(n.getFullYear(), n.getMonth() + 1, 0).toISOString().slice(0, 10);
+    }
+
+    /* ============================================================
+       THEME TOGGLE — light / dark mode restored
+       ============================================================ */
+    function toggleTheme() {
+      const isDark = document.body.classList.toggle('dark');
+      themeToggle.textContent = isDark ? '☀️' : '🌙';
+      localStorage.setItem('pmTheme', isDark ? 'dark' : 'light');
+      const metaTheme = document.querySelector('meta[name="theme-color"]');
+      if (metaTheme) metaTheme.setAttribute('content', isDark ? '#070a14' : '#f5f7fb');
+      if (progressChart) updateChartForCurrent();
+    }
+
+    function loadTheme() {
+      const saved = localStorage.getItem('pmTheme');
+      if (saved === 'light') {
+        document.body.classList.remove('dark');
+        themeToggle.textContent = '🌙';
+        const metaTheme = document.querySelector('meta[name="theme-color"]');
+        if (metaTheme) metaTheme.setAttribute('content', '#f5f7fb');
+      } else {
+        document.body.classList.add('dark');
+        themeToggle.textContent = '☀️';
+        const metaTheme = document.querySelector('meta[name="theme-color"]');
+        if (metaTheme) metaTheme.setAttribute('content', '#070a14');
+      }
+    }
+
+    function clearSearchFilters() {
+      if (searchHistoryInput) searchHistoryInput.value = '';
+      if (searchDateFrom) searchDateFrom.value = '';
+      if (searchDateTo) searchDateTo.value = '';
+      if (currentAgreementId && agreements[currentAgreementId]) renderHistoryTable(agreements[currentAgreementId].records);
+      showToast('Search cleared');
+    }
+
+    function exportBackup() {
+      const backup = {
+        version: 1,
+        app: 'PayPlan Ledger',
+        timestamp: new Date().toISOString(),
+        deviceId: getDeviceId(),
+        agreements: agreements,
+        currentAgreementId: currentAgreementId,
+        currencySymbol: currentCurrencySymbol,
+        theme: document.body.classList.contains('dark') ? 'dark' : 'light'
+      };
+      const jsonStr = JSON.stringify(backup, null, 2);
+      const blob = new Blob([jsonStr], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      backupDownloadLink.href = url;
+      backupDownloadLink.download = 'PayPlan_Ledger_Backup_' + new Date().toISOString().slice(0, 10) + '.json';
+      backupDownloadLink.click();
+      setTimeout(() => { URL.revokeObjectURL(url); }, 5000);
+      showToast('💾 Backup downloaded');
+    }
+    function importBackup(file) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        try {
+          const backup = JSON.parse(e.target.result);
+          if (!backup.agreements || !backup.version) throw new Error('Invalid');
+          showConfirm('Restore this backup? All current data will be replaced.', (ok) => {
+            if (!ok) return;
+            agreements = backup.agreements;
+            currentAgreementId = backup.currentAgreementId || Object.keys(agreements)[0];
+            currentCurrencySymbol = backup.currencySymbol || '$';
+            if (backup.theme === 'light') {
+              document.body.classList.remove('dark');
+            } else {
+              document.body.classList.add('dark');
+            }
+            localStorage.setItem('pmTheme', backup.theme || 'dark');
+            saveAgreements(); renderAgreementsList(); loadCurrentAgreementData();
+            updatePreviewForCurrent(); updateChartForCurrent(); loadScheduleIntoForm();
+            updateReminderDisplay(); refreshAllCurrencyDisplays();
+            updateDashboardStats(); updateStickyHeader();
+            welcomeModal.classList.remove('active');
+            showToast('✅ Data restored');
+          });
+        } catch (err) { showToast('❌ Invalid backup file'); }
+      };
+      reader.readAsText(file);
+    }
+
+    let storedPassword = '';
+    try { storedPassword = localStorage.getItem('pmAppPassword') || ''; } catch (e) {}
+    let _appUnlocked = false;
+
+    function setPassword(p) { localStorage.setItem('pmAppPassword', p); storedPassword = p; }
+    function checkPassword(p) { return p === storedPassword; }
+    function showLockScreen(isFirstTime) {
+      const lock = document.getElementById('lockScreen');
+      const subtitle = document.getElementById('lockSubtitle');
+      const badge = document.getElementById('lockSetupBadge');
+      const input = document.getElementById('passwordInput');
+      const errEl = document.getElementById('passwordError');
+      const btn = document.getElementById('passwordSubmitBtn');
+      const eyeBtn = document.getElementById('lockEyeBtn');
+      const change = document.getElementById('passwordChangeBtn');
+      const forgot = document.getElementById('forgotPasswordBtn');
+      if (isFirstTime) {
+        subtitle.textContent = 'Create a password to protect your data';
+        badge.style.display = 'inline-block';
+        input.placeholder = 'Create a password (min 3 chars)';
+        btn.textContent = 'Create Password & Enter';
+        change.style.display = 'none';
+        forgot.style.display = 'none';
+      } else {
+        subtitle.textContent = 'Hire Purchase Tracker';
+        badge.style.display = 'none';
+        input.placeholder = 'Enter your password';
+        btn.textContent = 'Unlock';
+        change.style.display = storedPassword ? 'inline' : 'none';
+        forgot.style.display = storedPassword ? 'inline' : 'none';
+      }
+      input.value = ''; errEl.textContent = ''; input.type = 'password';
+      if (eyeBtn) eyeBtn.textContent = '👁';
+      input.classList.remove('error');
+      lock.classList.remove('hidden');
+      _appUnlocked = false;
+      btn.disabled = false; btn.classList.remove('loading');
+      setTimeout(() => { try { input.focus(); } catch (e) {} }, 200);
+    }
+    function hideLockScreen() {
+      document.getElementById('lockScreen').classList.add('hidden');
+      mainAppContainer.style.display = 'block';
+      _appUnlocked = true;
+      setTimeout(() => {
+        if (currentAgreementId && agreements[currentAgreementId]) {
+          updateChartForCurrent(); updateReminderDisplay();
+          refreshAllCurrencyDisplays(); updateDashboardStats();
+        }
+      }, 100);
+    }
+    function toggleLockEye() {
+      const input = document.getElementById('passwordInput');
+      const eyeBtn = document.getElementById('lockEyeBtn');
+      if (input.type === 'password') { input.type = 'text'; eyeBtn.textContent = '🙈'; }
+      else { input.type = 'password'; eyeBtn.textContent = '👁'; }
+      input.focus();
+    }
+    function handlePasswordSubmit() {
+      const v = document.getElementById('passwordInput').value;
+      const errEl = document.getElementById('passwordError');
+      const input = document.getElementById('passwordInput');
+      const icon = document.getElementById('lockIconSvg');
+      const btn = document.getElementById('passwordSubmitBtn');
+      errEl.textContent = ''; input.classList.remove('error');
+      if (!storedPassword) {
+        if (v.length < 3) { errEl.textContent = 'Password must be at least 3 characters'; input.classList.add('error'); return; }
+        setPassword(v);
+        icon.textContent = '🔓'; icon.classList.add('unlocking');
+        btn.textContent = 'Welcome!'; btn.classList.add('loading');
+        setTimeout(() => { hideLoader(); hideLockScreen(); }, 400);
+      } else {
+        if (checkPassword(v)) {
+          icon.textContent = '🔓'; icon.classList.add('unlocking');
+          btn.textContent = 'Unlocking...'; btn.classList.add('loading');
+          setTimeout(() => { hideLockScreen(); }, 300);
+        } else {
+          errEl.textContent = 'Incorrect password. Try again.';
+          input.classList.add('error'); input.value = '';
+          setTimeout(() => { input.classList.remove('error'); }, 600);
+        }
+      }
+    }
+    function openChangePasswordModal() {
+      document.getElementById('cpCurrent').value = '';
+      document.getElementById('cpNew').value = '';
+      document.getElementById('cpConfirm').value = '';
+      document.getElementById('cpError').textContent = '';
+      changePasswordModal.classList.add('active');
+    }
+    function openForgotPasswordModal() { forgotPasswordModal.classList.add('active'); }
+
+    document.getElementById('cpCancelBtn').addEventListener('click', () => changePasswordModal.classList.remove('active'));
+    document.getElementById('fpCancelBtn').addEventListener('click', () => forgotPasswordModal.classList.remove('active'));
+    document.getElementById('cpConfirmBtn').addEventListener('click', () => {
+      const current = document.getElementById('cpCurrent').value;
+      const newPass = document.getElementById('cpNew').value;
+      const confirm = document.getElementById('cpConfirm').value;
+      const errEl = document.getElementById('cpError');
+      errEl.textContent = '';
+      if (!checkPassword(current)) { errEl.textContent = 'Current password is incorrect.'; return; }
+      if (newPass.length < 3) { errEl.textContent = 'Min 3 characters.'; return; }
+      if (newPass !== confirm) { errEl.textContent = 'Passwords do not match.'; return; }
+      setPassword(newPass);
+      changePasswordModal.classList.remove('active');
+      showToast('Password changed');
+      document.getElementById('passwordInput').value = '';
+      showLockScreen(false);
+    });
+    document.getElementById('fpConfirmBtn').addEventListener('click', () => {
+      const deviceId = getDeviceId();
+      localStorage.clear();
+      localStorage.setItem('pmDeviceId', deviceId);
+      storedPassword = '';
+      forgotPasswordModal.classList.remove('active');
+      showToast('App reset. Create a new password.');
+      showLockScreen(true);
+    });
+
+    let loaderHidden = false;
+    function hideLoader() {
+      if (loaderHidden) return;
+      loaderHidden = true;
+      loader.classList.add('fade-out');
+      setTimeout(() => { if (loader) loader.style.display = 'none'; }, 600);
+    }
+    setTimeout(() => { if (!loaderHidden) hideLoader(); }, 3000);
+
+    /* ============================================================
+       SIDEBAR — auto-close after menu selection
+       ============================================================ */
+    function toggleSidebar() {
+      const isHidden = appSidebar.classList.toggle('sidebar-hidden');
+      document.body.classList.toggle('sidebar-closed', isHidden);
+      floatingMenuBtn.classList.toggle('visible', isHidden);
+      sidebarBackdrop.classList.toggle('visible', !isHidden);
+      localStorage.setItem('pmSidebarHidden', isHidden ? 'true' : 'false');
+    }
+
+    function closeSidebarIfMobile() {
+      if (window.innerWidth <= 900) {
+        appSidebar.classList.add('sidebar-hidden');
+        document.body.classList.add('sidebar-closed');
+        floatingMenuBtn.classList.add('visible');
+        sidebarBackdrop.classList.remove('visible');
+        localStorage.setItem('pmSidebarHidden', 'true');
+      }
+    }
+
+    function restoreSidebarState() {
+      const isHidden = localStorage.getItem('pmSidebarHidden') === 'true';
+      if (isHidden || window.innerWidth <= 900) {
+        appSidebar.classList.add('sidebar-hidden');
+        document.body.classList.add('sidebar-closed');
+        floatingMenuBtn.classList.add('visible');
+      } else {
+        appSidebar.classList.remove('sidebar-hidden');
+        document.body.classList.remove('sidebar-closed');
+        floatingMenuBtn.classList.remove('visible');
+      }
+    }
+
+    // FIX: openFullscreen now destroys any live chart before moving the
+    // canvas, so a second open — or a section switch — can't orphan
+    // a Chart.js instance.
+    function openFullscreen(elementId, title) {
+      const card = document.getElementById(elementId);
+      if (!card) { showToast('Cannot expand this section'); return; }
+      let bodyElement = card.querySelector('.card-body');
+      if (!bodyElement) { showToast('Cannot find card content'); return; }
+
+      if (progressChart) { progressChart.destroy(); progressChart = null; }
+      if (window._fsChart) { try { window._fsChart.destroy(); } catch (e) {} window._fsChart = null; }
+
+      const parent = bodyElement.parentNode;
+      const nextSibling = bodyElement.nextSibling;
+      fullscreenData = { parent, nextSibling, cardId: elementId };
+      parent.removeChild(bodyElement);
+      fsBody.innerHTML = '';
+      fsBody.appendChild(bodyElement);
+      fsTitle.textContent = title || 'Card';
+      fullscreenOverlay.classList.add('active');
+      document.body.style.overflow = 'hidden';
+
+      setTimeout(() => {
+        if (elementId === 'card-dashboard-chart') {
+          const c = fsBody.querySelector('#progressChart');
+          if (c && typeof Chart !== 'undefined' && currentAgreementId && agreements[currentAgreementId]
+              && agreements[currentAgreementId].records.length > 0) {
+            c.id = 'progressChartFS';
+            window._fsChart = drawChart(c);
+          }
+        }
+      }, 50);
+    }
+
+    // FIX: closeFullscreen restores the original canvas id and destroys
+    // the fullscreen chart instance, preventing duplicate Chart objects.
+    function closeFullscreen(e) {
+      if (e && e.target && e.target !== e.currentTarget) return;
+      if (!fullscreenData) return;
+
+      if (window._fsChart) { try { window._fsChart.destroy(); } catch (err) {} window._fsChart = null; }
+
+      const bodyElement = fsBody.querySelector('.card-body');
+      if (bodyElement) {
+        const fsCanvas = bodyElement.querySelector('#progressChartFS');
+        if (fsCanvas) fsCanvas.id = 'progressChart';
+        fsBody.removeChild(bodyElement);
+        if (fullscreenData.nextSibling) {
+          fullscreenData.parent.insertBefore(bodyElement, fullscreenData.nextSibling);
+        } else {
+          fullscreenData.parent.appendChild(bodyElement);
+        }
+      }
+      fullscreenData = null;
+      fullscreenOverlay.classList.remove('active');
+      document.body.style.overflow = '';
+      setTimeout(() => { updateChartForCurrent(); }, 30);
+    }
+
+    /* ============================================================
+       NAVIGATION — with auto-close on mobile
+       ============================================================ */
+    function switchSection(sectionId) {
+      document.querySelectorAll('.section').forEach(el => el.classList.remove('active'));
+      const target = document.getElementById('section-' + sectionId);
+      if (target) target.classList.add('active');
+
+      document.querySelectorAll('.nav-icons button').forEach(el => el.classList.remove('active'));
+      const btn = document.querySelector('.nav-icons button[data-section="' + sectionId + '"]');
+      if (btn) btn.classList.add('active');
+
+      if (sectionId === 'dashboard') setTimeout(() => { updateChartForCurrent(); updateDashboardStats(); }, 60);
+      if (sectionId === 'history' && currentAgreementId && agreements[currentAgreementId]) {
+        renderHistoryTable(agreements[currentAgreementId].records);
+      }
+
+      closeSidebarIfMobile();
+
+      setTimeout(() => { window.scrollTo({ top: 0, behavior: 'smooth' }); }, 50);
+    }
+
+    function bindEvents() {
+      const debouncedPreview = debounce(updatePreviewForCurrent, 50);
+
+      // FIX: only persist the contract amount when the field parses to a
+      // positive number. Empty field no longer silently resets to 5000.
+      totalHireAmountInput.addEventListener('input', () => {
+        debouncedPreview();
+        if (currentAgreementId && agreements[currentAgreementId]) {
+          const parsed = parseFloat(totalHireAmountInput.value);
+          if (!isNaN(parsed) && parsed > 0) {
+            agreements[currentAgreementId].totalHireAmount = parsed;
+            saveAgreements();
+            rafSchedule('chart', updateChartForCurrent);
+            rafSchedule('reminder', updateReminderDisplay);
+          }
+        }
+      }, { passive: true });
+
+      amountPaidInput.addEventListener('input', debouncedPreview, { passive: true });
+
+      saveBtn.addEventListener('click', saveRecord);
+      resetFormBtn.addEventListener('click', resetForm);
+      clearCurrentHistoryBtn.addEventListener('click', clearCurrentHistory);
+      downloadFullBtn.addEventListener('click', handleDownloadFull);
+      downloadRangeBtn.addEventListener('click', handleDownloadRange);
+      todayBtn.addEventListener('click', setToday);
+      weekBtn.addEventListener('click', setThisWeek);
+      monthBtn.addEventListener('click', setThisMonth);
+      addAgreementBtn.addEventListener('click', addNewAgreement);
+      createAgreementBtn.addEventListener('click', createNewAgreement);
+      cancelNewAgreementBtn.addEventListener('click', () => newAgreementModal.classList.remove('active'));
+      saveScheduleBtn.addEventListener('click', saveSchedule);
+      saveCurrencyBtn.addEventListener('click', saveCurrency);
+      exportBackupBtn.addEventListener('click', exportBackup);
+
+      document.getElementById('generateRecoveryBtn').addEventListener('click', showRecoveryCode);
+      document.getElementById('copyRecoveryBtn').addEventListener('click', copyRecoveryCode);
+      document.getElementById('openRecoveryModalBtn').addEventListener('click', () => {
+        recoveryCodeInput.value = ''; recoveryPasswordInput.value = '';
+        recoveryError.textContent = ''; recoveryError.style.display = 'none';
+        recoveryModal.classList.add('active');
+      });
+      recoveryCancelBtn.addEventListener('click', () => recoveryModal.classList.remove('active'));
+      recoveryConfirmBtn.addEventListener('click', async () => {
+        const code = recoveryCodeInput.value.trim();
+        const password = recoveryPasswordInput.value.trim();
+        if (!code) { recoveryError.textContent = 'Enter a recovery code.'; recoveryError.style.display = 'block'; return; }
+        if (!password) { recoveryError.textContent = 'Enter the recovery password.'; recoveryError.style.display = 'block'; return; }
+        await restoreFromRecoveryCode(code, password);
+      });
+      recoveryModal.addEventListener('click', function(e) { if (e.target === this) recoveryModal.classList.remove('active'); });
+      recoveryCodeInput.addEventListener('keypress', function(e) { if (e.key === 'Enter') recoveryConfirmBtn.click(); });
+      recoveryPasswordInput.addEventListener('keypress', function(e) { if (e.key === 'Enter') recoveryConfirmBtn.click(); });
+
+      rpCancelBtn.addEventListener('click', () => recoveryPasswordModal.classList.remove('active'));
+      rpConfirmBtn.addEventListener('click', handleGenerateRecoveryCode);
+      recoveryPasswordModal.addEventListener('click', function(e) { if (e.target === this) recoveryPasswordModal.classList.remove('active'); });
+      rpNewPassword.addEventListener('keypress', function(e) { if (e.key === 'Enter') rpConfirmBtn.click(); });
+      rpConfirmPassword.addEventListener('keypress', function(e) { if (e.key === 'Enter') rpConfirmBtn.click(); });
+
+      document.getElementById('welcomeStartFresh').addEventListener('click', () => {
+        const id = Date.now().toString();
+        agreements = { [id]: { name: 'My First Agreement', records: [], totalHireAmount: 5000, schedule: { nextDueDate: '', installmentAmount: '', frequency: 'monthly' } } };
+        currentAgreementId = id;
+        saveAgreements(); renderAgreementsList(); loadCurrentAgreementData();
+        updatePreviewForCurrent(); updateChartForCurrent(); loadScheduleIntoForm();
+        updateReminderDisplay(); refreshAllCurrencyDisplays();
+        updateDashboardStats(); updateStickyHeader();
+        welcomeModal.classList.remove('active');
+        showToast('Welcome! Start by adding a payment.');
+        celebrationShown[id] = false;
+      });
+
+      document.getElementById('welcomeRestoreData').addEventListener('click', () => {
+        welcomeModal.classList.remove('active');
+        recoveryCodeInput.value = ''; recoveryPasswordInput.value = '';
+        recoveryError.textContent = ''; recoveryError.style.display = 'none';
+        recoveryModal.classList.add('active');
+      });
+
+      document.getElementById('welcomeImportBackup').addEventListener('click', () => {
+        document.getElementById('welcomeFileInput').click();
+      });
+      document.getElementById('welcomeFileInput').addEventListener('change', (e) => {
+        if (e.target.files.length) { importBackup(e.target.files[0]); e.target.value = ''; }
+      });
+
+      if (searchHistoryInput) {
+        searchHistoryInput.addEventListener('input', debounce(() => {
+          if (currentAgreementId && agreements[currentAgreementId]) renderHistoryTable(agreements[currentAgreementId].records);
+        }, 200), { passive: true });
+      }
+      if (searchDateFrom) {
+        searchDateFrom.addEventListener('change', () => {
+          if (currentAgreementId && agreements[currentAgreementId]) renderHistoryTable(agreements[currentAgreementId].records);
+        });
+      }
+      if (searchDateTo) {
+        searchDateTo.addEventListener('change', () => {
+          if (currentAgreementId && agreements[currentAgreementId]) renderHistoryTable(agreements[currentAgreementId].records);
+        });
+      }
+      if (searchClearBtn) searchClearBtn.addEventListener('click', clearSearchFilters);
+
+      headerAgreementName.addEventListener('click', function(e) {
+        if (e.target === this) switchSection('agreements');
+      });
+
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && !appSidebar.classList.contains('sidebar-hidden')) {
+          toggleSidebar();
+        }
+      });
+
+      document.addEventListener('click', function(e) {
+        if (window.innerWidth <= 900 &&
+            !appSidebar.classList.contains('sidebar-hidden') &&
+            !appSidebar.contains(e.target) &&
+            !floatingMenuBtn.contains(e.target)) {
+          toggleSidebar();
+        }
+      });
+    }
+
+    function initMainApp() {
+      dateInput.value = getTodayDate();
+      loadAgreements();
+      renderAgreementsList();
+      loadCurrentAgreementData();
+      bindEvents();
+      loadTheme();
+      restoreSidebarState();
+      setThisWeek();
+      loadScheduleIntoForm();
+      loadCurrency();
+      updateReminderDisplay();
+      updateDashboardStats();
+      updateStickyHeader();
+
+      if (Object.keys(agreements).length === 0) welcomeModal.classList.add('active');
+
+      try {
+        const params = new URLSearchParams(window.location.search);
+        const section = params.get('section');
+        if (section) switchSection(section);
+      } catch (e) {}
+    }
+    function safeInitMainApp() { try { initMainApp(); } catch (e) { console.error(e); hideLoader(); } }
+
+    let mainInitialized = false;
+    const _hideLockOriginal = hideLockScreen;
+    hideLockScreen = function() {
+      _hideLockOriginal();
+      if (!mainInitialized) { mainInitialized = true; hideLoader(); safeInitMainApp(); }
+      setTimeout(() => {
+        if (!isStandalone() && !localStorage.getItem('pmInstallSkipped')) {
+          showInstallOverlay();
+        }
+      }, 1200);
+    };
+
+    applyStandaloneMode();
+
+    if (storedPassword) { showLockScreen(false); } else { showLockScreen(true); }
+    document.getElementById('passwordInput').addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') handlePasswordSubmit();
+    });
+
+    // =====================================================================
+    //  AUTO-DETECTING INSTALL GUIDE
+    // =====================================================================
+    function detectPlatform() {
+      const ua = navigator.userAgent || '';
+      const isIOS = /iPhone|iPad|iPod/i.test(ua) ||
+                    (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+      const isAndroid = /Android/i.test(ua);
+      const isWindows = /Windows/i.test(ua);
+      const isMac = /Macintosh|Mac OS X/i.test(ua) && !isIOS;
+      const isLinux = /Linux/i.test(ua) && !isAndroid;
+      const isChromeOS = /CrOS/i.test(ua);
+      return { isIOS, isAndroid, isWindows, isMac, isLinux, isChromeOS };
+    }
+
+    function renderInstallGuide() {
+      const p = detectPlatform();
+      const icon = document.getElementById('guideIcon');
+      const title = document.getElementById('guideTitle');
+      const sub = document.getElementById('guideSubtitle');
+      const steps = document.getElementById('guideSteps');
+      const primary = document.getElementById('guidePrimaryBtn');
+
+      let html = '';
+      let primaryLabel = 'Install Now';
+      let primaryAction = 'default';
+
+      if (p.isIOS) {
+        icon.textContent = '🍎';
+        title.textContent = 'Install on iPhone / iPad';
+        sub.textContent = 'Apple doesn\'t allow APK installs — but Safari gives you the same fullscreen app experience.';
+        html = `
+          <div class="guide-step">
+            <div class="step-num">1</div>
+            <div class="step-text">Tap the <strong>Share</strong> button at the bottom of Safari.</div>
+          </div>
+          <div class="guide-step">
+            <div class="step-num">2</div>
+            <div class="step-text">Scroll down and tap <strong>"Add to Home Screen"</strong>.</div>
+          </div>
+          <div class="guide-step">
+            <div class="step-num">3</div>
+            <div class="step-text">Name it <strong>PayPlan Ledger</strong> → tap <strong>Add</strong>.</div>
+          </div>
+          <div class="guide-step">
+            <div class="step-num">4</div>
+            <div class="step-text">Open the new icon from your home screen — it runs fullscreen, offline.</div>
+          </div>
+        `;
+        primaryLabel = 'Got it';
+        primaryAction = 'dismiss';
+      } else if (p.isAndroid) {
+        icon.textContent = '🤖';
+        title.textContent = 'Install on Android';
+        sub.textContent = 'Get the full app experience — no browser bar.';
+        html = `
+          <div class="guide-step">
+            <div class="step-num">1</div>
+            <div class="step-text">Tap the <strong>⋮ menu</strong> in Chrome (top right).</div>
+          </div>
+          <div class="guide-step">
+            <div class="step-num">2</div>
+            <div class="step-text">Tap <strong>"Install app"</strong>. If not available, choose <strong>"Add to Home screen"</strong>.</div>
+          </div>
+          <div class="guide-step">
+            <div class="step-num">3</div>
+            <div class="step-text">Confirm → the app appears on your home screen.</div>
+          </div>
+        `;
+        primaryLabel = 'Install App';
+        primaryAction = 'prompt';
+      } else if (p.isWindows || p.isMac || p.isLinux || p.isChromeOS) {
+        icon.textContent = '💻';
+        title.textContent = 'Install on Desktop';
+        sub.textContent = 'Install PayPlan Ledger as a desktop app with its own window and icon.';
+        html = `
+          <div class="guide-step">
+            <div class="step-num">1</div>
+            <div class="step-text">Look for the <strong>install icon</strong> in your browser's address bar (a small monitor with a down arrow).</div>
+          </div>
+          <div class="guide-step">
+            <div class="step-num">2</div>
+            <div class="step-text">If you don't see it, open the browser menu (⋮ or •••) → <strong>"Install PayPlan Ledger"</strong>.</div>
+          </div>
+          <div class="guide-step">
+            <div class="step-num">3</div>
+            <div class="step-text">Confirm. The app installs to your Start Menu / Applications folder.</div>
+          </div>
+          <div class="guide-step">
+            <div class="step-num">4</div>
+            <div class="step-text">Open it from there any time — no browser bar, works offline.</div>
+          </div>
+        `;
+        primaryLabel = 'Install App';
+        primaryAction = 'prompt';
+      } else {
+        icon.textContent = '📲';
+        title.textContent = 'Install PayPlan Ledger';
+        sub.textContent = 'Install to your device for the fullscreen app experience.';
+        html = `
+          <div class="guide-step">
+            <div class="step-num">1</div>
+            <div class="step-text">Open your browser menu and look for <strong>"Install app"</strong> or <strong>"Add to Home screen"</strong>.</div>
+          </div>
+          <div class="guide-step">
+            <div class="step-num">2</div>
+            <div class="step-text">Tap it and confirm. The app opens fullscreen from your home screen or app list.</div>
+          </div>
+        `;
+      }
+
+      steps.innerHTML = html;
+      primary.textContent = primaryLabel;
+      primary.dataset.action = primaryAction;
+    }
+
+    function handleGuidePrimary() {
+      const primary = document.getElementById('guidePrimaryBtn');
+      const action = primary.dataset.action;
+
+      if (action === 'dismiss') {
+        dismissInstallGuide();
+        return;
+      }
+
+      if (action === 'prompt' && deferredPrompt) {
+        deferredPrompt.prompt();
+        deferredPrompt.userChoice.then(function(choice) {
+          if (choice.outcome === 'accepted') {
+            showToast('🎉 Installing...');
+            dismissInstallGuide();
+          } else {
+            showToast('You can install anytime from the browser menu.');
+          }
+          deferredPrompt = null;
+        });
+        return;
+      }
+
+      dismissInstallGuide();
+    }
+
+    function dismissInstallGuide() {
+      const overlay = document.getElementById('installGuideOverlay');
+      if (overlay) overlay.classList.remove('visible');
+      try { localStorage.setItem('pmInstallGuideSeen', 'true'); } catch (e) {}
+    }
+
+    function maybeShowInstallGuide() {
+      if (isStandalone()) return;
+      try {
+        if (localStorage.getItem('pmInstallGuideSeen') === 'true') return;
+        if (localStorage.getItem('pmInstallSkipped') === 'true') return;
+      } catch (e) {}
+
+      renderInstallGuide();
+      const overlay = document.getElementById('installGuideOverlay');
+      if (overlay) overlay.classList.add('visible');
+    }
+
+    setTimeout(function() {
+      try { maybeShowInstallGuide(); } catch (e) {}
+    }, 2500);
+  </script>
+</body>
+</html>

@@ -1,0 +1,26 @@
+{
+  "id": "/payplan-ledger/",
+  "name": "PayPlan Ledger • Hire Purchase Tracker",
+  "short_name": "PayPlan Ledger",
+  "description": "Offline hire purchase and installment payment tracker. Track agreements, log payments, see running balances, and generate professional PDF reports — all without internet. Your data never leaves your device.",
+  "start_url": "/payplan-ledger/index.html",
+  "scope": "/payplan-ledger/",
+  "display": "fullscreen",
+  "display_override": ["fullscreen", "standalone", "minimal-ui"],
+  "orientation": "portrait",
+  "background_color": "#070a14",
+  "theme_color": "#10b981",
+  "lang": "en",
+  "dir": "ltr",
+  "categories": ["business", "finance", "productivity"],
+  "icons": [
+    { "src": "/payplan-ledger/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/payplan-ledger/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "/payplan-ledger/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ],
+  "screenshots": [
+    { "src": "/payplan-ledger/icon-512.png", "sizes": "512x512", "type": "image/png", "form_factor": "narrow", "label": "PayPlan Ledger dashboard" }
+  ],
+  "prefer_related_applications": false,
+  "iarc_rating_id": ""
+}
