@@ -54,9 +54,6 @@
       -webkit-tap-highlight-color: transparent;
     }
 
-    /* ============================================================
-       LIGHT THEME (default)
-       ============================================================ */
     :root {
       --bg: #f5f7fb;
       --bg-elevated: #ffffff;
@@ -66,46 +63,35 @@
       --border: rgba(15, 23, 42, 0.08);
       --border-strong: rgba(15, 23, 42, 0.12);
       --divider: rgba(15, 23, 42, 0.06);
-
       --text: #0a0f1f;
       --text-2: #475569;
       --text-3: #94a3b8;
-
       --primary: #10b981;
       --primary-2: #059669;
       --primary-soft: rgba(16, 185, 129, 0.1);
       --primary-gradient: linear-gradient(135deg, #10b981 0%, #059669 100%);
-
       --accent: #f59e0b;
       --accent-soft: rgba(245, 158, 11, 0.1);
       --accent-gradient: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
-
       --danger: #ef4444;
       --danger-soft: rgba(239, 68, 68, 0.1);
-
       --info: #3b82f6;
       --info-soft: rgba(59, 130, 246, 0.1);
-
       --shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.04), 0 1px 3px rgba(15, 23, 42, 0.03);
       --shadow-md: 0 4px 12px rgba(15, 23, 42, 0.06), 0 2px 4px rgba(15, 23, 42, 0.04);
       --shadow-lg: 0 12px 32px rgba(15, 23, 42, 0.1), 0 4px 8px rgba(15, 23, 42, 0.04);
       --shadow-xl: 0 24px 64px rgba(15, 23, 42, 0.16), 0 8px 16px rgba(15, 23, 42, 0.06);
       --shadow-primary: 0 8px 24px rgba(16, 185, 129, 0.28);
-
       --radius-sm: 12px;
       --radius: 16px;
       --radius-lg: 20px;
       --radius-xl: 28px;
       --radius-full: 999px;
-
       --sidebar-width: 72px;
       --transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
       --transition-spring: 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
 
-    /* ============================================================
-       DARK THEME
-       ============================================================ */
     body.dark {
       --bg: #070a14;
       --bg-elevated: #0d1220;
@@ -115,26 +101,20 @@
       --border: rgba(255, 255, 255, 0.08);
       --border-strong: rgba(255, 255, 255, 0.14);
       --divider: rgba(255, 255, 255, 0.06);
-
       --text: #f1f5f9;
       --text-2: #94a3b8;
       --text-3: #64748b;
-
       --primary: #10b981;
       --primary-2: #34d399;
       --primary-soft: rgba(16, 185, 129, 0.14);
       --primary-gradient: linear-gradient(135deg, #10b981 0%, #059669 100%);
-
       --accent: #fbbf24;
       --accent-soft: rgba(251, 191, 36, 0.14);
       --accent-gradient: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
-
       --danger: #f87171;
       --danger-soft: rgba(248, 113, 113, 0.14);
-
       --info: #60a5fa;
       --info-soft: rgba(96, 165, 250, 0.14);
-
       --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4), 0 1px 3px rgba(0, 0, 0, 0.3);
       --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.4), 0 2px 4px rgba(0, 0, 0, 0.3);
       --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.5), 0 4px 8px rgba(0, 0, 0, 0.3);
@@ -187,9 +167,6 @@
 
     body.standalone-mode .pwa-install-overlay { display: none !important; }
 
-    /* ============================================================
-       SIDEBAR BACKDROP (mobile)
-       ============================================================ */
     .sidebar-backdrop {
       position: fixed;
       inset: 0;
@@ -200,14 +177,8 @@
       visibility: hidden;
       transition: opacity 0.3s ease, visibility 0.3s ease;
     }
-    .sidebar-backdrop.visible {
-      opacity: 1;
-      visibility: visible;
-    }
+    .sidebar-backdrop.visible { opacity: 1; visibility: visible; }
 
-    /* ============================================================
-       PWA INSTALL OVERLAY
-       ============================================================ */
     .pwa-install-overlay {
       position: fixed;
       inset: 0;
@@ -319,9 +290,6 @@
     }
     .pwa-install-box .pwa-instructions strong { color: #fbbf24; }
 
-    /* ============================================================
-       SIDEBAR
-       ============================================================ */
     .app-sidebar {
       position: fixed;
       left: 0;
@@ -493,9 +461,6 @@
       background: var(--surface-3);
     }
 
-    /* ============================================================
-       MAIN CONTENT
-       ============================================================ */
     .main-content {
       margin-left: var(--sidebar-width);
       padding: 20px 24px 100px;
@@ -512,9 +477,6 @@
       padding-left: 56px;
     }
 
-    /* ============================================================
-       STICKY HEADER
-       ============================================================ */
     .sticky-header {
       position: sticky;
       top: 0;
@@ -591,9 +553,6 @@
       border-radius: 6px;
     }
 
-    /* ============================================================
-       SECTIONS & CARDS
-       ============================================================ */
     .section { display: none; }
     .section.active {
       display: block;
@@ -706,9 +665,6 @@
     .card.collapsed .card-body { display: none; }
     .card.collapsed .toggle-icon { transform: rotate(-90deg); }
 
-    /* ============================================================
-       FULLSCREEN OVERLAY
-       ============================================================ */
     .fullscreen-overlay {
       position: fixed;
       inset: 0;
@@ -793,9 +749,6 @@
     }
     .fullscreen-card .fs-body .card::before { display: none; }
 
-    /* ============================================================
-       MODALS
-       ============================================================ */
     .modal-overlay {
       position: fixed;
       inset: 0;
@@ -941,9 +894,6 @@
       color: var(--danger);
     }
 
-    /* ============================================================
-       FORMS
-       ============================================================ */
     .form-group { margin-bottom: 0.9rem; }
     label {
       font-weight: 600;
@@ -988,9 +938,6 @@
     }
     .row-2col .form-group { flex: 1; min-width: 0; }
 
-    /* ============================================================
-       BUTTONS
-       ============================================================ */
     button {
       background: var(--primary-gradient);
       border: none;
@@ -1070,9 +1017,6 @@
       box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
     }
 
-    /* ============================================================
-       AGREEMENT ITEMS
-       ============================================================ */
     .agreement-item {
       display: flex;
       justify-content: space-between;
@@ -1162,9 +1106,6 @@
       color: white;
     }
 
-    /* ============================================================
-       RESULT PANEL
-       ============================================================ */
     .result-panel {
       background: var(--surface-2);
       border-radius: var(--radius);
@@ -1214,9 +1155,6 @@
       100% { transform: scale(1); }
     }
 
-    /* ============================================================
-       TABLE
-       ============================================================ */
     .history-table {
       overflow-x: auto;
       margin-top: 8px;
@@ -1330,9 +1268,6 @@
       transform: none;
     }
 
-    /* ============================================================
-       REMINDER
-       ============================================================ */
     .reminder-card {
       background: linear-gradient(135deg, var(--accent-soft), rgba(245, 158, 11, 0.05));
       border-left: 4px solid var(--accent);
@@ -1346,9 +1281,6 @@
     .reminder-card strong { color: var(--text); font-weight: 700; }
     .reminder-warning { color: var(--danger); font-weight: 700; }
 
-    /* ============================================================
-       CHART
-       ============================================================ */
     .chart-wrapper {
       position: relative;
       width: 100%;
@@ -1382,9 +1314,6 @@
     .chart-fallback.visible { display: block; }
     .chart-wrapper.hidden-when-no-chart { display: none; }
 
-    /* ============================================================
-       RANGE BUTTONS
-       ============================================================ */
     .range-buttons {
       display: flex;
       gap: 8px;
@@ -1400,9 +1329,6 @@
       border-radius: var(--radius-full);
     }
 
-    /* ============================================================
-       ACTION BUTTONS IN TABLE
-       ============================================================ */
     .action-row-btns {
       display: flex;
       gap: 4px;
@@ -1448,9 +1374,6 @@
       box-shadow: none;
     }
 
-    /* ============================================================
-       CELEBRATION
-       ============================================================ */
     #celebrationModal .modal-card {
       background: linear-gradient(180deg, var(--bg-elevated) 0%, rgba(245, 158, 11, 0.1) 100%);
       border: 1px solid rgba(245, 158, 11, 0.3);
@@ -1495,9 +1418,6 @@
       font-variant-numeric: tabular-nums;
     }
 
-    /* ============================================================
-       LOCK SCREEN
-       ============================================================ */
     #lockScreen {
       position: fixed;
       inset: 0;
@@ -1745,9 +1665,6 @@
       z-index: 1;
     }
 
-    /* ============================================================
-       TOAST
-       ============================================================ */
     .toast-container {
       position: fixed;
       bottom: 24px;
@@ -1780,28 +1697,190 @@
     }
 
     /* ============================================================
-       PDF OVERLAY
+       PDF GENERATING OVERLAY — sleek redesigned version (v2)
        ============================================================ */
     .pdf-overlay {
       position: fixed;
       inset: 0;
-      background: rgba(5, 8, 18, 0.96);
+      background: rgba(5, 8, 18, 0.92);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
       z-index: 17000;
       display: flex;
       align-items: center;
       justify-content: center;
       padding: 24px;
-      animation: fadeIn 0.3s ease;
+      animation: pdfOverlayIn 0.3s ease;
     }
-    .pdf-overlay-inner {
-      text-align: center;
-      max-width: 360px;
-      width: 100%;
+    @keyframes pdfOverlayIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    .pdf-overlay.closing {
+      animation: pdfOverlayOut 0.3s ease forwards;
+    }
+    @keyframes pdfOverlayOut {
+      to { opacity: 0; }
     }
 
-    /* ============================================================
-       LOADER
-       ============================================================ */
+    .pdf-modal {
+      background: linear-gradient(180deg, rgba(19, 26, 44, 0.98) 0%, rgba(13, 18, 32, 0.98) 100%);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 28px;
+      padding: 40px 32px 32px;
+      max-width: 380px;
+      width: 100%;
+      text-align: center;
+      box-shadow: 0 32px 96px rgba(0, 0, 0, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+      color: #f1f5f9;
+      position: relative;
+      overflow: hidden;
+      animation: pdfModalIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    @keyframes pdfModalIn {
+      from { transform: scale(0.9) translateY(20px); opacity: 0; }
+      to { transform: scale(1) translateY(0); opacity: 1; }
+    }
+
+    .pdf-modal::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle at 30% 30%, rgba(16, 185, 129, 0.18), transparent 40%);
+      pointer-events: none;
+      animation: pdfGlow 4s ease-in-out infinite;
+    }
+    @keyframes pdfGlow {
+      0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.6; }
+      50% { transform: translate(5%, 5%) scale(1.1); opacity: 1; }
+    }
+
+    .pdf-icon-wrap {
+      position: relative;
+      width: 100px;
+      height: 100px;
+      margin: 0 auto 22px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .pdf-ring {
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      border: 2px solid rgba(16, 185, 129, 0.4);
+      animation: pdfRing 2s ease-out infinite;
+    }
+    .pdf-ring:nth-child(2) { animation-delay: 0.66s; }
+    .pdf-ring:nth-child(3) { animation-delay: 1.33s; }
+    @keyframes pdfRing {
+      0% { transform: scale(0.6); opacity: 1; }
+      100% { transform: scale(1.3); opacity: 0; }
+    }
+    .pdf-icon {
+      position: relative;
+      width: 72px;
+      height: 72px;
+      background: var(--primary-gradient);
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      color: white;
+      box-shadow: 0 16px 40px rgba(16, 185, 129, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+      z-index: 2;
+      animation: pdfIconFloat 3s ease-in-out infinite;
+    }
+    @keyframes pdfIconFloat {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-6px); }
+    }
+
+    .pdf-title {
+      font-size: 1.25rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      margin-bottom: 6px;
+      background: linear-gradient(135deg, #ffffff 0%, #94a3b8 100%);
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+      position: relative;
+      z-index: 1;
+    }
+    .pdf-subtitle {
+      font-size: 0.85rem;
+      color: #94a3b8;
+      margin-bottom: 24px;
+      min-height: 20px;
+      line-height: 1.5;
+      position: relative;
+      z-index: 1;
+      transition: opacity 0.3s ease;
+    }
+    .pdf-subtitle.swap {
+      opacity: 0;
+    }
+
+    .pdf-progress-track {
+      width: 100%;
+      height: 6px;
+      background: rgba(255, 255, 255, 0.06);
+      border-radius: 999px;
+      overflow: hidden;
+      margin-bottom: 14px;
+      position: relative;
+      z-index: 1;
+    }
+    .pdf-progress-bar {
+      height: 100%;
+      width: 0%;
+      background: var(--primary-gradient);
+      border-radius: 999px;
+      box-shadow: 0 0 12px rgba(16, 185, 129, 0.6);
+      transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
+    }
+    .pdf-progress-bar::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+      animation: pdfShimmer 1.5s linear infinite;
+    }
+    @keyframes pdfShimmer {
+      from { transform: translateX(-100%); }
+      to { transform: translateX(100%); }
+    }
+
+    .pdf-progress-text {
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: #64748b;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      position: relative;
+      z-index: 1;
+    }
+
+    .pdf-brand {
+      margin-top: 24px;
+      padding-top: 18px;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      font-size: 0.65rem;
+      color: #475569;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      font-weight: 700;
+      position: relative;
+      z-index: 1;
+    }
+
     .loader-overlay {
       position: fixed;
       inset: 0;
@@ -1851,9 +1930,6 @@
       font-weight: 500;
     }
 
-    /* ============================================================
-       RECOVERY CODE
-       ============================================================ */
     .recovery-code-box {
       background: var(--surface-2);
       border-radius: var(--radius);
@@ -1905,9 +1981,6 @@
       opacity: 0.7;
     }
 
-    /* ============================================================
-       ABOUT / LICENSE CARD
-       ============================================================ */
     .about-card {
       background: linear-gradient(135deg, var(--primary-soft), var(--accent-soft));
       border: 1px solid var(--border-strong);
@@ -1996,9 +2069,6 @@
 
     .backup-download-link { display: none; }
 
-    /* ============================================================
-       RESPONSIVE — narrow phones
-       ============================================================ */
     @media (max-width: 640px) {
       :root { --sidebar-width: 62px; }
 
@@ -2118,9 +2188,6 @@
     }
     ::-webkit-scrollbar-thumb:hover { background: var(--text-3); }
 
-    /* ============================================================
-       INSTALL GUIDE POPUP — auto-detects user's device
-       ============================================================ */
     .install-guide-overlay {
       position: fixed;
       inset: 0;
@@ -2250,18 +2317,13 @@
 
   <div class="ambient-glow"></div>
 
-  <!-- ============================================================
-       AUTO-DETECTING INSTALL GUIDE POPUP
-       ============================================================ -->
   <div class="install-guide-overlay" id="installGuideOverlay">
     <div class="install-guide-card" id="installGuideCard">
       <button class="close-btn" onclick="dismissInstallGuide()" aria-label="Close">✕</button>
       <span class="guide-icon" id="guideIcon">📱</span>
       <h2 id="guideTitle">Install PayPlan Ledger</h2>
       <p class="guide-sub" id="guideSubtitle">Get the full app experience — no browser bar, works offline.</p>
-      <div id="guideSteps">
-        <!-- Filled dynamically by JavaScript -->
-      </div>
+      <div id="guideSteps"></div>
       <div class="guide-actions">
         <button id="guidePrimaryBtn" onclick="handleGuidePrimary()" style="background:var(--primary-gradient);color:white;">
           Install Now
@@ -3757,22 +3819,131 @@
       });
     }
 
-    function showPDFProgress(message) {
-      var existing = document.getElementById('pdfProgressOverlay');
-      if (existing) existing.remove();
-      var ov = document.createElement('div');
-      ov.id = 'pdfProgressOverlay';
-      ov.className = 'pdf-overlay';
-      ov.innerHTML = '<div class="pdf-overlay-inner"><div style="font-size:3.8rem;color:#10b981;margin-bottom:14px;">📄</div><div style="color:#10b981;font-size:1.1rem;font-weight:800;margin-bottom:6px;">' + message + '</div><div style="color:#94a3b8;font-size:0.8rem;">Generating PDF in your browser...</div></div>';
-      document.body.appendChild(ov);
+    /* ============================================================
+       PDF WAITING OVERLAY — v2 with ordered download
+       ============================================================ */
+    let pdfOverlayEl = null;
+    let pdfProgressInterval = null;
+    let pdfMessageInterval = null;
+    let pdfMessageIndex = 0;
+    let pdfProgressValue = 0;
+
+    const PDF_MESSAGES = [
+      'Preparing your report...',
+      'Laying out the ledger...',
+      'Rendering payment table...',
+      'Calculating balances...',
+      'Finishing touches...'
+    ];
+
+    function showPDFProgress(title) {
+      hidePDFProgress(true);
+
+      pdfOverlayEl = document.createElement('div');
+      pdfOverlayEl.className = 'pdf-overlay';
+      pdfOverlayEl.id = 'pdfProgressOverlay';
+      pdfOverlayEl.innerHTML =
+        '<div class="pdf-modal">' +
+          '<div class="pdf-icon-wrap">' +
+            '<div class="pdf-ring"></div>' +
+            '<div class="pdf-ring"></div>' +
+            '<div class="pdf-ring"></div>' +
+            '<div class="pdf-icon">📄</div>' +
+          '</div>' +
+          '<div class="pdf-title">' + (title || 'Generating Report') + '</div>' +
+          '<div class="pdf-subtitle" id="pdfProgressMessage">' + PDF_MESSAGES[0] + '</div>' +
+          '<div class="pdf-progress-track">' +
+            '<div class="pdf-progress-bar" id="pdfProgressBar"></div>' +
+          '</div>' +
+          '<div class="pdf-progress-text" id="pdfProgressText">0% COMPLETE</div>' +
+          '<div class="pdf-brand">PAYPLAN LEDGER • OFFLINE-FIRST</div>' +
+        '</div>';
+
+      document.body.appendChild(pdfOverlayEl);
+
+      pdfProgressValue = 0;
+      pdfMessageIndex = 0;
+
+      pdfProgressInterval = setInterval(function() {
+        if (pdfProgressValue < 90) {
+          pdfProgressValue += Math.max(1, (90 - pdfProgressValue) * 0.04);
+          if (pdfProgressValue > 90) pdfProgressValue = 90;
+          updatePDFProgressUI(pdfProgressValue);
+        }
+      }, 180);
+
+      pdfMessageInterval = setInterval(function() {
+        pdfMessageIndex = (pdfMessageIndex + 1) % PDF_MESSAGES.length;
+        const msgEl = document.getElementById('pdfProgressMessage');
+        if (msgEl) {
+          msgEl.classList.add('swap');
+          setTimeout(function() {
+            if (msgEl) {
+              msgEl.textContent = PDF_MESSAGES[pdfMessageIndex];
+              msgEl.classList.remove('swap');
+            }
+          }, 300);
+        }
+      }, 1600);
     }
 
-    function hidePDFProgress() {
-      var ov = document.getElementById('pdfProgressOverlay');
-      if (ov) ov.remove();
+    function updatePDFProgressUI(value) {
+      const bar = document.getElementById('pdfProgressBar');
+      const text = document.getElementById('pdfProgressText');
+      if (bar) bar.style.width = value + '%';
+      if (text) text.textContent = Math.round(value) + '% COMPLETE';
+    }
+
+    function hidePDFProgress(immediate) {
+      if (pdfProgressInterval) { clearInterval(pdfProgressInterval); pdfProgressInterval = null; }
+      if (pdfMessageInterval) { clearInterval(pdfMessageInterval); pdfMessageInterval = null; }
+
+      if (!pdfOverlayEl) return Promise.resolve();
+
+      if (!immediate) {
+        updatePDFProgressUI(100);
+        const msgEl = document.getElementById('pdfProgressMessage');
+        if (msgEl) msgEl.textContent = 'Ready! Downloading...';
+      }
+
+      const el = pdfOverlayEl;
+      pdfOverlayEl = null;
+
+      return new Promise(function(resolve) {
+        const fadeDelay = immediate ? 0 : 600;
+        setTimeout(function() {
+          el.classList.add('closing');
+          setTimeout(function() {
+            if (el.parentNode) el.parentNode.removeChild(el);
+            resolve();
+          }, 320);
+        }, fadeDelay);
+      });
+    }
+
+    // Reliable blob download — works on mobile browsers where pdf.save() fails silently
+    function triggerBlobDownload(blob, fileName) {
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = fileName;
+      a.style.display = 'none';
+      document.body.appendChild(a);
+
+      try {
+        a.click();
+      } catch (e) {
+        // Fallback for very old browsers
+        const evt = new MouseEvent('click', { view: window, bubbles: true, cancelable: true });
+        a.dispatchEvent(evt);
+      }
+
+      document.body.removeChild(a);
+      setTimeout(function() { URL.revokeObjectURL(url); }, 4000);
     }
 
     async function generatePDF(htmlContent, fileName) {
+      // Fallback path when CDN libs aren't loaded
       if (typeof window.jspdf === 'undefined' || typeof window.html2canvas === 'undefined') {
         showToast('⚠️ Using browser print fallback (Save as PDF)');
         var printWindow = window.open('', '_blank');
@@ -3785,9 +3956,10 @@
         return;
       }
 
-      showPDFProgress('Preparing report');
+      showPDFProgress('Generating Report');
 
       try {
+        // 1. Build offscreen container
         var container = document.createElement('div');
         container.style.position = 'fixed';
         container.style.left = '-99999px';
@@ -3800,6 +3972,7 @@
 
         await new Promise(function(r) { setTimeout(r, 250); });
 
+        // 2. Render to canvas
         var canvas = await html2canvas(container, {
           scale: 2,
           backgroundColor: '#ffffff',
@@ -3810,6 +3983,7 @@
 
         document.body.removeChild(container);
 
+        // 3. Assemble PDF
         var { jsPDF } = window.jspdf;
         var pdf = new jsPDF({ orientation: 'portrait', unit: 'pt', format: 'a4' });
 
@@ -3840,11 +4014,27 @@
           }
         }
 
-        pdf.save(fileName || ('PayPlan_Ledger_Report_' + new Date().toISOString().slice(0, 10) + '.pdf'));
-        hidePDFProgress();
+        // 4. Build the blob BEFORE hiding the overlay, so failures happen while it's still visible
+        var pdfBlob = pdf.output('blob');
+        if (!pdfBlob || pdfBlob.size === 0) {
+          throw new Error('PDF produced an empty file.');
+        }
+
+        const safeName = fileName || ('PayPlan_Ledger_Report_' + new Date().toISOString().slice(0, 10) + '.pdf');
+
+        // 5. Fade out overlay FIRST (await so animation completes)
+        await hidePDFProgress(false);
+
+        // 6. Small buffer so the DOM settles before triggering the download
+        await new Promise(function(r) { setTimeout(r, 80); });
+
+        // 7. Trigger download via reliable blob method
+        triggerBlobDownload(pdfBlob, safeName);
+
         showToast('✅ PDF downloaded');
+
       } catch (err) {
-        hidePDFProgress();
+        hidePDFProgress(true);
         console.error('PDF error:', err);
         showToast('❌ PDF failed: ' + err.message);
       }
@@ -4436,9 +4626,6 @@
       if (e.key === 'Enter') handlePasswordSubmit();
     });
 
-    // =====================================================================
-    //  AUTO-DETECTING INSTALL GUIDE
-    // =====================================================================
     function detectPlatform() {
       const ua = navigator.userAgent || '';
       const isIOS = /iPhone|iPad|iPod/i.test(ua) ||
