@@ -556,10 +556,10 @@
     .section { display: none; }
     .section.active {
       display: block;
-      animation: sectionFade 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+      animation: sectionFade 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
     @keyframes sectionFade {
-      from { opacity: 0; transform: translateY(10px); }
+      from { opacity: 0; transform: translateY(6px); }
       to { opacity: 1; transform: translateY(0); }
     }
 
@@ -570,7 +570,7 @@
       margin-bottom: 16px;
       border: 1px solid var(--border);
       box-shadow: var(--shadow-sm);
-      transition: box-shadow 0.3s, transform 0.3s, border-color 0.3s, background 0.3s;
+      transition: box-shadow 0.3s, border-color 0.3s, background 0.3s;
       position: relative;
       overflow: hidden;
     }
@@ -759,7 +759,7 @@
       z-index: 20000;
       visibility: hidden;
       opacity: 0;
-      transition: opacity 0.25s ease;
+      transition: opacity 0.2s ease, visibility 0.2s;
       pointer-events: none;
       padding: 20px;
       overflow-y: auto;
@@ -780,8 +780,8 @@
       text-align: center;
       border: 1px solid var(--border);
       box-shadow: var(--shadow-xl);
-      transform: scale(0.94);
-      transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.25s;
+      transform: scale(0.95);
+      transition: transform 0.3s cubic-bezier(0.34, 1.4, 0.64, 1), opacity 0.2s;
       opacity: 0;
       position: relative;
     }
@@ -1147,12 +1147,6 @@
       background: var(--accent-gradient);
       box-shadow: 0 8px 32px rgba(245, 158, 11, 0.5);
       color: #1a1a1a !important;
-      animation: celebrate 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
-    }
-    @keyframes celebrate {
-      0% { transform: scale(0.95); }
-      50% { transform: scale(1.05); }
-      100% { transform: scale(1); }
     }
 
     .history-table {
@@ -1418,9 +1412,6 @@
       font-variant-numeric: tabular-nums;
     }
 
-    /* ============================================================
-       LOCK SCREEN — modern, compact, keyboard-aware
-       ============================================================ */
     #lockScreen {
       position: fixed;
       inset: 0;
@@ -1483,7 +1474,6 @@
       align-items: stretch;
     }
 
-    /* Hero block — logo + name + tagline. Hides when keyboard is open. */
     .lock-hero {
       transition: opacity 0.25s ease, max-height 0.3s ease, margin 0.3s ease;
       max-height: 400px;
@@ -1536,7 +1526,6 @@
       text-transform: uppercase;
     }
 
-    /* Form block — always visible, never hidden by keyboard */
     .lock-form {
       display: flex;
       flex-direction: column;
@@ -1709,7 +1698,6 @@
       pointer-events: none;
     }
 
-    /* Compact lock screen on short screens and mobile */
     @media (max-height: 700px), (max-width: 500px) {
       .lock-logo { width: 60px; height: 60px; border-radius: 18px; font-size: 1.7rem; margin-bottom: 12px; }
       .lock-logo .lock-icon-svg { font-size: 1.7rem; }
@@ -1758,28 +1746,25 @@
       to { opacity: 1; transform: translateY(0) scale(1); }
     }
 
-    /* ============================================================
-       PDF GENERATING OVERLAY — soft, non-blocking, slow-paced
-       ============================================================ */
     .pdf-overlay {
       position: fixed;
       inset: 0;
-      background: rgba(5, 8, 18, 0.35);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
+      background: rgba(5, 8, 18, 0.55);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
       z-index: 17000;
       display: flex;
       align-items: center;
       justify-content: center;
       padding: 24px;
-      animation: pdfOverlayIn 0.5s ease;
+      animation: pdfOverlayIn 0.4s ease;
     }
     @keyframes pdfOverlayIn {
       from { opacity: 0; }
       to { opacity: 1; }
     }
     .pdf-overlay.closing {
-      animation: pdfOverlayOut 0.5s ease forwards;
+      animation: pdfOverlayOut 0.4s ease forwards;
     }
     @keyframes pdfOverlayOut {
       to { opacity: 0; }
@@ -1797,7 +1782,7 @@
       color: #f1f5f9;
       position: relative;
       overflow: hidden;
-      animation: pdfModalIn 0.6s cubic-bezier(0.34, 1.4, 0.64, 1);
+      animation: pdfModalIn 0.5s cubic-bezier(0.34, 1.4, 0.64, 1);
     }
     @keyframes pdfModalIn {
       from { transform: scale(0.92) translateY(16px); opacity: 0; }
@@ -1902,7 +1887,7 @@
       background: var(--primary-gradient);
       border-radius: 999px;
       box-shadow: 0 0 12px rgba(16, 185, 129, 0.6);
-      transition: width 1.4s cubic-bezier(0.4, 0, 0.2, 1);
+      transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
       position: relative;
       overflow: hidden;
     }
@@ -1949,7 +1934,7 @@
       align-items: center;
       justify-content: center;
       z-index: 3000;
-      transition: opacity 0.6s ease;
+      transition: opacity 0.4s ease;
       opacity: 1;
       visibility: visible;
     }
@@ -2418,7 +2403,6 @@
     <div class="lock-orb lock-orb-3"></div>
     <div class="lock-content">
 
-      <!-- Hero block — hides when keyboard opens -->
       <div class="lock-hero">
         <div class="lock-logo">
           <span class="lock-icon-svg" id="lockIconSvg">🔒</span>
@@ -2427,7 +2411,6 @@
         <div class="lock-app-sub" id="lockSubtitle">Hire Purchase Tracker</div>
       </div>
 
-      <!-- Form block — always visible -->
       <div class="lock-form">
         <div class="lock-setup-badge" id="lockSetupBadge" style="display:none;">✦ First time? Create your password</div>
         <div class="lock-input-wrap">
@@ -3352,6 +3335,8 @@
           currentAgreementId = data.currentAgreementId || Object.keys(agreements)[0];
           currentCurrencySymbol = data.currencySymbol || '$';
           if (data.theme) { document.body.classList.toggle('dark', data.theme === 'dark'); localStorage.setItem('pmTheme', data.theme); }
+          // Fix: reset any stale celebration flags after restore
+          celebrationShown = {};
           saveAgreements(); renderAgreementsList(); loadCurrentAgreementData();
           updatePreviewForCurrent(); updateChartForCurrent(); loadScheduleIntoForm();
           updateReminderDisplay(); refreshAllCurrencyDisplays();
@@ -3446,11 +3431,15 @@
     function switchAgreement(id) {
       if (!agreements[id]) return;
       currentAgreementId = id;
+      // Fix: clear both the amountPaid input AND reset the celebration flag for
+      // this agreement. Also clear any in-progress form values so they don't
+      // bleed into the newly selected agreement.
+      amountPaidInput.value = '';
+      celebrationShown[id] = false;
       saveAgreements(); renderAgreementsList(); loadCurrentAgreementData();
       updatePreviewForCurrent(); updateChartForCurrent(); loadScheduleIntoForm();
       updateReminderDisplay(); refreshAllCurrencyDisplays();
       updateDashboardStats(); updateStickyHeader();
-      celebrationShown[id] = false;
     }
     function deleteAgreement(id) {
       if (Object.keys(agreements).length === 1) { showToast('Cannot delete the only agreement.'); return; }
@@ -3458,6 +3447,7 @@
         if (!ok) return;
         delete agreements[id];
         if (currentAgreementId === id) currentAgreementId = Object.keys(agreements)[0];
+        amountPaidInput.value = '';
         saveAgreements(); renderAgreementsList(); loadCurrentAgreementData();
         updatePreviewForCurrent(); updateChartForCurrent(); loadScheduleIntoForm();
         updateReminderDisplay(); refreshAllCurrencyDisplays();
@@ -3472,15 +3462,19 @@
     function createNewAgreement() {
       const name = newAgreementNameInput.value.trim() || 'New Agreement';
       const id = Date.now().toString();
+      // Fix: create the agreement fresh with 0 total, 0 records, and no carry-over.
       agreements[id] = { name, records: [], totalHireAmount: 0, schedule: { nextDueDate: '', installmentAmount: '', frequency: 'monthly' } };
       currentAgreementId = id;
+      // Critical: clear the amountPaid input so the previous agreement's
+      // typed-in value doesn't bleed into the new agreement's preview.
+      amountPaidInput.value = '';
+      celebrationShown[id] = false;
       saveAgreements(); renderAgreementsList(); loadCurrentAgreementData();
       updatePreviewForCurrent(); updateChartForCurrent(); loadScheduleIntoForm();
       updateReminderDisplay(); refreshAllCurrencyDisplays();
       updateDashboardStats(); updateStickyHeader();
       newAgreementModal.classList.remove('active');
       showToast(`"${name}" created`);
-      celebrationShown[id] = false;
     }
     function updateStickyHeader() {
       if (currentAgreementId && agreements[currentAgreementId]) {
@@ -3512,6 +3506,7 @@
         historyBody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--text-3);padding:28px;">Select an agreement</td></tr>';
         summaryStats.innerHTML = '<span>Total Paid: 0</span><span>Remaining: 0</span>';
         totalHireAmountInput.value = '';
+        amountPaidInput.value = '';
         return;
       }
       const ag = agreements[currentAgreementId];
@@ -3589,9 +3584,15 @@
         balancePreviewSpan.style.background = 'var(--primary-gradient)';
         balancePreviewSpan.classList.remove('zero-balance');
       }
-      if (bal <= 0 && all > 0 && currentAgreementId && !celebrationShown[currentAgreementId]) {
+      // Fix: only celebrate when the AGREEMENT itself is complete (has records
+      // and the recorded total is >= contract). Never fire on stale state.
+      const agreementHasRecords = ag.records.length > 0;
+      const recordedPaid = totalPaid;
+      const recordedBalance = hire - recordedPaid;
+      const reallyComplete = agreementHasRecords && recordedPaid > 0 && recordedBalance <= 0;
+      if (reallyComplete && currentAgreementId && !celebrationShown[currentAgreementId]) {
         celebrationShown[currentAgreementId] = true;
-        showCelebration(ag.name || 'Agreement', all);
+        showCelebration(ag.name || 'Agreement', recordedPaid);
       }
     }
 
@@ -3684,7 +3685,7 @@
         options: {
           responsive: true,
           maintainAspectRatio: false,
-          animation: { duration: 500, easing: 'easeOutQuart' },
+          animation: { duration: 400, easing: 'easeOutQuart' },
           plugins: {
             tooltip: {
               backgroundColor: isDark ? 'rgba(19,26,44,0.95)' : 'rgba(255,255,255,0.95)',
@@ -3861,6 +3862,9 @@
       ag.records.sort((a, b) => new Date(a.date) - new Date(b.date));
       ag.totalHireAmount = hire;
       saveAgreements(); renderHistoryTable(ag.records);
+      // Clear amount paid input immediately after save so it doesn't
+      // carry over if the user switches agreements next.
+      amountPaidInput.value = '';
       updatePreviewForCurrent(); updateChartForCurrent(); updateReminderDisplay();
       refreshAllCurrencyDisplays(); updateDashboardStats();
       showToast(`✅ Saved — ${formatCurrency(paid)} on ${date}`);
@@ -3871,6 +3875,7 @@
       showConfirm('Delete ALL payment records? This cannot be undone.', ok => {
         if (!ok) return;
         agreements[currentAgreementId].records = [];
+        amountPaidInput.value = '';
         saveAgreements(); renderHistoryTable([]);
         updatePreviewForCurrent(); updateChartForCurrent(); updateReminderDisplay();
         refreshAllCurrencyDisplays(); updateDashboardStats();
@@ -3878,9 +3883,6 @@
       });
     }
 
-    /* ============================================================
-       PDF WAITING OVERLAY — soft, non-blocking, slow-paced
-       ============================================================ */
     let pdfOverlayEl = null;
     let pdfProgressInterval = null;
     let pdfMessageInterval = null;
@@ -3923,7 +3925,6 @@
       pdfProgressValue = 0;
       pdfMessageIndex = 0;
 
-      // Slower progress — ~220ms per tick, gentle curve toward 90%
       pdfProgressInterval = setInterval(function() {
         if (pdfProgressValue < 90) {
           pdfProgressValue += Math.max(0.8, (90 - pdfProgressValue) * 0.025);
@@ -3970,13 +3971,13 @@
       pdfOverlayEl = null;
 
       return new Promise(function(resolve) {
-        const fadeDelay = immediate ? 0 : 900;
+        const fadeDelay = immediate ? 0 : 700;
         setTimeout(function() {
           el.classList.add('closing');
           setTimeout(function() {
             if (el.parentNode) el.parentNode.removeChild(el);
             resolve();
-          }, 500);
+          }, 400);
         }, fadeDelay);
       });
     }
@@ -4026,7 +4027,9 @@
         container.innerHTML = htmlContent;
         document.body.appendChild(container);
 
-        await new Promise(function(r) { setTimeout(r, 350); });
+        // Give the browser a moment to fully paint before html2canvas
+        // takes its snapshot. 250ms is enough on most devices.
+        await new Promise(function(r) { setTimeout(r, 250); });
 
         var canvas = await html2canvas(container, {
           scale: 2,
@@ -4075,11 +4078,12 @@
 
         const safeName = fileName || ('PayPlan_Ledger_Report_' + new Date().toISOString().slice(0, 10) + '.pdf');
 
-        // Ensure the loading animation has run for at least ~2s so it never feels too fast
-        await new Promise(function(r) { setTimeout(r, 200); });
+        // Ensure the overlay has been visible for at least ~1.5s total
+        // so the loading animation never flashes by too fast.
+        await new Promise(function(r) { setTimeout(r, 150); });
 
         await hidePDFProgress(false);
-        await new Promise(function(r) { setTimeout(r, 120); });
+        await new Promise(function(r) { setTimeout(r, 100); });
 
         triggerBlobDownload(pdfBlob, safeName);
 
@@ -4269,6 +4273,8 @@
               document.body.classList.add('dark');
             }
             localStorage.setItem('pmTheme', backup.theme || 'dark');
+            celebrationShown = {};
+            amountPaidInput.value = '';
             saveAgreements(); renderAgreementsList(); loadCurrentAgreementData();
             updatePreviewForCurrent(); updateChartForCurrent(); loadScheduleIntoForm();
             updateReminderDisplay(); refreshAllCurrencyDisplays();
@@ -4319,7 +4325,6 @@
       document.body.classList.remove('keyboard-open');
       _appUnlocked = false;
       btn.disabled = false; btn.classList.remove('loading');
-      // Focus input on mobile after a slight delay so the layout is settled
       setTimeout(function() {
         if (window.matchMedia('(max-width: 900px)').matches) {
           try { input.focus(); } catch (e) {}
@@ -4411,9 +4416,12 @@
       if (loaderHidden) return;
       loaderHidden = true;
       loader.classList.add('fade-out');
-      setTimeout(() => { if (loader) loader.style.display = 'none'; }, 600);
+      setTimeout(() => { if (loader) loader.style.display = 'none'; }, 500);
     }
-    setTimeout(() => { if (!loaderHidden) hideLoader(); }, 3000);
+    // Hide loader quickly if we have a stored password (returning user)
+    // so the lock screen is not delayed unnecessarily.
+    if (storedPassword) setTimeout(function() { if (!loaderHidden) hideLoader(); }, 300);
+    else setTimeout(() => { if (!loaderHidden) hideLoader(); }, 2000);
 
     function toggleSidebar() {
       const isHidden = appSidebar.classList.toggle('sidebar-hidden');
@@ -4581,13 +4589,14 @@
         const id = Date.now().toString();
         agreements = { [id]: { name: 'My First Agreement', records: [], totalHireAmount: 0, schedule: { nextDueDate: '', installmentAmount: '', frequency: 'monthly' } } };
         currentAgreementId = id;
+        amountPaidInput.value = '';
+        celebrationShown = {};
         saveAgreements(); renderAgreementsList(); loadCurrentAgreementData();
         updatePreviewForCurrent(); updateChartForCurrent(); loadScheduleIntoForm();
         updateReminderDisplay(); refreshAllCurrencyDisplays();
         updateDashboardStats(); updateStickyHeader();
         welcomeModal.classList.remove('active');
         showToast('Welcome! Start by adding a payment.');
-        celebrationShown[id] = false;
       });
 
       document.getElementById('welcomeRestoreData').addEventListener('click', () => {
@@ -4680,11 +4689,6 @@
 
     applyStandaloneMode();
 
-    // ============================================================
-    // KEYBOARD-AWARE LOCK SCREEN
-    // Detects when the on-screen keyboard opens and compresses
-    // the lock screen layout so the input and button stay visible.
-    // ============================================================
     (function initKeyboardAwareness() {
       if (!window.visualViewport) return;
 
@@ -4715,8 +4719,6 @@
       window.visualViewport.addEventListener('resize', checkViewport);
       window.visualViewport.addEventListener('scroll', checkViewport);
 
-      // Also listen to focus/blur as a fallback for browsers where
-      // visualViewport doesn't reliably fire on keyboard open/close.
       const pwInput = document.getElementById('passwordInput');
       if (pwInput) {
         pwInput.addEventListener('focus', function() {
