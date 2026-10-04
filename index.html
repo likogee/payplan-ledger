@@ -1275,6 +1275,91 @@
     .reminder-card strong { color: var(--text); font-weight: 700; }
     .reminder-warning { color: var(--danger); font-weight: 700; }
 
+    /* NEW: Recovery nudge card */
+    .recovery-nudge {
+      background: linear-gradient(135deg, rgba(251, 191, 36, 0.12), rgba(251, 191, 36, 0.03));
+      border-left: 4px solid var(--accent);
+      padding: 14px 18px;
+      border-radius: var(--radius);
+      margin-top: 10px;
+      font-size: 0.86rem;
+      line-height: 1.65;
+      color: var(--text);
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+    }
+    .recovery-nudge .nudge-icon {
+      font-size: 1.4rem;
+      flex-shrink: 0;
+      line-height: 1;
+      margin-top: 2px;
+    }
+    .recovery-nudge .nudge-body { flex: 1; }
+    .recovery-nudge .nudge-title {
+      font-weight: 800;
+      color: var(--text);
+      margin-bottom: 4px;
+      font-size: 0.88rem;
+    }
+    .recovery-nudge .nudge-desc {
+      color: var(--text-2);
+      font-size: 0.82rem;
+    }
+    .recovery-nudge button {
+      margin-top: 10px;
+      width: auto;
+      padding: 8px 16px;
+      font-size: 0.75rem;
+      border-radius: var(--radius-full);
+      background: var(--accent-gradient);
+      color: #1a1a1a;
+      box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+      font-weight: 800;
+    }
+
+    /* NEW: Snapshot warning inside recovery code display */
+    .recovery-snapshot-warning {
+      background: rgba(239, 68, 68, 0.08);
+      border: 1.5px solid rgba(239, 68, 68, 0.3);
+      border-radius: var(--radius-sm);
+      padding: 12px 14px;
+      margin: 10px 0;
+      font-size: 0.78rem;
+      color: var(--text);
+      line-height: 1.6;
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+    }
+    .recovery-snapshot-warning .warn-ico {
+      font-size: 1.1rem;
+      flex-shrink: 0;
+      line-height: 1;
+    }
+    .recovery-snapshot-warning strong { color: var(--danger); font-weight: 800; }
+
+    /* NEW: Last generated timestamp line */
+    .recovery-timestamp {
+      font-size: 0.78rem;
+      color: var(--text-2);
+      margin-top: 10px;
+      padding: 10px 14px;
+      background: var(--surface-2);
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+      line-height: 1.5;
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+    }
+    .recovery-timestamp .ts-ico { flex-shrink: 0; }
+    .recovery-timestamp.stale {
+      background: rgba(251, 191, 36, 0.08);
+      border-color: rgba(251, 191, 36, 0.3);
+    }
+    .recovery-timestamp.stale strong { color: var(--accent); }
+
     .chart-wrapper {
       position: relative;
       width: 100%;
@@ -2736,6 +2821,9 @@
             <div style="text-align:center;padding:12px;background:var(--surface-2);border-radius:var(--radius);color:var(--text-2);font-size:0.85rem;font-weight:600;border:1px solid var(--border);">
               <span id="dashCurrentAgreement">No agreement selected</span>
             </div>
+
+            <!-- NEW: Recovery code nudge (shown only when stale) -->
+            <div id="dashboardRecoveryNudge" style="display:none;"></div>
           </div>
         </div>
 
@@ -2986,12 +3074,25 @@
             <p style="font-size:0.8rem;color:var(--text-2);margin-bottom:10px;line-height:1.6;">
               Generate a recovery code to restore your data on any device. <strong>Keep this code safe!</strong>
             </p>
-            <button id="generateRecoveryBtn" class="gold-btn small-btn" style="width:auto;">🔑 Generate Recovery Code</button>
+
+            <!-- NEW: Last generated timestamp -->
+            <div id="recoveryTimestampDisplay" class="recovery-timestamp"></div>
+
+            <button id="generateRecoveryBtn" class="gold-btn small-btn" style="width:auto;margin-top:12px;">🔑 Generate Recovery Code</button>
+
             <div id="recoveryCodeDisplay" style="display:none;margin-top:12px;">
               <p style="font-size:0.7rem;color:var(--text-3);margin-bottom:6px;">Your recovery code:</p>
               <div class="recovery-code-box"><span id="recoveryCodeText"></span></div>
+              <!-- NEW: snapshot warning after code is shown -->
+              <div class="recovery-snapshot-warning">
+                <span class="warn-ico">⚠️</span>
+                <div>
+                  <strong>This code is a snapshot.</strong> It contains only what exists in the app right now. Any payments or agreements you add later will <strong>NOT</strong> be included. Generate a new code regularly — we recommend once a week, or after any significant new data.
+                </div>
+              </div>
               <button id="copyRecoveryBtn" class="outline small-btn" style="width:auto;">📋 Copy Code</button>
             </div>
+
             <hr style="margin:16px 0;border:none;border-top:1px solid var(--divider);">
             <p style="font-size:0.8rem;color:var(--text-2);margin-bottom:10px;line-height:1.6;">
               Already have a recovery code and password? Restore your data on any device.
@@ -3311,6 +3412,15 @@
         document.getElementById('recoveryCodeText').textContent = code;
         document.getElementById('recoveryCodeDisplay').style.display = 'block';
         recoveryPasswordModal.classList.remove('active');
+
+        // NEW: record the timestamp of this generation
+        const nowIso = new Date().toISOString();
+        localStorage.setItem('pmRecoveryLastGenerated', nowIso);
+
+        // Update the timestamp display and dashboard nudge immediately
+        updateRecoveryTimestampDisplay();
+        updateRecoveryNudge();
+
         showToast('Recovery code generated!');
       }
     }
@@ -3335,8 +3445,8 @@
           currentAgreementId = data.currentAgreementId || Object.keys(agreements)[0];
           currentCurrencySymbol = data.currencySymbol || '$';
           if (data.theme) { document.body.classList.toggle('dark', data.theme === 'dark'); localStorage.setItem('pmTheme', data.theme); }
-          // Fix: reset any stale celebration flags after restore
           celebrationShown = {};
+          amountPaidInput.value = '';
           saveAgreements(); renderAgreementsList(); loadCurrentAgreementData();
           updatePreviewForCurrent(); updateChartForCurrent(); loadScheduleIntoForm();
           updateReminderDisplay(); refreshAllCurrencyDisplays();
@@ -3348,6 +3458,104 @@
         recoveryError.textContent = e.message;
         recoveryError.style.display = 'block';
       }
+    }
+
+    // NEW: Compute days since last recovery code, and update displays
+    function getDaysSinceLastRecovery() {
+      const iso = localStorage.getItem('pmRecoveryLastGenerated');
+      if (!iso) return null;
+      try {
+        const then = new Date(iso).getTime();
+        const now = Date.now();
+        const days = Math.floor((now - then) / 86400000);
+        return days;
+      } catch (e) { return null; }
+    }
+
+    function formatLastRecoveryDate() {
+      const iso = localStorage.getItem('pmRecoveryLastGenerated');
+      if (!iso) return null;
+      try {
+        const d = new Date(iso);
+        return d.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+      } catch (e) { return null; }
+    }
+
+    function updateRecoveryTimestampDisplay() {
+      const el = document.getElementById('recoveryTimestampDisplay');
+      if (!el) return;
+      const iso = localStorage.getItem('pmRecoveryLastGenerated');
+      if (!iso) {
+        el.className = 'recovery-timestamp stale';
+        el.innerHTML = '<span class="ts-ico">⚠️</span><div><strong>You have not generated a recovery code yet.</strong><br>If you lose this device, your data cannot be restored. Generate one now.</div>';
+        return;
+      }
+      const days = getDaysSinceLastRecovery();
+      const dateStr = formatLastRecoveryDate();
+      if (days === null) {
+        el.className = 'recovery-timestamp';
+        el.innerHTML = '<span class="ts-ico">🔑</span><div>Last generated: ' + dateStr + '</div>';
+        return;
+      }
+      if (days === 0) {
+        el.className = 'recovery-timestamp';
+        el.innerHTML = '<span class="ts-ico">✅</span><div><strong>Last generated: Today.</strong><br>Your latest data is protected.</div>';
+      } else if (days < 7) {
+        el.className = 'recovery-timestamp';
+        el.innerHTML = '<span class="ts-ico">🔑</span><div>Last generated: <strong>' + days + ' day' + (days === 1 ? '' : 's') + ' ago</strong> (' + dateStr + ').<br>Generate a fresh code soon to include your latest data.</div>';
+      } else {
+        el.className = 'recovery-timestamp stale';
+        el.innerHTML = '<span class="ts-ico">⚠️</span><div><strong>Last generated: ' + days + ' days ago</strong> (' + dateStr + ').<br>Your recent data is not included. Generate a fresh code now.</div>';
+      }
+    }
+
+    function updateRecoveryNudge() {
+      const el = document.getElementById('dashboardRecoveryNudge');
+      if (!el) return;
+      const iso = localStorage.getItem('pmRecoveryLastGenerated');
+      const days = getDaysSinceLastRecovery();
+
+      // Only show if there's actual data to protect
+      const hasData = Object.keys(agreements).length > 0;
+      if (!hasData) {
+        el.style.display = 'none';
+        el.innerHTML = '';
+        return;
+      }
+
+      // Never generated
+      if (!iso) {
+        el.style.display = 'block';
+        el.innerHTML =
+          '<div class="recovery-nudge">' +
+            '<span class="nudge-icon">🔑</span>' +
+            '<div class="nudge-body">' +
+              '<div class="nudge-title">Protect your data with a recovery code</div>' +
+              '<div class="nudge-desc">You have agreements and payments stored on this device. If you lose this phone, your records will be gone. Generate a recovery code now to keep them safe.</div>' +
+              '<button onclick="switchSection(\'settings\');setTimeout(function(){window.scrollTo(0,document.body.scrollHeight);},200);">Generate Recovery Code →</button>' +
+            '</div>' +
+          '</div>';
+        return;
+      }
+
+      // Stale: 7+ days
+      if (days !== null && days >= 7) {
+        el.style.display = 'block';
+        el.innerHTML =
+          '<div class="recovery-nudge">' +
+            '<span class="nudge-icon">⚠️</span>' +
+            '<div class="nudge-body">' +
+              '<div class="nudge-title">Recovery code is ' + days + ' days old</div>' +
+              '<div class="nudge-desc">Your recovery code was last generated ' + days + ' days ago. Any payments or agreements you added since then are not included. Generate a fresh code to keep everything backed up.</div>' +
+              '<button onclick="switchSection(\'settings\');setTimeout(function(){window.scrollTo(0,document.body.scrollHeight);},200);">Update Recovery Code →</button>' +
+            '</div>' +
+          '</div>';
+        return;
+      }
+
+      // Fresh enough — hide
+      el.style.display = 'none';
+      el.innerHTML = '';
     }
 
     function saveAgreements() {
@@ -3431,9 +3639,6 @@
     function switchAgreement(id) {
       if (!agreements[id]) return;
       currentAgreementId = id;
-      // Fix: clear both the amountPaid input AND reset the celebration flag for
-      // this agreement. Also clear any in-progress form values so they don't
-      // bleed into the newly selected agreement.
       amountPaidInput.value = '';
       celebrationShown[id] = false;
       saveAgreements(); renderAgreementsList(); loadCurrentAgreementData();
@@ -3452,6 +3657,7 @@
         updatePreviewForCurrent(); updateChartForCurrent(); loadScheduleIntoForm();
         updateReminderDisplay(); refreshAllCurrencyDisplays();
         updateDashboardStats(); updateStickyHeader();
+        updateRecoveryNudge();
         showToast('Agreement deleted');
       });
     }
@@ -3462,17 +3668,15 @@
     function createNewAgreement() {
       const name = newAgreementNameInput.value.trim() || 'New Agreement';
       const id = Date.now().toString();
-      // Fix: create the agreement fresh with 0 total, 0 records, and no carry-over.
       agreements[id] = { name, records: [], totalHireAmount: 0, schedule: { nextDueDate: '', installmentAmount: '', frequency: 'monthly' } };
       currentAgreementId = id;
-      // Critical: clear the amountPaid input so the previous agreement's
-      // typed-in value doesn't bleed into the new agreement's preview.
       amountPaidInput.value = '';
       celebrationShown[id] = false;
       saveAgreements(); renderAgreementsList(); loadCurrentAgreementData();
       updatePreviewForCurrent(); updateChartForCurrent(); loadScheduleIntoForm();
       updateReminderDisplay(); refreshAllCurrencyDisplays();
       updateDashboardStats(); updateStickyHeader();
+      updateRecoveryNudge();
       newAgreementModal.classList.remove('active');
       showToast(`"${name}" created`);
     }
@@ -3499,6 +3703,7 @@
       } else {
         document.getElementById('dashCurrentAgreement').textContent = 'No agreement selected';
       }
+      updateRecoveryNudge();
     }
 
     function loadCurrentAgreementData() {
@@ -3584,8 +3789,6 @@
         balancePreviewSpan.style.background = 'var(--primary-gradient)';
         balancePreviewSpan.classList.remove('zero-balance');
       }
-      // Fix: only celebrate when the AGREEMENT itself is complete (has records
-      // and the recorded total is >= contract). Never fire on stale state.
       const agreementHasRecords = ag.records.length > 0;
       const recordedPaid = totalPaid;
       const recordedBalance = hire - recordedPaid;
@@ -3862,8 +4065,6 @@
       ag.records.sort((a, b) => new Date(a.date) - new Date(b.date));
       ag.totalHireAmount = hire;
       saveAgreements(); renderHistoryTable(ag.records);
-      // Clear amount paid input immediately after save so it doesn't
-      // carry over if the user switches agreements next.
       amountPaidInput.value = '';
       updatePreviewForCurrent(); updateChartForCurrent(); updateReminderDisplay();
       refreshAllCurrencyDisplays(); updateDashboardStats();
@@ -4027,8 +4228,6 @@
         container.innerHTML = htmlContent;
         document.body.appendChild(container);
 
-        // Give the browser a moment to fully paint before html2canvas
-        // takes its snapshot. 250ms is enough on most devices.
         await new Promise(function(r) { setTimeout(r, 250); });
 
         var canvas = await html2canvas(container, {
@@ -4078,8 +4277,6 @@
 
         const safeName = fileName || ('PayPlan_Ledger_Report_' + new Date().toISOString().slice(0, 10) + '.pdf');
 
-        // Ensure the overlay has been visible for at least ~1.5s total
-        // so the loading animation never flashes by too fast.
         await new Promise(function(r) { setTimeout(r, 150); });
 
         await hidePDFProgress(false);
@@ -4279,6 +4476,7 @@
             updatePreviewForCurrent(); updateChartForCurrent(); loadScheduleIntoForm();
             updateReminderDisplay(); refreshAllCurrencyDisplays();
             updateDashboardStats(); updateStickyHeader();
+            updateRecoveryNudge();
             welcomeModal.classList.remove('active');
             showToast('✅ Data restored');
           });
@@ -4341,6 +4539,8 @@
           updateChartForCurrent(); updateReminderDisplay();
           refreshAllCurrencyDisplays(); updateDashboardStats();
         }
+        updateRecoveryTimestampDisplay();
+        updateRecoveryNudge();
       }, 100);
     }
     function toggleLockEye() {
@@ -4418,8 +4618,6 @@
       loader.classList.add('fade-out');
       setTimeout(() => { if (loader) loader.style.display = 'none'; }, 500);
     }
-    // Hide loader quickly if we have a stored password (returning user)
-    // so the lock screen is not delayed unnecessarily.
     if (storedPassword) setTimeout(function() { if (!loaderHidden) hideLoader(); }, 300);
     else setTimeout(() => { if (!loaderHidden) hideLoader(); }, 2000);
 
@@ -4520,6 +4718,9 @@
       if (sectionId === 'dashboard') setTimeout(() => { updateChartForCurrent(); updateDashboardStats(); }, 60);
       if (sectionId === 'history' && currentAgreementId && agreements[currentAgreementId]) {
         renderHistoryTable(agreements[currentAgreementId].records);
+      }
+      if (sectionId === 'settings') {
+        updateRecoveryTimestampDisplay();
       }
 
       closeSidebarIfMobile();
@@ -4664,6 +4865,8 @@
       updateReminderDisplay();
       updateDashboardStats();
       updateStickyHeader();
+      updateRecoveryTimestampDisplay();
+      updateRecoveryNudge();
 
       if (Object.keys(agreements).length === 0) welcomeModal.classList.add('active');
 
