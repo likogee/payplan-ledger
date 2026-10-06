@@ -1,4 +1,4 @@
-const CACHE = 'payplan-ledger-v17';
+const CACHE = 'payplan-ledger-v18';
 const PRECACHE_URLS = ['./', './index.html', './icon-192.png', './icon-512.png'];
 
 self.addEventListener('install', function(e) {
