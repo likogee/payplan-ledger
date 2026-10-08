@@ -1320,9 +1320,6 @@
     }
     .recovery-timestamp.stale strong { color: var(--accent); }
 
-    /* ============================================================
-       INSTALL APP CARD (new in Settings)
-       ============================================================ */
     .install-status {
       display: flex;
       align-items: flex-start;
@@ -1381,6 +1378,329 @@
       padding: 10px 20px;
       font-size: 0.82rem;
       border-radius: var(--radius-full);
+    }
+
+    .customers-summary-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+    .customers-summary-card {
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 14px 16px;
+      text-align: center;
+    }
+    .customers-summary-card .cs-label {
+      font-size: 0.64rem;
+      color: var(--text-3);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 6px;
+    }
+    .customers-summary-card .cs-value {
+      font-size: 1.15rem;
+      font-weight: 900;
+      letter-spacing: -0.03em;
+      font-variant-numeric: tabular-nums;
+    }
+    .customers-summary-card.cs-contract .cs-value { color: var(--text); }
+    .customers-summary-card.cs-paid .cs-value { color: var(--primary); }
+    .customers-summary-card.cs-outstanding .cs-value { color: var(--accent); }
+    .customers-summary-card.cs-count .cs-value { color: var(--info); }
+
+    .customers-filter-row {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-bottom: 12px;
+    }
+    .customers-filter-btn {
+      padding: 8px 16px;
+      border-radius: var(--radius-full);
+      border: 1.5px solid var(--border-strong);
+      background: transparent;
+      color: var(--text-2);
+      font-size: 0.75rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-family: inherit;
+      width: auto;
+      margin: 0;
+      box-shadow: none;
+    }
+    .customers-filter-btn::before { display: none; }
+    .customers-filter-btn:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+      background: var(--primary-soft);
+      transform: none;
+      box-shadow: none;
+    }
+    .customers-filter-btn.active {
+      background: var(--primary-gradient);
+      border-color: transparent;
+      color: white;
+      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+    }
+    .customers-filter-btn.active::before { display: none; }
+
+    .customers-sort-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 12px;
+      font-size: 0.75rem;
+      color: var(--text-2);
+    }
+    .customers-sort-row label {
+      margin: 0;
+      font-size: 0.68rem;
+      color: var(--text-3);
+    }
+    .customers-sort-row select {
+      flex: 1;
+      padding: 9px 12px;
+      font-size: 0.78rem;
+      border-radius: var(--radius-full);
+      background: var(--surface-2);
+    }
+
+    .customer-row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 16px;
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      margin-bottom: 8px;
+      cursor: pointer;
+      transition: all 0.2s;
+      position: relative;
+      overflow: hidden;
+    }
+    .customer-row:hover {
+      border-color: var(--primary);
+      background: var(--primary-soft);
+      transform: translateX(2px);
+    }
+    .customer-row.is-complete { border-left: 3px solid var(--primary); }
+    .customer-row.is-overdue { border-left: 3px solid var(--danger); }
+
+    .customer-info { min-width: 0; }
+    .customer-name {
+      font-weight: 700;
+      font-size: 0.9rem;
+      color: var(--text);
+      margin-bottom: 4px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      letter-spacing: -0.01em;
+    }
+    .customer-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px 10px;
+      font-size: 0.7rem;
+      color: var(--text-3);
+      font-weight: 600;
+    }
+    .customer-meta .meta-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+    }
+    .customer-meta .meta-item strong {
+      color: var(--text-2);
+      font-weight: 700;
+      font-variant-numeric: tabular-nums;
+    }
+    .customer-balance {
+      text-align: right;
+      flex-shrink: 0;
+    }
+    .customer-balance .cb-label {
+      font-size: 0.58rem;
+      color: var(--text-3);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 3px;
+    }
+    .customer-balance .cb-value {
+      font-size: 0.98rem;
+      font-weight: 900;
+      font-variant-numeric: tabular-nums;
+      letter-spacing: -0.02em;
+    }
+    .customer-balance .cb-value.is-outstanding { color: var(--accent); }
+    .customer-balance .cb-value.is-complete { color: var(--primary); }
+    .customer-balance .cb-value.is-overdue { color: var(--danger); }
+
+    .customers-empty {
+      text-align: center;
+      padding: 40px 20px;
+      color: var(--text-2);
+    }
+    .customers-empty .ce-icon {
+      font-size: 2.8rem;
+      margin-bottom: 10px;
+      opacity: 0.5;
+    }
+    .customers-empty .ce-title {
+      font-weight: 700;
+      font-size: 0.95rem;
+      margin-bottom: 6px;
+      color: var(--text);
+    }
+    .customers-empty .ce-desc {
+      font-size: 0.78rem;
+      color: var(--text-3);
+      line-height: 1.5;
+    }
+
+    /* INSTALL GUIDE MODAL */
+    .install-guide-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 45000;
+      background: rgba(5, 8, 18, 0.75);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      animation: fadeIn 0.3s ease;
+    }
+    .install-guide-overlay.visible { display: flex; }
+
+    .install-guide-card {
+      background: var(--bg-elevated);
+      border-radius: var(--radius-xl);
+      padding: 32px 26px 26px;
+      max-width: 440px;
+      width: 100%;
+      max-height: 85vh;
+      overflow-y: auto;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-xl);
+      position: relative;
+      animation: slideUp 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+      color: var(--text);
+    }
+    .install-guide-card .close-btn {
+      position: sticky;
+      top: 0;
+      float: right;
+      background: var(--surface-3);
+      border: none;
+      border-radius: 12px;
+      width: 34px;
+      height: 34px;
+      font-size: 1rem;
+      color: var(--text-2);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: var(--transition);
+      outline: none;
+      font-family: inherit;
+      z-index: 10;
+    }
+    .install-guide-card .close-btn:hover {
+      background: var(--danger-soft);
+      color: var(--danger);
+      transform: rotate(90deg);
+    }
+    .install-guide-card .guide-icon {
+      font-size: 3rem;
+      text-align: center;
+      display: block;
+      margin-bottom: 12px;
+      clear: both;
+      -webkit-user-select: none;
+      user-select: none;
+    }
+    .install-guide-card h2 {
+      font-size: 1.3rem;
+      font-weight: 800;
+      text-align: center;
+      margin-bottom: 6px;
+      letter-spacing: -0.02em;
+      color: var(--text);
+    }
+    .install-guide-card .guide-sub {
+      text-align: center;
+      font-size: 0.85rem;
+      color: var(--text-2);
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    .install-guide-card .guide-step {
+      display: flex;
+      gap: 14px;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--divider);
+      align-items: flex-start;
+    }
+    .install-guide-card .guide-step:last-of-type { border-bottom: none; }
+    .install-guide-card .step-num {
+      flex-shrink: 0;
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: var(--primary-gradient);
+      color: white;
+      font-size: 0.75rem;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 2px;
+    }
+    .install-guide-card .step-text {
+      font-size: 0.85rem;
+      color: var(--text);
+      line-height: 1.65;
+      flex: 1;
+    }
+    .install-guide-card .step-text strong {
+      color: var(--primary);
+      font-weight: 700;
+    }
+    .install-guide-card .guide-note {
+      background: rgba(251, 191, 36, 0.1);
+      border: 1px solid rgba(251, 191, 36, 0.3);
+      border-radius: var(--radius-sm);
+      padding: 12px 14px;
+      margin-top: 16px;
+      font-size: 0.78rem;
+      color: var(--text);
+      line-height: 1.6;
+    }
+    .install-guide-card .guide-note strong {
+      color: var(--accent);
+      font-weight: 800;
+    }
+    .install-guide-card .guide-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 20px;
+    }
+    .install-guide-card .guide-actions button {
+      margin-top: 0;
+      flex: 1;
+      padding: 12px;
+      font-size: 0.85rem;
     }
 
     .chart-wrapper {
@@ -1871,12 +2191,8 @@
       from { opacity: 0; }
       to { opacity: 1; }
     }
-    .pdf-overlay.closing {
-      animation: pdfOverlayOut 0.4s ease forwards;
-    }
-    @keyframes pdfOverlayOut {
-      to { opacity: 0; }
-    }
+    .pdf-overlay.closing { animation: pdfOverlayOut 0.4s ease forwards; }
+    @keyframes pdfOverlayOut { to { opacity: 0; } }
 
     .pdf-modal {
       background: linear-gradient(180deg, rgba(19, 26, 44, 0.98) 0%, rgba(13, 18, 32, 0.98) 100%);
@@ -1896,14 +2212,11 @@
       from { transform: scale(0.92) translateY(16px); opacity: 0; }
       to { transform: scale(1) translateY(0); opacity: 1; }
     }
-
     .pdf-modal::before {
       content: '';
       position: absolute;
-      top: -50%;
-      left: -50%;
-      width: 200%;
-      height: 200%;
+      top: -50%; left: -50%;
+      width: 200%; height: 200%;
       background: radial-gradient(circle at 30% 30%, rgba(16, 185, 129, 0.18), transparent 40%);
       pointer-events: none;
       animation: pdfGlow 6s ease-in-out infinite;
@@ -1912,7 +2225,6 @@
       0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.6; }
       50% { transform: translate(5%, 5%) scale(1.1); opacity: 1; }
     }
-
     .pdf-icon-wrap {
       position: relative;
       width: 100px;
@@ -1954,7 +2266,6 @@
       0%, 100% { transform: translateY(0); }
       50% { transform: translateY(-6px); }
     }
-
     .pdf-title {
       font-size: 1.25rem;
       font-weight: 800;
@@ -1978,7 +2289,6 @@
       transition: opacity 0.4s ease;
     }
     .pdf-subtitle.swap { opacity: 0; }
-
     .pdf-progress-track {
       width: 100%;
       height: 6px;
@@ -2010,7 +2320,6 @@
       from { transform: translateX(-100%); }
       to { transform: translateX(100%); }
     }
-
     .pdf-progress-text {
       font-size: 0.7rem;
       font-weight: 700;
@@ -2020,7 +2329,6 @@
       position: relative;
       z-index: 1;
     }
-
     .pdf-brand {
       margin-top: 24px;
       padding-top: 18px;
@@ -2285,6 +2593,10 @@
 
       .install-actions { flex-direction: column; }
       .install-actions button { width: 100%; }
+
+      .customers-summary-grid { gap: 8px; }
+      .customers-summary-card { padding: 12px 10px; }
+      .customers-summary-card .cs-value { font-size: 1rem; }
     }
 
     @media (max-width: 400px) {
@@ -2364,6 +2676,27 @@
     <div class="pwa-toast-actions">
       <button class="pwa-toast-install" id="pwaToastInstallBtn">Install</button>
       <button class="pwa-toast-dismiss" id="pwaToastDismissBtn">Later</button>
+    </div>
+  </div>
+
+  <div class="install-guide-overlay" id="installGuideOverlay">
+    <div class="install-guide-card" id="installGuideCard">
+      <button class="close-btn" onclick="dismissInstallGuide()" aria-label="Close">✕</button>
+      <span class="guide-icon" id="guideIcon">📱</span>
+      <h2 id="guideTitle">Install PayPlan Ledger</h2>
+      <p class="guide-sub" id="guideSubtitle">Get the full app experience — no browser bar, works offline.</p>
+      <div id="guideSteps"></div>
+      <div class="guide-note" id="guideNote">
+        <strong>Tip:</strong> If you opened this link from WhatsApp, Instagram, or Facebook, first tap the <strong>menu (⋮)</strong> and choose <strong>"Open in Chrome"</strong> or <strong>"Open in browser"</strong>. Then follow the steps above.
+      </div>
+      <div class="guide-actions">
+        <button id="guidePrimaryBtn" onclick="handleGuidePrimary()" style="background:var(--primary-gradient);color:white;">
+          Got it
+        </button>
+        <button class="outline" onclick="dismissInstallGuide()">
+          Close
+        </button>
+      </div>
     </div>
   </div>
 
@@ -2656,6 +2989,10 @@
           <span class="nav-icon-emoji">📋</span>
           <span class="nav-icon-label">Plans</span>
         </button>
+        <button data-section="customers" onclick="switchSection('customers')">
+          <span class="nav-icon-emoji">👥</span>
+          <span class="nav-icon-label">Customers</span>
+        </button>
         <button data-section="payment" onclick="switchSection('payment')">
           <span class="nav-icon-emoji">💳</span>
           <span class="nav-icon-label">Pay</span>
@@ -2769,6 +3106,84 @@
         </div>
       </div>
 
+      <div class="section" id="section-customers">
+        <div class="card" id="card-customers-summary">
+          <div class="card-header">
+            <h2><span class="card-icon">📊</span> Business Snapshot</h2>
+            <div class="header-actions">
+              <button class="expand-btn" onclick="openFullscreen('card-customers-summary','Business Snapshot')">⛶</button>
+              <span class="toggle-icon" onclick="event.stopPropagation();this.closest('.card').classList.toggle('collapsed')">▼</span>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="customers-summary-grid">
+              <div class="customers-summary-card cs-count">
+                <div class="cs-label">Customers</div>
+                <div class="cs-value" id="csTotalCustomers">0</div>
+              </div>
+              <div class="customers-summary-card cs-contract">
+                <div class="cs-label">Total Contract</div>
+                <div class="cs-value" id="csTotalContract">$0</div>
+              </div>
+              <div class="customers-summary-card cs-paid">
+                <div class="cs-label">Total Paid</div>
+                <div class="cs-value" id="csTotalPaid">$0</div>
+              </div>
+              <div class="customers-summary-card cs-outstanding">
+                <div class="cs-label">Outstanding</div>
+                <div class="cs-value" id="csTotalOutstanding">$0</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card" id="card-customers-list">
+          <div class="card-header">
+            <h2><span class="card-icon">👥</span> All Customers</h2>
+            <div class="header-actions">
+              <button class="expand-btn" onclick="openFullscreen('card-customers-list','All Customers')">⛶</button>
+              <span class="toggle-icon" onclick="event.stopPropagation();this.closest('.card').classList.toggle('collapsed')">▼</span>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="search-wrap">
+              <div class="search-text-input">
+                <span class="search-icon">🔍</span>
+                <input type="text" id="customersSearchInput" placeholder="Search customers..." />
+              </div>
+              <button class="search-clear-btn" id="customersSearchClearBtn">✕ Clear</button>
+            </div>
+
+            <div class="customers-filter-row" id="customersFilterRow">
+              <button class="customers-filter-btn active" data-filter="all">All</button>
+              <button class="customers-filter-btn" data-filter="active">Active</button>
+              <button class="customers-filter-btn" data-filter="completed">Completed</button>
+              <button class="customers-filter-btn" data-filter="overdue">Overdue</button>
+            </div>
+
+            <div class="customers-sort-row">
+              <label for="customersSortSelect">Sort by</label>
+              <select id="customersSortSelect">
+                <option value="balance-desc">Balance (highest first)</option>
+                <option value="balance-asc">Balance (lowest first)</option>
+                <option value="name-asc">Name (A → Z)</option>
+                <option value="name-desc">Name (Z → A)</option>
+                <option value="contract-desc">Contract (highest first)</option>
+                <option value="paid-desc">Paid (highest first)</option>
+              </select>
+            </div>
+
+            <div id="customersList"></div>
+
+            <button id="customersPdfBtn" class="pdf-btn" style="margin-top:14px;">📥 Portfolio PDF</button>
+            <p style="font-size:0.7rem;margin-top:10px;color:var(--text-3);line-height:1.6;text-align:center;">
+              One report with every customer's balance<br>
+              <span style="color:var(--primary);font-weight:700;">Generate directly on your device</span>
+            </p>
+          </div>
+        </div>
+      </div>
+
       <div class="section" id="section-payment">
         <div class="card" id="card-payment">
           <div class="card-header">
@@ -2868,7 +3283,6 @@
 
       <div class="section" id="section-settings">
 
-        <!-- NEW: Install App card -->
         <div class="card" id="card-settings-install">
           <div class="card-header">
             <h2><span class="card-icon">📲</span> Install App</h2>
@@ -2895,16 +3309,18 @@
         <div class="about-card">
           <div class="about-logo">💼</div>
           <div class="about-title">PayPlan Ledger</div>
-          <div class="about-version">Version 14.1 • Single-User License</div>
+          <div class="about-version">Version 15.2 • Single-User License</div>
           <div class="about-license-badge">✓ Offline-First</div>
           <p class="about-tagline">All your data stays on your device. No cloud, no subscriptions, no tracking.</p>
           <div class="about-features">
             <div class="about-feature"><span class="feat-icon">📋</span> Unlimited agreements</div>
+            <div class="about-feature"><span class="feat-icon">👥</span> Portfolio view</div>
             <div class="about-feature"><span class="feat-icon">💳</span> Unlimited payments</div>
             <div class="about-feature"><span class="feat-icon">📊</span> Offline PDF reports</div>
             <div class="about-feature"><span class="feat-icon">💾</span> Manual backup & restore</div>
             <div class="about-feature"><span class="feat-icon">🔄</span> Encrypted recovery codes</div>
             <div class="about-feature"><span class="feat-icon">🔒</span> Password protected</div>
+            <div class="about-feature"><span class="feat-icon">✈️</span> Works fully offline</div>
           </div>
         </div>
 
@@ -3013,7 +3429,7 @@
         </div>
       </div>
 
-      <footer>PAYPLAN LEDGER v14.1 • OFFLINE-FIRST • ALL DATA STORED LOCALLY</footer>
+      <footer>PAYPLAN LEDGER v15.2 • OFFLINE-FIRST • ALL DATA STORED LOCALLY</footer>
     </div>
   </div>
 
@@ -3021,7 +3437,7 @@
 
   <script>
     // ============================================================
-    //  STANDALONE / INSTALL STATE
+    //  STANDALONE / INSTALL DETECTION
     // ============================================================
     function isStandalone() {
       return window.matchMedia('(display-mode: standalone)').matches ||
@@ -3037,6 +3453,23 @@
              (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
     }
 
+    function isAndroidDevice() {
+      return /Android/i.test(navigator.userAgent || '');
+    }
+
+    function isInAppBrowser() {
+      const ua = navigator.userAgent || '';
+      // Common in-app browsers from social apps
+      return /FBAN|FBAV|Instagram|Line|WhatsApp|Twitter|MicroMessenger|Snapchat|Pinterest/i.test(ua);
+    }
+
+    function isSecureContext() {
+      return window.isSecureContext === true ||
+             location.protocol === 'https:' ||
+             location.hostname === 'localhost' ||
+             location.hostname === '127.0.0.1';
+    }
+
     function applyStandaloneMode() {
       if (isStandalone()) {
         document.body.classList.add('standalone-mode');
@@ -3049,7 +3482,7 @@
     }
 
     // ============================================================
-    //  PWA INSTALL TOAST (bottom)
+    //  PWA INSTALL TOAST (bottom of screen)
     // ============================================================
     let deferredPrompt = null;
     let installToastTimeout = null;
@@ -3091,16 +3524,10 @@
 
     pwaToastInstallBtn.addEventListener('click', async () => {
       if (!deferredPrompt) {
-        const ua = navigator.userAgent;
-        if (/iPhone|iPad|iPod/i.test(ua)) {
-          pwaToastSub.innerHTML = 'Tap <strong>Share (⬆️)</strong> → <strong>Add to Home Screen</strong>';
-        } else if (/Android/i.test(ua)) {
-          pwaToastSub.innerHTML = 'Tap <strong>⋮ menu</strong> → <strong>Install app</strong>';
-        } else {
-          pwaToastSub.innerHTML = 'Look for the <strong>install icon</strong> in your browser bar';
-        }
-        clearTimeout(installToastTimeout);
-        installToastTimeout = setTimeout(function() { hideInstallToast(false); }, 8000);
+        // No native prompt — show instructions modal
+        renderInstallGuide();
+        showInstallGuide();
+        hideInstallToast(false);
         return;
       }
 
@@ -3121,6 +3548,9 @@
         hideInstallToast(true);
       }
       deferredPrompt = null;
+      pwaToastInstallBtn.disabled = false;
+      pwaToastInstallBtn.textContent = 'Install';
+      updateInstallStatusUI();
     });
 
     pwaToastDismissBtn.addEventListener('click', () => {
@@ -3139,7 +3569,7 @@
     window.matchMedia('(display-mode: fullscreen)').addEventListener('change', applyStandaloneMode);
 
     // ============================================================
-    //  INSTALL APP CARD — status UI + action handlers
+    //  INSTALL STATUS CARD
     // ============================================================
     function updateInstallStatusUI() {
       const box = document.getElementById('installStatusBox');
@@ -3151,10 +3581,9 @@
 
       if (!box || !icon || !title || !desc) return;
 
-      // Reset classes
       box.className = 'install-status';
 
-      // Case 1: already installed
+      // 1. Already installed
       if (isStandalone()) {
         box.classList.add('is-installed');
         icon.textContent = '✅';
@@ -3165,7 +3594,29 @@
         return;
       }
 
-      // Case 2: browser supports one-tap install and prompt is ready
+      // 2. In-app browser (WhatsApp, Instagram, etc.)
+      if (isInAppBrowser()) {
+        box.classList.add('is-unavailable');
+        icon.textContent = '🌐';
+        title.textContent = 'Open in your main browser';
+        desc.textContent = 'You opened this link from another app. Tap "Show Me How" to see how to open it in Chrome or Safari, then install.';
+        if (installBtn) installBtn.style.display = 'none';
+        if (instructionsBtn) instructionsBtn.style.display = 'inline-flex';
+        return;
+      }
+
+      // 3. Not secure (HTTP without localhost) — installation not possible
+      if (!isSecureContext()) {
+        box.classList.add('is-unavailable');
+        icon.textContent = '⚠️';
+        title.textContent = 'Can\'t install from this URL';
+        desc.textContent = 'The app must be served over HTTPS to install. Tap "Show Me How" for what to do.';
+        if (installBtn) installBtn.style.display = 'none';
+        if (instructionsBtn) instructionsBtn.style.display = 'inline-flex';
+        return;
+      }
+
+      // 4. Native prompt available
       if (deferredPrompt) {
         box.classList.add('is-ready');
         icon.textContent = '📲';
@@ -3176,11 +3627,12 @@
         return;
       }
 
-      // Case 3: iOS or unsupported browser — show manual instructions
+      // 5. iOS or unsupported browser — manual steps
       const ios = isIOSDevice();
+      const android = isAndroidDevice();
       box.classList.add('is-unavailable');
-      icon.textContent = ios ? '📱' : '💡';
-      title.textContent = ios ? 'Install on iPhone / iPad' : 'Manual install required';
+      icon.textContent = ios ? '📱' : (android ? '🤖' : '💡');
+      title.textContent = ios ? 'Install on iPhone / iPad' : (android ? 'Install on Android' : 'Manual install required');
       desc.textContent = ios
         ? 'Safari doesn\'t allow one-tap install. Tap "Show Me How" for the steps.'
         : 'Your browser doesn\'t support one-tap install. Tap "Show Me How" for the steps.';
@@ -3188,10 +3640,148 @@
       if (instructionsBtn) instructionsBtn.style.display = 'inline-flex';
     }
 
-    // Manual install button in Settings — trigger the native prompt if available
+    // ============================================================
+    //  INSTALL GUIDE MODAL — shows step-by-step instructions
+    // ============================================================
+    function renderInstallGuide() {
+      const icon = document.getElementById('guideIcon');
+      const title = document.getElementById('guideTitle');
+      const sub = document.getElementById('guideSubtitle');
+      const steps = document.getElementById('guideSteps');
+      const note = document.getElementById('guideNote');
+      const primary = document.getElementById('guidePrimaryBtn');
+
+      if (!steps) return;
+
+      const ios = isIOSDevice();
+      const android = isAndroidDevice();
+      const inApp = isInAppBrowser();
+      let html = '';
+
+      if (inApp) {
+        icon.textContent = '🌐';
+        title.textContent = 'Open in your browser first';
+        sub.textContent = 'You\'re viewing this inside another app\'s built-in browser, which can\'t install apps.';
+        html = `
+          <div class="guide-step">
+            <div class="step-num">1</div>
+            <div class="step-text">Tap the <strong>menu button</strong> at the top-right of this screen (it usually looks like <strong>⋮</strong> or <strong>•••</strong>).</div>
+          </div>
+          <div class="guide-step">
+            <div class="step-num">2</div>
+            <div class="step-text">Choose <strong>"Open in Chrome"</strong>, <strong>"Open in Safari"</strong>, or <strong>"Open in browser"</strong>.</div>
+          </div>
+          <div class="guide-step">
+            <div class="step-num">3</div>
+            <div class="step-text">Once it opens in Chrome or Safari, come back to <strong>Settings → Install App</strong> and follow the steps.</div>
+          </div>
+        `;
+        note.style.display = 'block';
+        note.innerHTML = '<strong>Note:</strong> Some in-app browsers don\'t offer an "Open in browser" option. In that case, copy the URL, open Chrome or Safari directly, and paste it.';
+      } else if (ios) {
+        icon.textContent = '🍎';
+        title.textContent = 'Install on iPhone / iPad';
+        sub.textContent = 'Apple doesn\'t allow one-tap installs — but Safari gives you the same fullscreen app experience.';
+        html = `
+          <div class="guide-step">
+            <div class="step-num">1</div>
+            <div class="step-text">Make sure you\'re using <strong>Safari</strong> (not Chrome or another browser).</div>
+          </div>
+          <div class="guide-step">
+            <div class="step-num">2</div>
+            <div class="step-text">Tap the <strong>Share</strong> button at the bottom of the screen (it looks like a square with an arrow going up ⬆️).</div>
+          </div>
+          <div class="guide-step">
+            <div class="step-num">3</div>
+            <div class="step-text">Scroll down in the share sheet and tap <strong>"Add to Home Screen"</strong>.</div>
+          </div>
+          <div class="guide-step">
+            <div class="step-num">4</div>
+            <div class="step-text">Name it <strong>PayPlan Ledger</strong> → tap <strong>Add</strong>.</div>
+          </div>
+          <div class="guide-step">
+            <div class="step-num">5</div>
+            <div class="step-text">Open the new icon from your home screen — it runs fullscreen, offline.</div>
+          </div>
+        `;
+        note.style.display = 'block';
+        note.innerHTML = '<strong>Tip:</strong> If you don\'t see "Add to Home Screen", scroll the share sheet down further. It sometimes hides below the app list.';
+      } else if (android) {
+        icon.textContent = '🤖';
+        title.textContent = 'Install on Android';
+        sub.textContent = 'Two taps to install — no app store needed.';
+        html = `
+          <div class="guide-step">
+            <div class="step-num">1</div>
+            <div class="step-text">Open this page in <strong>Chrome</strong> (not the built-in browser of WhatsApp, Instagram, or Facebook).</div>
+          </div>
+          <div class="guide-step">
+            <div class="step-num">2</div>
+            <div class="step-text">Tap the <strong>three-dot menu (⋮)</strong> at the top-right of Chrome.</div>
+          </div>
+          <div class="guide-step">
+            <div class="step-num">3</div>
+            <div class="step-text">Tap <strong>"Install app"</strong>. If you don\'t see that option, tap <strong>"Add to Home screen"</strong> instead.</div>
+          </div>
+          <div class="guide-step">
+            <div class="step-num">4</div>
+            <div class="step-text">Confirm → the app appears on your home screen.</div>
+          </div>
+        `;
+        note.style.display = 'block';
+        note.innerHTML = '<strong>Tip:</strong> If "Install app" doesn\'t appear in the menu, make sure you\'re on the latest version of Chrome.';
+      } else {
+        icon.textContent = '💻';
+        title.textContent = 'Install on Desktop';
+        sub.textContent = 'Install PayPlan Ledger as a desktop app with its own window and icon.';
+        html = `
+          <div class="guide-step">
+            <div class="step-num">1</div>
+            <div class="step-text">Look for the <strong>install icon</strong> in your browser's address bar (a small monitor with a down arrow ⬇️).</div>
+          </div>
+          <div class="guide-step">
+            <div class="step-num">2</div>
+            <div class="step-text">If you don\'t see it, open the browser menu (⋮ or •••) → <strong>"Install PayPlan Ledger"</strong>.</div>
+          </div>
+          <div class="guide-step">
+            <div class="step-num">3</div>
+            <div class="step-text">Confirm. The app installs to your Start Menu / Applications folder.</div>
+          </div>
+          <div class="guide-step">
+            <div class="step-num">4</div>
+            <div class="step-text">Open it from there any time — no browser bar, works offline.</div>
+          </div>
+        `;
+        note.style.display = 'none';
+      }
+
+      steps.innerHTML = html;
+      primary.textContent = 'Got it';
+      primary.dataset.action = 'dismiss';
+    }
+
+    function showInstallGuide() {
+      renderInstallGuide();
+      const overlay = document.getElementById('installGuideOverlay');
+      if (overlay) overlay.classList.add('visible');
+    }
+
+    function dismissInstallGuide() {
+      const overlay = document.getElementById('installGuideOverlay');
+      if (overlay) overlay.classList.remove('visible');
+    }
+
+    function handleGuidePrimary() {
+      dismissInstallGuide();
+    }
+
+    // Wire up the "Show Me How" button
+    document.getElementById('installInstructionsBtn').addEventListener('click', showInstallGuide);
+
+    // Wire up the "Install App" button
     document.getElementById('installAppBtn').addEventListener('click', async function() {
       if (!deferredPrompt) {
-        showToast('Install prompt not available — try the manual steps.');
+        showInstallGuide();
         return;
       }
       this.disabled = true;
@@ -3206,170 +3796,13 @@
           showToast('You can install anytime.');
         }
       } catch (e) {
-        showToast('Install prompt failed. Try the manual steps.');
+        showInstallGuide();
       }
       deferredPrompt = null;
       this.disabled = false;
       this.textContent = '📲 Install to Home Screen';
       updateInstallStatusUI();
     });
-
-    // "Show Me How" button — opens the existing install guide overlay
-    document.getElementById('installInstructionsBtn').addEventListener('click', function() {
-      renderInstallGuide();
-      const overlay = document.getElementById('installGuideOverlay');
-      if (overlay) overlay.classList.add('visible');
-    });
-
-    // ============================================================
-    //  INSTALL GUIDE OVERLAY (step-by-step instructions)
-    // ============================================================
-    function detectPlatform() {
-      const ua = navigator.userAgent || '';
-      const isIOS = /iPhone|iPad|iPod/i.test(ua) ||
-                    (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
-      const isAndroid = /Android/i.test(ua);
-      const isWindows = /Windows/i.test(ua);
-      const isMac = /Macintosh|Mac OS X/i.test(ua) && !isIOS;
-      const isLinux = /Linux/i.test(ua) && !isAndroid;
-      const isChromeOS = /CrOS/i.test(ua);
-      return { isIOS, isAndroid, isWindows, isMac, isLinux, isChromeOS };
-    }
-
-    function renderInstallGuide() {
-      const p = detectPlatform();
-      const icon = document.getElementById('guideIcon');
-      const title = document.getElementById('guideTitle');
-      const sub = document.getElementById('guideSubtitle');
-      const steps = document.getElementById('guideSteps');
-      const primary = document.getElementById('guidePrimaryBtn');
-
-      if (!steps) return;
-
-      let html = '';
-      let primaryLabel = 'Install Now';
-      let primaryAction = 'default';
-
-      if (p.isIOS) {
-        icon.textContent = '🍎';
-        title.textContent = 'Install on iPhone / iPad';
-        sub.textContent = 'Apple doesn\'t allow one-tap installs — but Safari gives you the same fullscreen app experience.';
-        html = `
-          <div class="guide-step">
-            <div class="step-num">1</div>
-            <div class="step-text">Tap the <strong>Share</strong> button at the bottom of Safari.</div>
-          </div>
-          <div class="guide-step">
-            <div class="step-num">2</div>
-            <div class="step-text">Scroll down and tap <strong>"Add to Home Screen"</strong>.</div>
-          </div>
-          <div class="guide-step">
-            <div class="step-num">3</div>
-            <div class="step-text">Name it <strong>PayPlan Ledger</strong> → tap <strong>Add</strong>.</div>
-          </div>
-          <div class="guide-step">
-            <div class="step-num">4</div>
-            <div class="step-text">Open the new icon from your home screen — it runs fullscreen, offline.</div>
-          </div>
-        `;
-        primaryLabel = 'Got it';
-        primaryAction = 'dismiss';
-      } else if (p.isAndroid) {
-        icon.textContent = '🤖';
-        title.textContent = 'Install on Android';
-        sub.textContent = 'Get the full app experience — no browser bar.';
-        html = `
-          <div class="guide-step">
-            <div class="step-num">1</div>
-            <div class="step-text">Tap the <strong>⋮ menu</strong> in Chrome (top right).</div>
-          </div>
-          <div class="guide-step">
-            <div class="step-num">2</div>
-            <div class="step-text">Tap <strong>"Install app"</strong>. If not available, choose <strong>"Add to Home screen"</strong>.</div>
-          </div>
-          <div class="guide-step">
-            <div class="step-num">3</div>
-            <div class="step-text">Confirm → the app appears on your home screen.</div>
-          </div>
-        `;
-        primaryLabel = 'Install App';
-        primaryAction = 'prompt';
-      } else if (p.isWindows || p.isMac || p.isLinux || p.isChromeOS) {
-        icon.textContent = '💻';
-        title.textContent = 'Install on Desktop';
-        sub.textContent = 'Install PayPlan Ledger as a desktop app with its own window and icon.';
-        html = `
-          <div class="guide-step">
-            <div class="step-num">1</div>
-            <div class="step-text">Look for the <strong>install icon</strong> in your browser's address bar (a small monitor with a down arrow).</div>
-          </div>
-          <div class="guide-step">
-            <div class="step-num">2</div>
-            <div class="step-text">If you don't see it, open the browser menu (⋮ or •••) → <strong>"Install PayPlan Ledger"</strong>.</div>
-          </div>
-          <div class="guide-step">
-            <div class="step-num">3</div>
-            <div class="step-text">Confirm. The app installs to your Start Menu / Applications folder.</div>
-          </div>
-          <div class="guide-step">
-            <div class="step-num">4</div>
-            <div class="step-text">Open it from there any time — no browser bar, works offline.</div>
-          </div>
-        `;
-        primaryLabel = 'Install App';
-        primaryAction = 'prompt';
-      } else {
-        icon.textContent = '📲';
-        title.textContent = 'Install PayPlan Ledger';
-        sub.textContent = 'Install to your device for the fullscreen app experience.';
-        html = `
-          <div class="guide-step">
-            <div class="step-num">1</div>
-            <div class="step-text">Open your browser menu and look for <strong>"Install app"</strong> or <strong>"Add to Home screen"</strong>.</div>
-          </div>
-          <div class="guide-step">
-            <div class="step-num">2</div>
-            <div class="step-text">Tap it and confirm. The app opens fullscreen from your home screen or app list.</div>
-          </div>
-        `;
-      }
-
-      steps.innerHTML = html;
-      primary.textContent = primaryLabel;
-      primary.dataset.action = primaryAction;
-    }
-
-    function handleGuidePrimary() {
-      const primary = document.getElementById('guidePrimaryBtn');
-      const action = primary.dataset.action;
-
-      if (action === 'dismiss') {
-        dismissInstallGuide();
-        return;
-      }
-
-      if (action === 'prompt' && deferredPrompt) {
-        deferredPrompt.prompt();
-        deferredPrompt.userChoice.then(function(choice) {
-          if (choice.outcome === 'accepted') {
-            showToast('🎉 Installing...');
-            dismissInstallGuide();
-          } else {
-            showToast('You can install anytime from the browser menu.');
-          }
-          deferredPrompt = null;
-        });
-        return;
-      }
-
-      dismissInstallGuide();
-    }
-
-    function dismissInstallGuide() {
-      const overlay = document.getElementById('installGuideOverlay');
-      if (overlay) overlay.classList.remove('visible');
-      try { localStorage.setItem('pmInstallGuideSeen', 'true'); } catch (e) {}
-    }
 
     // ============================================================
     //  APP STATE
@@ -3464,6 +3897,17 @@
     const editRecordSaveBtn = document.getElementById('editRecordSaveBtn');
     const editRecordCancelBtn = document.getElementById('editRecordCancelBtn');
 
+    const customersSearchInput = document.getElementById('customersSearchInput');
+    const customersSearchClearBtn = document.getElementById('customersSearchClearBtn');
+    const customersFilterRow = document.getElementById('customersFilterRow');
+    const customersSortSelect = document.getElementById('customersSortSelect');
+    const customersListDiv = document.getElementById('customersList');
+    const customersPdfBtn = document.getElementById('customersPdfBtn');
+    const csTotalCustomers = document.getElementById('csTotalCustomers');
+    const csTotalContract = document.getElementById('csTotalContract');
+    const csTotalPaid = document.getElementById('csTotalPaid');
+    const csTotalOutstanding = document.getElementById('csTotalOutstanding');
+
     let progressChart = null;
     const chartCanvas = document.getElementById('progressChart');
     const chartWrapper = document.getElementById('chartWrapper');
@@ -3473,6 +3917,7 @@
     let celebrationShown = {};
     let editRecordTarget = null;
     let fullscreenData = null;
+    let customersActiveFilter = 'all';
 
     const rafSchedule = (() => {
       let scheduled = new Map();
@@ -3537,6 +3982,47 @@
       let paid = 0, hire = 0;
       for (const r of s) { hire = r.totalHireAmount; paid += r.amountPaid; }
       return { totalPaid: paid, finalBalance: hire - paid, lastHire: hire };
+    }
+
+    function calcPortfolioStats() {
+      let totalContract = 0;
+      let totalPaid = 0;
+      let totalOutstanding = 0;
+      let activeCount = 0;
+      let completedCount = 0;
+      let overdueCount = 0;
+
+      for (const id in agreements) {
+        const ag = agreements[id];
+        const hire = ag.totalHireAmount || 0;
+        const { totalPaid: tp } = calcTotals(ag.records);
+        const balance = hire - tp;
+
+        totalContract += hire;
+        totalPaid += tp;
+        if (balance > 0) {
+          totalOutstanding += balance;
+          activeCount++;
+          const s = ag.schedule;
+          if (s && s.nextDueDate) {
+            const today = new Date(); today.setHours(0, 0, 0, 0);
+            const due = new Date(s.nextDueDate); due.setHours(0, 0, 0, 0);
+            if (due < today) overdueCount++;
+          }
+        } else if (hire > 0) {
+          completedCount++;
+        }
+      }
+
+      return {
+        totalContract,
+        totalPaid,
+        totalOutstanding,
+        activeCount,
+        completedCount,
+        overdueCount,
+        count: Object.keys(agreements).length
+      };
     }
 
     async function encryptData(data, password) {
@@ -3636,6 +4122,7 @@
           updatePreviewForCurrent(); updateChartForCurrent(); loadScheduleIntoForm();
           updateReminderDisplay(); refreshAllCurrencyDisplays();
           updateDashboardStats(); updateStickyHeader();
+          renderCustomers();
           document.getElementById('recoveryModal').classList.remove('active');
           showToast('✅ Data restored!');
         });
@@ -3808,6 +4295,7 @@
         agreements[id].name = input.value.trim() || currentName;
         saveAgreements(); renderAgreementsList();
         if (currentAgreementId === id) updateStickyHeader();
+        renderCustomers();
         showToast('Agreement name updated');
       };
       input.addEventListener('blur', saveEdit, { once: true });
@@ -3825,6 +4313,8 @@
       updatePreviewForCurrent(); updateChartForCurrent(); loadScheduleIntoForm();
       updateReminderDisplay(); refreshAllCurrencyDisplays();
       updateDashboardStats(); updateStickyHeader();
+      closeSidebarIfMobile();
+      setTimeout(() => { window.scrollTo({ top: 0, behavior: 'smooth' }); }, 50);
     }
     function deleteAgreement(id) {
       if (Object.keys(agreements).length === 1) { showToast('Cannot delete the only agreement.'); return; }
@@ -3838,6 +4328,7 @@
         updateReminderDisplay(); refreshAllCurrencyDisplays();
         updateDashboardStats(); updateStickyHeader();
         updateRecoveryNudge();
+        renderCustomers();
         showToast('Agreement deleted');
       });
     }
@@ -3857,6 +4348,7 @@
       updateReminderDisplay(); refreshAllCurrencyDisplays();
       updateDashboardStats(); updateStickyHeader();
       updateRecoveryNudge();
+      renderCustomers();
       newAgreementModal.classList.remove('active');
       showToast(`"${name}" created`);
     }
@@ -3884,6 +4376,153 @@
         document.getElementById('dashCurrentAgreement').textContent = 'No agreement selected';
       }
       updateRecoveryNudge();
+    }
+
+    function renderCustomers() {
+      if (!customersListDiv) return;
+
+      const stats = calcPortfolioStats();
+      csTotalCustomers.textContent = stats.count;
+      csTotalContract.textContent = formatCurrency(stats.totalContract);
+      csTotalPaid.textContent = formatCurrency(stats.totalPaid);
+      csTotalOutstanding.textContent = formatCurrency(stats.totalOutstanding);
+
+      if (stats.count === 0) {
+        customersListDiv.innerHTML =
+          '<div class="customers-empty">' +
+            '<div class="ce-icon">👥</div>' +
+            '<div class="ce-title">No customers yet</div>' +
+            '<div class="ce-desc">Create your first agreement to see the portfolio view.</div>' +
+          '</div>';
+        return;
+      }
+
+      const searchTerm = (customersSearchInput ? customersSearchInput.value : '').toLowerCase().trim();
+      const sortMode = customersSortSelect ? customersSortSelect.value : 'balance-desc';
+
+      let rows = [];
+      for (const [id, ag] of Object.entries(agreements)) {
+        const hire = ag.totalHireAmount || 0;
+        const { totalPaid } = calcTotals(ag.records);
+        const balance = hire - totalPaid;
+
+        let status = 'active';
+        if (balance <= 0 && hire > 0) status = 'completed';
+
+        const s = ag.schedule;
+        let isOverdue = false;
+        if (s && s.nextDueDate && balance > 0) {
+          const today = new Date(); today.setHours(0, 0, 0, 0);
+          const due = new Date(s.nextDueDate); due.setHours(0, 0, 0, 0);
+          if (due < today) { isOverdue = true; status = 'overdue'; }
+        }
+
+        rows.push({
+          id,
+          name: ag.name,
+          hire,
+          paid: totalPaid,
+          balance,
+          status,
+          isOverdue,
+          nextDueDate: s ? s.nextDueDate : ''
+        });
+      }
+
+      if (customersActiveFilter !== 'all') {
+        rows = rows.filter(r => r.status === customersActiveFilter);
+      }
+
+      if (searchTerm) {
+        rows = rows.filter(r => r.name.toLowerCase().includes(searchTerm));
+      }
+
+      rows.sort((a, b) => {
+        switch (sortMode) {
+          case 'balance-desc': return b.balance - a.balance;
+          case 'balance-asc': return a.balance - b.balance;
+          case 'name-asc': return a.name.localeCompare(b.name);
+          case 'name-desc': return b.name.localeCompare(a.name);
+          case 'contract-desc': return b.hire - a.hire;
+          case 'paid-desc': return b.paid - a.paid;
+          default: return 0;
+        }
+      });
+
+      if (rows.length === 0) {
+        customersListDiv.innerHTML =
+          '<div class="customers-empty">' +
+            '<div class="ce-icon">🔍</div>' +
+            '<div class="ce-title">No matching customers</div>' +
+            '<div class="ce-desc">Try a different search or filter.</div>' +
+          '</div>';
+        return;
+      }
+
+      let html = '';
+      for (const r of rows) {
+        let rowClass = 'customer-row';
+        if (r.status === 'completed') rowClass += ' is-complete';
+        if (r.isOverdue) rowClass += ' is-overdue';
+
+        let balanceClass = 'cb-value';
+        if (r.isOverdue) balanceClass += ' is-overdue';
+        else if (r.balance <= 0) balanceClass += ' is-complete';
+        else balanceClass += ' is-outstanding';
+
+        html +=
+          '<div class="' + rowClass + '" onclick="switchAgreement(\'' + r.id + '\')">' +
+            '<div class="customer-info">' +
+              '<div class="customer-name">' + escapeHtmlPlain(r.name) + '</div>' +
+              '<div class="customer-meta">' +
+                '<span class="meta-item">📋 Contract <strong>' + formatCurrency(r.hire) + '</strong></span>' +
+                '<span class="meta-item">💵 Paid <strong>' + formatCurrency(r.paid) + '</strong></span>' +
+                (r.nextDueDate ? '<span class="meta-item">📅 Due <strong>' + r.nextDueDate + '</strong></span>' : '') +
+              '</div>' +
+            '</div>' +
+            '<div class="customer-balance">' +
+              '<div class="cb-label">Balance</div>' +
+              '<div class="' + balanceClass + '">' + formatCurrency(r.balance) + '</div>' +
+            '</div>' +
+          '</div>';
+      }
+      customersListDiv.innerHTML = html;
+    }
+
+    function escapeHtmlPlain(s) {
+      return s ? String(s).replace(/[&<>"']/g, function(m) {
+        return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[m];
+      }) : '';
+    }
+
+    function initCustomerEvents() {
+      if (customersSearchInput) {
+        customersSearchInput.addEventListener('input', debounce(renderCustomers, 150), { passive: true });
+      }
+      if (customersSearchClearBtn) {
+        customersSearchClearBtn.addEventListener('click', () => {
+          if (customersSearchInput) customersSearchInput.value = '';
+          renderCustomers();
+        });
+      }
+      if (customersFilterRow) {
+        customersFilterRow.addEventListener('click', (e) => {
+          const btn = e.target.closest('.customers-filter-btn');
+          if (!btn) return;
+          const filter = btn.dataset.filter;
+          customersActiveFilter = filter;
+          customersFilterRow.querySelectorAll('.customers-filter-btn').forEach(b => {
+            b.classList.toggle('active', b.dataset.filter === filter);
+          });
+          renderCustomers();
+        });
+      }
+      if (customersSortSelect) {
+        customersSortSelect.addEventListener('change', renderCustomers);
+      }
+      if (customersPdfBtn) {
+        customersPdfBtn.addEventListener('click', handlePortfolioPDF);
+      }
     }
 
     function loadCurrentAgreementData() {
@@ -3948,6 +4587,7 @@
       saveAgreements(); renderHistoryTable(agreements[currentAgreementId].records);
       updatePreviewForCurrent(); updateChartForCurrent(); updateReminderDisplay();
       refreshAllCurrencyDisplays(); updateDashboardStats();
+      renderCustomers();
       showToast('Record deleted');
     }
 
@@ -4021,6 +4661,7 @@
         saveAgreements(); renderHistoryTable(ag.records);
         updatePreviewForCurrent(); updateChartForCurrent(); updateReminderDisplay();
         refreshAllCurrencyDisplays();
+        renderCustomers();
         showToast('✅ Record updated');
       }
       closeEditRecordModal();
@@ -4169,6 +4810,7 @@
       if (!nd || isNaN(ia) || ia <= 0) { showToast('Enter valid due date and amount'); return; }
       agreements[currentAgreementId].schedule = { nextDueDate: nd, installmentAmount: ia, frequency: frequencySelect.value };
       saveAgreements(); updateReminderDisplay();
+      renderCustomers();
       showToast('Schedule saved');
     }
     function updateReminderDisplay() {
@@ -4214,6 +4856,7 @@
       const ag = agreements[currentAgreementId];
       if (ag) { renderHistoryTable(ag.records); updateChartForCurrent(); updateReminderDisplay(); }
       updateDashboardStats();
+      renderCustomers();
     }
 
     function resetForm() { dateInput.value = getTodayDate(); amountPaidInput.value = ''; updatePreviewForCurrent(); showToast('Form reset'); }
@@ -4248,6 +4891,7 @@
       amountPaidInput.value = '';
       updatePreviewForCurrent(); updateChartForCurrent(); updateReminderDisplay();
       refreshAllCurrencyDisplays(); updateDashboardStats();
+      renderCustomers();
       showToast(`✅ Saved — ${formatCurrency(paid)} on ${date}`);
       if (navigator.vibrate) navigator.vibrate(20);
     }
@@ -4260,6 +4904,7 @@
         saveAgreements(); renderHistoryTable([]);
         updatePreviewForCurrent(); updateChartForCurrent(); updateReminderDisplay();
         refreshAllCurrencyDisplays(); updateDashboardStats();
+        renderCustomers();
         showToast('History cleared');
       });
     }
@@ -4624,6 +5269,163 @@
         '</div></body></html>';
     }
 
+    function buildPortfolioPDF() {
+      const stats = calcPortfolioStats();
+      const now = new Date();
+      const generated = now.toLocaleString('en-US', {
+        year: 'numeric', month: 'short', day: 'numeric',
+        hour: '2-digit', minute: '2-digit'
+      });
+      const docId = 'PPL-' + now.getTime().toString(36).toUpperCase().slice(-8);
+
+      const rows = [];
+      for (const id in agreements) {
+        const ag = agreements[id];
+        const hire = ag.totalHireAmount || 0;
+        const { totalPaid } = calcTotals(ag.records);
+        const balance = hire - totalPaid;
+        let status = 'Active';
+        let statusClass = 'st-active';
+        if (balance <= 0 && hire > 0) {
+          status = 'Completed';
+          statusClass = 'st-complete';
+        } else {
+          const s = ag.schedule;
+          if (s && s.nextDueDate) {
+            const today = new Date(); today.setHours(0, 0, 0, 0);
+            const due = new Date(s.nextDueDate); due.setHours(0, 0, 0, 0);
+            if (due < today) {
+              status = 'Overdue';
+              statusClass = 'st-overdue';
+            }
+          }
+        }
+        rows.push({ name: ag.name, hire, paid: totalPaid, balance, status, statusClass });
+      }
+      rows.sort((a, b) => b.balance - a.balance);
+
+      let bodyRows = '';
+      for (const r of rows) {
+        bodyRows +=
+          '<tr>' +
+            '<td class="c-name">' + escapeHtml(r.name) + '</td>' +
+            '<td class="c-num">' + formatCurrency(r.hire) + '</td>' +
+            '<td class="c-num c-paid">' + formatCurrency(r.paid) + '</td>' +
+            '<td class="c-num c-balance">' + formatCurrency(r.balance) + '</td>' +
+            '<td class="c-status"><span class="pill ' + r.statusClass + '">' + r.status + '</span></td>' +
+          '</tr>';
+      }
+
+      return '<!DOCTYPE html><html><head><meta charset="UTF-8"><title>PayPlan Ledger — Portfolio</title><style>' +
+        '*{box-sizing:border-box;margin:0;padding:0}' +
+        'body{font-family:-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:#fff;color:#0f172a;padding:0;width:794px}' +
+        '.page{padding:56px 56px 48px;background:#fff;min-height:1123px;position:relative}' +
+        '.header{display:flex;align-items:center;justify-content:space-between;padding-bottom:18px;border-bottom:2px solid #10b981;margin-bottom:24px}' +
+        '.brand{display:flex;align-items:center;gap:12px}' +
+        '.brand-icon{width:44px;height:44px;background:linear-gradient(135deg,#10b981 0%,#059669 100%);border-radius:12px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:22px;box-shadow:0 6px 16px rgba(16,185,129,0.35)}' +
+        '.brand-text{line-height:1.2}' +
+        '.brand-name{font-size:15px;font-weight:900;color:#0f172a;letter-spacing:-0.02em}' +
+        '.brand-sub{font-size:10px;font-weight:700;color:#10b981;letter-spacing:0.14em;text-transform:uppercase;margin-top:2px}' +
+        '.doc-meta{text-align:right;font-size:10px;color:#64748b;line-height:1.6}' +
+        '.doc-meta .id{font-family:"Courier New",monospace;color:#0f172a;font-weight:800;letter-spacing:0.02em}' +
+        '.doc-title{font-size:26px;font-weight:900;color:#0f172a;letter-spacing:-0.03em;margin-bottom:4px}' +
+        '.doc-sub{font-size:12px;color:#64748b;font-weight:600;margin-bottom:22px}' +
+        '.summary-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:26px}' +
+        '.sum-card{padding:16px 14px;border-radius:12px;border:1px solid #e2e8f0;background:#fff;text-align:center}' +
+        '.sum-card.count{background:#f1f5f9}' +
+        '.sum-card.contract{background:#f1f5f9}' +
+        '.sum-card.paid{background:rgba(16,185,129,0.08);border-color:rgba(16,185,129,0.3)}' +
+        '.sum-card.outstanding{background:rgba(245,158,11,0.08);border-color:rgba(245,158,11,0.3)}' +
+        '.sum-label{font-size:9px;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;color:#64748b;margin-bottom:6px}' +
+        '.sum-card.paid .sum-label{color:#059669}' +
+        '.sum-card.outstanding .sum-label{color:#c2410c}' +
+        '.sum-value{font-size:16px;font-weight:900;letter-spacing:-0.03em;color:#0f172a;font-variant-numeric:tabular-nums}' +
+        '.sum-card.paid .sum-value{color:#059669}' +
+        '.sum-card.outstanding .sum-value{color:#c2410c}' +
+        '.section-label{font-size:10px;font-weight:800;letter-spacing:0.14em;text-transform:uppercase;color:#0f172a;margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid #e2e8f0;display:flex;align-items:center;gap:6px}' +
+        '.section-label .dot{width:6px;height:6px;background:#10b981;border-radius:50%;display:inline-block}' +
+        'table.portfolio{width:100%;border-collapse:collapse;margin-bottom:20px;font-size:11px}' +
+        'table.portfolio thead th{background:#0f172a;color:#fff;padding:11px 12px;font-size:9px;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;text-align:right}' +
+        'table.portfolio thead th:first-child{text-align:left;border-top-left-radius:8px}' +
+        'table.portfolio thead th:last-child{border-top-right-radius:8px;text-align:center}' +
+        'table.portfolio tbody td{padding:11px 12px;border-bottom:1px solid #f1f5f9;color:#334155;vertical-align:middle}' +
+        'table.portfolio tbody td.c-name{text-align:left;color:#0f172a;font-weight:700;letter-spacing:-0.01em}' +
+        'table.portfolio tbody td.c-num{text-align:right;font-variant-numeric:tabular-nums;font-weight:600}' +
+        'table.portfolio tbody td.c-paid{color:#059669;font-weight:700}' +
+        'table.portfolio tbody td.c-balance{color:#c2410c;font-weight:800}' +
+        'table.portfolio tbody td.c-status{text-align:center}' +
+        'table.portfolio tbody tr:nth-child(even) td{background:#f8fafc}' +
+        'table.portfolio tbody tr:last-child td{border-bottom:2px solid #10b981}' +
+        '.pill{display:inline-block;padding:3px 10px;border-radius:999px;font-size:9px;font-weight:800;letter-spacing:0.06em;text-transform:uppercase}' +
+        '.pill.st-active{background:#dbeafe;color:#1e40af}' +
+        '.pill.st-complete{background:#d1fae5;color:#065f46}' +
+        '.pill.st-overdue{background:#fee2e2;color:#991b1b}' +
+        '.footer{margin-top:40px;padding-top:16px;border-top:1px solid #e2e8f0;display:flex;justify-content:space-between;align-items:center;font-size:9px;color:#94a3b8;letter-spacing:0.08em;text-transform:uppercase;font-weight:600}' +
+        '.footer .brand-mark{color:#10b981;font-weight:800}' +
+        '.empty-state{padding:60px 20px;text-align:center;background:#f8fafc;border-radius:12px;color:#94a3b8;font-size:12px}' +
+        '</style></head><body>' +
+        '<div class="page">' +
+
+          '<div class="header">' +
+            '<div class="brand">' +
+              '<div class="brand-icon">💼</div>' +
+              '<div class="brand-text">' +
+                '<div class="brand-name">PayPlan Ledger</div>' +
+                '<div class="brand-sub">Portfolio Statement</div>' +
+              '</div>' +
+            '</div>' +
+            '<div class="doc-meta">' +
+              '<div>Doc ID: <span class="id">' + docId + '</span></div>' +
+              '<div>' + generated + '</div>' +
+            '</div>' +
+          '</div>' +
+
+          '<div class="doc-title">Customer Balance Summary</div>' +
+          '<div class="doc-sub">All agreements · Sorted by outstanding balance</div>' +
+
+          '<div class="summary-grid">' +
+            '<div class="sum-card count">' +
+              '<div class="sum-label">Customers</div>' +
+              '<div class="sum-value">' + stats.count + '</div>' +
+            '</div>' +
+            '<div class="sum-card contract">' +
+              '<div class="sum-label">Total Contract</div>' +
+              '<div class="sum-value">' + formatCurrency(stats.totalContract) + '</div>' +
+            '</div>' +
+            '<div class="sum-card paid">' +
+              '<div class="sum-label">Total Paid</div>' +
+              '<div class="sum-value">' + formatCurrency(stats.totalPaid) + '</div>' +
+            '</div>' +
+            '<div class="sum-card outstanding">' +
+              '<div class="sum-label">Outstanding</div>' +
+              '<div class="sum-value">' + formatCurrency(stats.totalOutstanding) + '</div>' +
+            '</div>' +
+          '</div>' +
+
+          '<div class="section-label"><span class="dot"></span> Customer Balances</div>' +
+          (bodyRows ?
+            '<table class="portfolio">' +
+              '<thead><tr>' +
+                '<th>Customer / Agreement</th>' +
+                '<th>Contract</th>' +
+                '<th>Paid</th>' +
+                '<th>Balance</th>' +
+                '<th>Status</th>' +
+              '</tr></thead>' +
+              '<tbody>' + bodyRows + '</tbody>' +
+            '</table>'
+            :
+            '<div class="empty-state">No customers to report yet.</div>'
+          ) +
+
+          '<div class="footer">' +
+            '<span><span class="brand-mark">PayPlan Ledger</span> · Offline-First Tracker</span>' +
+            '<span>' + stats.count + ' customer' + (stats.count === 1 ? '' : 's') + ' · Page 1</span>' +
+          '</div>' +
+
+        '</div></body></html>';
+    }
+
     async function requestPDF(records, baseTitle) {
       if (!currentAgreementId) { showToast('No agreement selected'); return; }
       const ag = agreements[currentAgreementId];
@@ -4646,6 +5448,7 @@
         if (newAgreementName !== currentName) {
           agreements[currentAgreementId].name = newAgreementName;
           saveAgreements(); renderAgreementsList(); updateStickyHeader();
+          renderCustomers();
         }
         await generatePDF(buildPDF(records, reportTitle, baseTitle, newAgreementName, seller, buyer), 'PayPlan_' + newAgreementName.replace(/[^a-z0-9]/gi, '_') + '.pdf');
         cl();
@@ -4655,6 +5458,13 @@
       nameModalConfirm.addEventListener('click', yes);
       nameModalCancel.addEventListener('click', no);
     }
+
+    async function handlePortfolioPDF() {
+      const stats = calcPortfolioStats();
+      if (stats.count === 0) { showToast('No customers to export'); return; }
+      await generatePDF(buildPortfolioPDF(), 'PayPlan_Portfolio_' + new Date().toISOString().slice(0, 10) + '.pdf');
+    }
+
     async function handleDownloadFull() {
       if (!currentAgreementId) { showToast('No agreement selected'); return; }
       const r = agreements[currentAgreementId].records;
@@ -4759,6 +5569,7 @@
             updateReminderDisplay(); refreshAllCurrencyDisplays();
             updateDashboardStats(); updateStickyHeader();
             updateRecoveryNudge();
+            renderCustomers();
             welcomeModal.classList.remove('active');
             showToast('✅ Data restored');
           });
@@ -4824,6 +5635,7 @@
         updateRecoveryTimestampDisplay();
         updateRecoveryNudge();
         updateInstallStatusUI();
+        renderCustomers();
       }, 100);
     }
     function toggleLockEye() {
@@ -5006,6 +5818,9 @@
         updateRecoveryTimestampDisplay();
         updateInstallStatusUI();
       }
+      if (sectionId === 'customers') {
+        renderCustomers();
+      }
 
       closeSidebarIfMobile();
 
@@ -5080,6 +5895,7 @@
         updatePreviewForCurrent(); updateChartForCurrent(); loadScheduleIntoForm();
         updateReminderDisplay(); refreshAllCurrencyDisplays();
         updateDashboardStats(); updateStickyHeader();
+        renderCustomers();
         welcomeModal.classList.remove('active');
         showToast('Welcome! Start by adding a payment.');
       });
@@ -5120,8 +5936,11 @@
       });
 
       document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape' && !appSidebar.classList.contains('sidebar-hidden')) {
-          toggleSidebar();
+        if (e.key === 'Escape') {
+          if (!appSidebar.classList.contains('sidebar-hidden')) {
+            toggleSidebar();
+          }
+          dismissInstallGuide();
         }
       });
 
@@ -5133,6 +5952,8 @@
           toggleSidebar();
         }
       });
+
+      initCustomerEvents();
     }
 
     function initMainApp() {
@@ -5152,6 +5973,7 @@
       updateRecoveryTimestampDisplay();
       updateRecoveryNudge();
       updateInstallStatusUI();
+      renderCustomers();
 
       if (Object.keys(agreements).length === 0) welcomeModal.classList.add('active');
 
