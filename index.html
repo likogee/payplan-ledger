@@ -166,7 +166,6 @@
     }
 
     body.standalone-mode .pwa-install-toast { display: none !important; }
-    body.standalone-mode .install-guide-overlay { display: none !important; }
 
     .sidebar-backdrop {
       position: fixed;
@@ -180,9 +179,6 @@
     }
     .sidebar-backdrop.visible { opacity: 1; visibility: visible; }
 
-    /* ============================================================
-       NEW PWA INSTALL — compact bottom toast, non-blocking
-       ============================================================ */
     .pwa-install-toast {
       position: fixed;
       left: 12px;
@@ -203,16 +199,9 @@
       animation: pwaToastIn 0.4s cubic-bezier(0.34, 1.4, 0.64, 1);
     }
     .pwa-install-toast.visible { display: flex; }
-    .pwa-install-toast.hiding {
-      animation: pwaToastOut 0.3s ease forwards;
-    }
-    @keyframes pwaToastIn {
-      from { transform: translateY(120%); opacity: 0; }
-      to { transform: translateY(0); opacity: 1; }
-    }
-    @keyframes pwaToastOut {
-      to { transform: translateY(120%); opacity: 0; }
-    }
+    .pwa-install-toast.hiding { animation: pwaToastOut 0.3s ease forwards; }
+    @keyframes pwaToastIn { from { transform: translateY(120%); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+    @keyframes pwaToastOut { to { transform: translateY(120%); opacity: 0; } }
 
     .pwa-toast-icon {
       width: 44px;
@@ -226,10 +215,7 @@
       flex-shrink: 0;
       box-shadow: 0 8px 20px rgba(16, 185, 129, 0.35);
     }
-    .pwa-toast-body {
-      flex: 1;
-      min-width: 0;
-    }
+    .pwa-toast-body { flex: 1; min-width: 0; }
     .pwa-toast-title {
       font-size: 0.86rem;
       font-weight: 800;
@@ -237,16 +223,8 @@
       margin-bottom: 2px;
       color: #f1f5f9;
     }
-    .pwa-toast-sub {
-      font-size: 0.72rem;
-      color: #94a3b8;
-      line-height: 1.4;
-    }
-    .pwa-toast-actions {
-      display: flex;
-      gap: 8px;
-      flex-shrink: 0;
-    }
+    .pwa-toast-sub { font-size: 0.72rem; color: #94a3b8; line-height: 1.4; }
+    .pwa-toast-actions { display: flex; gap: 8px; flex-shrink: 0; }
     .pwa-toast-actions button {
       padding: 9px 16px;
       border-radius: 999px;
@@ -266,24 +244,14 @@
       color: white;
       box-shadow: 0 6px 16px rgba(16, 185, 129, 0.35);
     }
-    .pwa-toast-install:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 10px 24px rgba(16, 185, 129, 0.5);
-    }
-    .pwa-toast-install:disabled {
-      opacity: 0.7;
-      cursor: wait;
-      transform: none;
-    }
+    .pwa-toast-install:hover { transform: translateY(-1px); box-shadow: 0 10px 24px rgba(16, 185, 129, 0.5); }
+    .pwa-toast-install:disabled { opacity: 0.7; cursor: wait; transform: none; }
     .pwa-toast-dismiss {
       background: rgba(255, 255, 255, 0.05);
       color: #94a3b8;
       border: 1px solid rgba(255, 255, 255, 0.08);
     }
-    .pwa-toast-dismiss:hover {
-      background: rgba(255, 255, 255, 0.1);
-      color: #f1f5f9;
-    }
+    .pwa-toast-dismiss:hover { background: rgba(255, 255, 255, 0.1); color: #f1f5f9; }
 
     .app-sidebar {
       position: fixed;
@@ -1352,6 +1320,69 @@
     }
     .recovery-timestamp.stale strong { color: var(--accent); }
 
+    /* ============================================================
+       INSTALL APP CARD (new in Settings)
+       ============================================================ */
+    .install-status {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 14px 16px;
+      border-radius: var(--radius);
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      margin-bottom: 14px;
+      font-size: 0.85rem;
+      line-height: 1.55;
+    }
+    .install-status .is-icon {
+      font-size: 1.5rem;
+      flex-shrink: 0;
+      line-height: 1;
+      margin-top: 2px;
+    }
+    .install-status .is-body { flex: 1; min-width: 0; }
+    .install-status .is-title {
+      font-weight: 800;
+      color: var(--text);
+      margin-bottom: 3px;
+      font-size: 0.88rem;
+      letter-spacing: -0.01em;
+    }
+    .install-status .is-desc {
+      color: var(--text-2);
+      font-size: 0.8rem;
+    }
+    .install-status.is-installed {
+      background: rgba(16, 185, 129, 0.08);
+      border-color: rgba(16, 185, 129, 0.3);
+    }
+    .install-status.is-installed .is-title { color: var(--primary); }
+    .install-status.is-unavailable {
+      background: rgba(251, 191, 36, 0.08);
+      border-color: rgba(251, 191, 36, 0.3);
+    }
+    .install-status.is-unavailable .is-title { color: var(--accent); }
+    .install-status.is-ready {
+      background: rgba(59, 130, 246, 0.08);
+      border-color: rgba(59, 130, 246, 0.3);
+    }
+    .install-status.is-ready .is-title { color: var(--info); }
+
+    .install-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    .install-actions button {
+      width: auto;
+      margin-top: 0;
+      padding: 10px 20px;
+      font-size: 0.82rem;
+      border-radius: var(--radius-full);
+    }
+
     .chart-wrapper {
       position: relative;
       width: 100%;
@@ -2251,6 +2282,9 @@
       .pwa-toast-body { text-align: center; }
       .pwa-toast-actions { width: 100%; }
       .pwa-toast-actions button { flex: 1; }
+
+      .install-actions { flex-direction: column; }
+      .install-actions button { width: 100%; }
     }
 
     @media (max-width: 400px) {
@@ -2321,7 +2355,6 @@
 
   <div class="ambient-glow"></div>
 
-  <!-- NEW: Compact bottom toast for PWA install -->
   <div class="pwa-install-toast" id="pwaInstallToast">
     <div class="pwa-toast-icon">💼</div>
     <div class="pwa-toast-body">
@@ -2835,10 +2868,34 @@
 
       <div class="section" id="section-settings">
 
+        <!-- NEW: Install App card -->
+        <div class="card" id="card-settings-install">
+          <div class="card-header">
+            <h2><span class="card-icon">📲</span> Install App</h2>
+            <div class="header-actions">
+              <button class="expand-btn" onclick="openFullscreen('card-settings-install','Install App')">⛶</button>
+              <span class="toggle-icon" onclick="event.stopPropagation();this.closest('.card').classList.toggle('collapsed')">▼</span>
+            </div>
+          </div>
+          <div class="card-body">
+            <div id="installStatusBox" class="install-status">
+              <span class="is-icon" id="installStatusIcon">📲</span>
+              <div class="is-body">
+                <div class="is-title" id="installStatusTitle">Checking status...</div>
+                <div class="is-desc" id="installStatusDesc">Please wait a moment.</div>
+              </div>
+            </div>
+            <div class="install-actions">
+              <button id="installAppBtn" class="outline small-btn" style="display:none;">📲 Install to Home Screen</button>
+              <button id="installInstructionsBtn" class="outline small-btn" style="display:none;">📖 Show Me How</button>
+            </div>
+          </div>
+        </div>
+
         <div class="about-card">
           <div class="about-logo">💼</div>
           <div class="about-title">PayPlan Ledger</div>
-          <div class="about-version">Version 14.0 • Single-User License</div>
+          <div class="about-version">Version 14.1 • Single-User License</div>
           <div class="about-license-badge">✓ Offline-First</div>
           <p class="about-tagline">All your data stays on your device. No cloud, no subscriptions, no tracking.</p>
           <div class="about-features">
@@ -2956,19 +3013,28 @@
         </div>
       </div>
 
-      <footer>PAYPLAN LEDGER v14.0 • OFFLINE-FIRST • ALL DATA STORED LOCALLY</footer>
+      <footer>PAYPLAN LEDGER v14.1 • OFFLINE-FIRST • ALL DATA STORED LOCALLY</footer>
     </div>
   </div>
 
   <div id="toastContainer" class="toast-container"></div>
 
   <script>
+    // ============================================================
+    //  STANDALONE / INSTALL STATE
+    // ============================================================
     function isStandalone() {
       return window.matchMedia('(display-mode: standalone)').matches ||
              window.matchMedia('(display-mode: fullscreen)').matches ||
              window.matchMedia('(display-mode: minimal-ui)').matches ||
              window.navigator.standalone === true ||
              document.referrer.includes('android-app://');
+    }
+
+    function isIOSDevice() {
+      const ua = navigator.userAgent || '';
+      return /iPhone|iPad|iPod/i.test(ua) ||
+             (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
     }
 
     function applyStandaloneMode() {
@@ -2979,8 +3045,12 @@
       } else {
         document.body.classList.remove('standalone-mode');
       }
+      updateInstallStatusUI();
     }
 
+    // ============================================================
+    //  PWA INSTALL TOAST (bottom)
+    // ============================================================
     let deferredPrompt = null;
     let installToastTimeout = null;
 
@@ -2995,11 +3065,8 @@
       if (!pwaInstallToast) return;
       pwaInstallToast.classList.remove('hiding');
       pwaInstallToast.classList.add('visible');
-      // Auto-dismiss after 12 seconds of inactivity so it never blocks the app.
       clearTimeout(installToastTimeout);
-      installToastTimeout = setTimeout(function() {
-        hideInstallToast(false);
-      }, 12000);
+      installToastTimeout = setTimeout(function() { hideInstallToast(false); }, 12000);
     }
 
     function hideInstallToast(remember) {
@@ -3018,13 +3085,12 @@
     window.addEventListener('beforeinstallprompt', (e) => {
       e.preventDefault();
       deferredPrompt = e;
-      // Show the compact toast after a short delay so the app loads first.
+      updateInstallStatusUI();
       if (!isStandalone()) setTimeout(showInstallToast, 1500);
     });
 
     pwaToastInstallBtn.addEventListener('click', async () => {
       if (!deferredPrompt) {
-        // Fallback: show manual instructions in the toast subtext
         const ua = navigator.userAgent;
         if (/iPhone|iPad|iPod/i.test(ua)) {
           pwaToastSub.innerHTML = 'Tap <strong>Share (⬆️)</strong> → <strong>Add to Home Screen</strong>';
@@ -3065,12 +3131,249 @@
       hideInstallToast(true);
       deferredPrompt = null;
       document.body.classList.add('standalone-mode');
+      updateInstallStatusUI();
       showToast('🎉 Installed successfully!');
     });
 
     window.matchMedia('(display-mode: standalone)').addEventListener('change', applyStandaloneMode);
     window.matchMedia('(display-mode: fullscreen)').addEventListener('change', applyStandaloneMode);
 
+    // ============================================================
+    //  INSTALL APP CARD — status UI + action handlers
+    // ============================================================
+    function updateInstallStatusUI() {
+      const box = document.getElementById('installStatusBox');
+      const icon = document.getElementById('installStatusIcon');
+      const title = document.getElementById('installStatusTitle');
+      const desc = document.getElementById('installStatusDesc');
+      const installBtn = document.getElementById('installAppBtn');
+      const instructionsBtn = document.getElementById('installInstructionsBtn');
+
+      if (!box || !icon || !title || !desc) return;
+
+      // Reset classes
+      box.className = 'install-status';
+
+      // Case 1: already installed
+      if (isStandalone()) {
+        box.classList.add('is-installed');
+        icon.textContent = '✅';
+        title.textContent = 'Installed';
+        desc.textContent = 'The app is running as a standalone app on this device.';
+        if (installBtn) installBtn.style.display = 'none';
+        if (instructionsBtn) instructionsBtn.style.display = 'none';
+        return;
+      }
+
+      // Case 2: browser supports one-tap install and prompt is ready
+      if (deferredPrompt) {
+        box.classList.add('is-ready');
+        icon.textContent = '📲';
+        title.textContent = 'Ready to install';
+        desc.textContent = 'Tap the button below to install PayPlan Ledger to your home screen.';
+        if (installBtn) installBtn.style.display = 'inline-flex';
+        if (instructionsBtn) instructionsBtn.style.display = 'none';
+        return;
+      }
+
+      // Case 3: iOS or unsupported browser — show manual instructions
+      const ios = isIOSDevice();
+      box.classList.add('is-unavailable');
+      icon.textContent = ios ? '📱' : '💡';
+      title.textContent = ios ? 'Install on iPhone / iPad' : 'Manual install required';
+      desc.textContent = ios
+        ? 'Safari doesn\'t allow one-tap install. Tap "Show Me How" for the steps.'
+        : 'Your browser doesn\'t support one-tap install. Tap "Show Me How" for the steps.';
+      if (installBtn) installBtn.style.display = 'none';
+      if (instructionsBtn) instructionsBtn.style.display = 'inline-flex';
+    }
+
+    // Manual install button in Settings — trigger the native prompt if available
+    document.getElementById('installAppBtn').addEventListener('click', async function() {
+      if (!deferredPrompt) {
+        showToast('Install prompt not available — try the manual steps.');
+        return;
+      }
+      this.disabled = true;
+      this.textContent = 'Installing...';
+      try {
+        deferredPrompt.prompt();
+        const { outcome } = await deferredPrompt.userChoice;
+        if (outcome === 'accepted') {
+          showToast('🎉 Installing...');
+          hideInstallToast(true);
+        } else {
+          showToast('You can install anytime.');
+        }
+      } catch (e) {
+        showToast('Install prompt failed. Try the manual steps.');
+      }
+      deferredPrompt = null;
+      this.disabled = false;
+      this.textContent = '📲 Install to Home Screen';
+      updateInstallStatusUI();
+    });
+
+    // "Show Me How" button — opens the existing install guide overlay
+    document.getElementById('installInstructionsBtn').addEventListener('click', function() {
+      renderInstallGuide();
+      const overlay = document.getElementById('installGuideOverlay');
+      if (overlay) overlay.classList.add('visible');
+    });
+
+    // ============================================================
+    //  INSTALL GUIDE OVERLAY (step-by-step instructions)
+    // ============================================================
+    function detectPlatform() {
+      const ua = navigator.userAgent || '';
+      const isIOS = /iPhone|iPad|iPod/i.test(ua) ||
+                    (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+      const isAndroid = /Android/i.test(ua);
+      const isWindows = /Windows/i.test(ua);
+      const isMac = /Macintosh|Mac OS X/i.test(ua) && !isIOS;
+      const isLinux = /Linux/i.test(ua) && !isAndroid;
+      const isChromeOS = /CrOS/i.test(ua);
+      return { isIOS, isAndroid, isWindows, isMac, isLinux, isChromeOS };
+    }
+
+    function renderInstallGuide() {
+      const p = detectPlatform();
+      const icon = document.getElementById('guideIcon');
+      const title = document.getElementById('guideTitle');
+      const sub = document.getElementById('guideSubtitle');
+      const steps = document.getElementById('guideSteps');
+      const primary = document.getElementById('guidePrimaryBtn');
+
+      if (!steps) return;
+
+      let html = '';
+      let primaryLabel = 'Install Now';
+      let primaryAction = 'default';
+
+      if (p.isIOS) {
+        icon.textContent = '🍎';
+        title.textContent = 'Install on iPhone / iPad';
+        sub.textContent = 'Apple doesn\'t allow one-tap installs — but Safari gives you the same fullscreen app experience.';
+        html = `
+          <div class="guide-step">
+            <div class="step-num">1</div>
+            <div class="step-text">Tap the <strong>Share</strong> button at the bottom of Safari.</div>
+          </div>
+          <div class="guide-step">
+            <div class="step-num">2</div>
+            <div class="step-text">Scroll down and tap <strong>"Add to Home Screen"</strong>.</div>
+          </div>
+          <div class="guide-step">
+            <div class="step-num">3</div>
+            <div class="step-text">Name it <strong>PayPlan Ledger</strong> → tap <strong>Add</strong>.</div>
+          </div>
+          <div class="guide-step">
+            <div class="step-num">4</div>
+            <div class="step-text">Open the new icon from your home screen — it runs fullscreen, offline.</div>
+          </div>
+        `;
+        primaryLabel = 'Got it';
+        primaryAction = 'dismiss';
+      } else if (p.isAndroid) {
+        icon.textContent = '🤖';
+        title.textContent = 'Install on Android';
+        sub.textContent = 'Get the full app experience — no browser bar.';
+        html = `
+          <div class="guide-step">
+            <div class="step-num">1</div>
+            <div class="step-text">Tap the <strong>⋮ menu</strong> in Chrome (top right).</div>
+          </div>
+          <div class="guide-step">
+            <div class="step-num">2</div>
+            <div class="step-text">Tap <strong>"Install app"</strong>. If not available, choose <strong>"Add to Home screen"</strong>.</div>
+          </div>
+          <div class="guide-step">
+            <div class="step-num">3</div>
+            <div class="step-text">Confirm → the app appears on your home screen.</div>
+          </div>
+        `;
+        primaryLabel = 'Install App';
+        primaryAction = 'prompt';
+      } else if (p.isWindows || p.isMac || p.isLinux || p.isChromeOS) {
+        icon.textContent = '💻';
+        title.textContent = 'Install on Desktop';
+        sub.textContent = 'Install PayPlan Ledger as a desktop app with its own window and icon.';
+        html = `
+          <div class="guide-step">
+            <div class="step-num">1</div>
+            <div class="step-text">Look for the <strong>install icon</strong> in your browser's address bar (a small monitor with a down arrow).</div>
+          </div>
+          <div class="guide-step">
+            <div class="step-num">2</div>
+            <div class="step-text">If you don't see it, open the browser menu (⋮ or •••) → <strong>"Install PayPlan Ledger"</strong>.</div>
+          </div>
+          <div class="guide-step">
+            <div class="step-num">3</div>
+            <div class="step-text">Confirm. The app installs to your Start Menu / Applications folder.</div>
+          </div>
+          <div class="guide-step">
+            <div class="step-num">4</div>
+            <div class="step-text">Open it from there any time — no browser bar, works offline.</div>
+          </div>
+        `;
+        primaryLabel = 'Install App';
+        primaryAction = 'prompt';
+      } else {
+        icon.textContent = '📲';
+        title.textContent = 'Install PayPlan Ledger';
+        sub.textContent = 'Install to your device for the fullscreen app experience.';
+        html = `
+          <div class="guide-step">
+            <div class="step-num">1</div>
+            <div class="step-text">Open your browser menu and look for <strong>"Install app"</strong> or <strong>"Add to Home screen"</strong>.</div>
+          </div>
+          <div class="guide-step">
+            <div class="step-num">2</div>
+            <div class="step-text">Tap it and confirm. The app opens fullscreen from your home screen or app list.</div>
+          </div>
+        `;
+      }
+
+      steps.innerHTML = html;
+      primary.textContent = primaryLabel;
+      primary.dataset.action = primaryAction;
+    }
+
+    function handleGuidePrimary() {
+      const primary = document.getElementById('guidePrimaryBtn');
+      const action = primary.dataset.action;
+
+      if (action === 'dismiss') {
+        dismissInstallGuide();
+        return;
+      }
+
+      if (action === 'prompt' && deferredPrompt) {
+        deferredPrompt.prompt();
+        deferredPrompt.userChoice.then(function(choice) {
+          if (choice.outcome === 'accepted') {
+            showToast('🎉 Installing...');
+            dismissInstallGuide();
+          } else {
+            showToast('You can install anytime from the browser menu.');
+          }
+          deferredPrompt = null;
+        });
+        return;
+      }
+
+      dismissInstallGuide();
+    }
+
+    function dismissInstallGuide() {
+      const overlay = document.getElementById('installGuideOverlay');
+      if (overlay) overlay.classList.remove('visible');
+      try { localStorage.setItem('pmInstallGuideSeen', 'true'); } catch (e) {}
+    }
+
+    // ============================================================
+    //  APP STATE
+    // ============================================================
     const agreementsListDiv = document.getElementById('agreementsList');
     const addAgreementBtn = document.getElementById('addAgreementBtn');
     const currentAgreementNameDisplay = document.getElementById('currentAgreementNameDisplay');
@@ -4178,59 +4481,161 @@
 
     function buildPDF(records, mainTitle, period, agree, seller, buyer) {
       const sorted = [...records].sort((a, b) => new Date(a.date) - new Date(b.date));
-      let run = 0, rows = '', paid = 0, bal = 0, hire = 0;
+      let run = 0;
+      let rows = '';
+      let paid = 0, bal = 0, hire = 0;
+
       for (const r of sorted) {
-        run += r.amountPaid; paid = run; hire = r.totalHireAmount; bal = hire - run;
-        rows += '<tr><td>' + r.date + '</td><td style="text-align:right">' + formatCurrency(r.totalHireAmount) + '</td><td style="text-align:right">' + formatCurrency(r.amountPaid) + '</td><td style="text-align:right">' + formatCurrency(run) + '</td><td style="text-align:right;' + (bal < 0 ? 'color:#c2410c' : '') + '">' + formatCurrency(bal) + '</td></tr>';
+        run += r.amountPaid;
+        paid = run;
+        hire = r.totalHireAmount;
+        bal = hire - run;
+        rows +=
+          '<tr>' +
+            '<td class="c-date">' + r.date + '</td>' +
+            '<td class="c-num">' + formatCurrency(r.totalHireAmount) + '</td>' +
+            '<td class="c-num">' + formatCurrency(r.amountPaid) + '</td>' +
+            '<td class="c-num c-total">' + formatCurrency(run) + '</td>' +
+            '<td class="c-num ' + (bal < 0 ? 'c-negative' : 'c-balance') + '">' + formatCurrency(bal) + '</td>' +
+          '</tr>';
       }
+
+      const now = new Date();
+      const generated = now.toLocaleString('en-US', {
+        year: 'numeric', month: 'short', day: 'numeric',
+        hour: '2-digit', minute: '2-digit'
+      });
+      const docId = 'PPL-' + now.getTime().toString(36).toUpperCase().slice(-8);
+
       return '<!DOCTYPE html><html><head><meta charset="UTF-8"><title>PayPlan Ledger Report</title><style>' +
-        'body{font-family:Arial,Helvetica,sans-serif;margin:0;padding:40px 32px;color:#14212b;background:#fff;width:730px}' +
-        'h1{color:#10b981;text-align:center;font-size:24px;border-bottom:3px solid #fbbf24;padding-bottom:12px;margin:0 0 8px 0}' +
-        '.sub{text-align:center;color:#666;font-size:12px;margin-bottom:18px}' +
-        'hr{border:none;border-top:2px solid #10b981;margin:12px 0}' +
-        '.meta{font-size:12px;margin-bottom:16px;line-height:1.8;color:#334155}' +
-        'table{width:100%;border-collapse:collapse;margin-bottom:18px;font-size:12px}' +
-        'th{background:#10b981;color:white;padding:10px;text-align:right;font-weight:700}' +
-        'th:first-child{text-align:left}' +
-        'td{border:1px solid #e2e8f0;padding:9px;color:#1e293b}' +
-        'td:not(:first-child){text-align:right}' +
-        'tr:nth-child(even){background:#f8fafc}' +
-        '.sum{width:45%;margin-left:auto;font-size:13px;border-collapse:collapse}' +
-        '.sum td{padding:8px 12px;border:none;font-weight:600}' +
-        '.sum tr:last-child{background:#e8f3ee;font-weight:bold;color:#10b981}' +
-        '.footer{text-align:center;margin-top:32px;font-size:10px;color:#94a3b8;border-top:1px solid #e2e8f0;padding-top:16px}' +
+        '*{box-sizing:border-box;margin:0;padding:0}' +
+        'body{font-family:-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:#fff;color:#0f172a;padding:0;width:794px}' +
+        '.page{padding:56px 56px 48px;background:#fff;min-height:1123px;position:relative}' +
+        '.header{display:flex;align-items:center;justify-content:space-between;padding-bottom:18px;border-bottom:2px solid #10b981;margin-bottom:24px}' +
+        '.brand{display:flex;align-items:center;gap:12px}' +
+        '.brand-icon{width:44px;height:44px;background:linear-gradient(135deg,#10b981 0%,#059669 100%);border-radius:12px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:22px;box-shadow:0 6px 16px rgba(16,185,129,0.35)}' +
+        '.brand-text{line-height:1.2}' +
+        '.brand-name{font-size:15px;font-weight:900;color:#0f172a;letter-spacing:-0.02em}' +
+        '.brand-sub{font-size:10px;font-weight:700;color:#10b981;letter-spacing:0.14em;text-transform:uppercase;margin-top:2px}' +
+        '.doc-meta{text-align:right;font-size:10px;color:#64748b;line-height:1.6}' +
+        '.doc-meta .id{font-family:"Courier New",monospace;color:#0f172a;font-weight:800;letter-spacing:0.02em}' +
+        '.doc-title{font-size:26px;font-weight:900;color:#0f172a;letter-spacing:-0.03em;margin-bottom:4px}' +
+        '.doc-sub{font-size:12px;color:#64748b;font-weight:600;margin-bottom:20px}' +
+        '.meta-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:22px}' +
+        '.meta-block{padding:14px 16px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px}' +
+        '.meta-block .ml{font-size:9px;color:#64748b;font-weight:800;letter-spacing:0.12em;text-transform:uppercase;margin-bottom:4px}' +
+        '.meta-block .mv{font-size:13px;color:#0f172a;font-weight:700;line-height:1.4}' +
+        '.meta-block .mv.name{font-size:14px;font-weight:800;letter-spacing:-0.01em}' +
+        '.summary-row{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:24px}' +
+        '.sum-card{padding:16px;border-radius:12px;border:1px solid #e2e8f0;background:#fff;text-align:center}' +
+        '.sum-card.contract{background:#f1f5f9}' +
+        '.sum-card.paid{background:rgba(16,185,129,0.08);border-color:rgba(16,185,129,0.3)}' +
+        '.sum-card.remaining{background:rgba(245,158,11,0.08);border-color:rgba(245,158,11,0.3)}' +
+        '.sum-label{font-size:9px;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;color:#64748b;margin-bottom:6px}' +
+        '.sum-card.paid .sum-label{color:#059669}' +
+        '.sum-card.remaining .sum-label{color:#c2410c}' +
+        '.sum-value{font-size:18px;font-weight:900;letter-spacing:-0.03em;color:#0f172a}' +
+        '.sum-card.paid .sum-value{color:#059669}' +
+        '.sum-card.remaining .sum-value{color:#c2410c}' +
+        '.section-label{font-size:10px;font-weight:800;letter-spacing:0.14em;text-transform:uppercase;color:#0f172a;margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid #e2e8f0;display:flex;align-items:center;gap:6px}' +
+        '.section-label .dot{width:6px;height:6px;background:#10b981;border-radius:50%;display:inline-block}' +
+        'table.ledger{width:100%;border-collapse:collapse;margin-bottom:20px;font-size:11px}' +
+        'table.ledger thead th{background:#0f172a;color:#fff;padding:11px 14px;font-size:9px;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;text-align:right}' +
+        'table.ledger thead th:first-child{text-align:left;border-top-left-radius:8px}' +
+        'table.ledger thead th:last-child{border-top-right-radius:8px}' +
+        'table.ledger tbody td{padding:11px 14px;border-bottom:1px solid #f1f5f9;color:#334155;vertical-align:middle}' +
+        'table.ledger tbody td.c-date{text-align:left;color:#0f172a;font-weight:600}' +
+        'table.ledger tbody td.c-num{text-align:right;font-variant-numeric:tabular-nums;font-weight:600}' +
+        'table.ledger tbody td.c-total{color:#0f172a;font-weight:800}' +
+        'table.ledger tbody td.c-balance{color:#c2410c;font-weight:800}' +
+        'table.ledger tbody td.c-negative{color:#dc2626;font-weight:800}' +
+        'table.ledger tbody tr:nth-child(even) td{background:#f8fafc}' +
+        'table.ledger tbody tr:last-child td{border-bottom:2px solid #10b981}' +
+        '.footer{margin-top:40px;padding-top:16px;border-top:1px solid #e2e8f0;display:flex;justify-content:space-between;align-items:center;font-size:9px;color:#94a3b8;letter-spacing:0.08em;text-transform:uppercase;font-weight:600}' +
+        '.footer .brand-mark{color:#10b981;font-weight:800}' +
+        '.empty-state{padding:40px 20px;text-align:center;background:#f8fafc;border-radius:12px;color:#94a3b8;font-size:12px}' +
         '</style></head><body>' +
-        '<h1>💼 ' + escapeHtml(mainTitle) + '</h1>' +
-        '<div class="sub">' + escapeHtml(agree) + ' • Hire Purchase Report</div>' +
-        '<hr>' +
-        '<div class="meta">' +
-          '<strong>Period:</strong> ' + escapeHtml(period) + '<br>' +
-          '<strong>Agreement:</strong> ' + escapeHtml(agree) + '<br>' +
-          '<strong>Seller:</strong> ' + escapeHtml(seller) + ' &nbsp;&nbsp; <strong>Buyer:</strong> ' + escapeHtml(buyer) + '<br>' +
-          '<strong>Generated:</strong> ' + new Date().toLocaleString('en-US') +
-        '</div>' +
-        '<table><thead><tr><th>Date</th><th>Contract</th><th>Paid</th><th>Total</th><th>Balance</th></tr></thead><tbody>' + rows + '</tbody></table>' +
-        '<table class="sum">' +
-          '<tr><td>Total Contract:</td><td>' + formatCurrency(hire) + '</td></tr>' +
-          '<tr><td>Total Paid:</td><td>' + formatCurrency(paid) + '</td></tr>' +
-          '<tr><td>Remaining:</td><td>' + formatCurrency(bal) + '</td></tr>' +
-        '</table>' +
-        '<div class="footer">PayPlan Ledger • Hire Purchase Tracker • ' + new Date().toLocaleDateString('en-US') + '</div>' +
-        '</body></html>';
+        '<div class="page">' +
+
+          '<div class="header">' +
+            '<div class="brand">' +
+              '<div class="brand-icon">💼</div>' +
+              '<div class="brand-text">' +
+                '<div class="brand-name">PayPlan Ledger</div>' +
+                '<div class="brand-sub">Payment Statement</div>' +
+              '</div>' +
+            '</div>' +
+            '<div class="doc-meta">' +
+              '<div>Doc ID: <span class="id">' + docId + '</span></div>' +
+              '<div>' + generated + '</div>' +
+            '</div>' +
+          '</div>' +
+
+          '<div class="doc-title">' + escapeHtml(mainTitle) + '</div>' +
+          '<div class="doc-sub">' + escapeHtml(period) + '</div>' +
+
+          '<div class="meta-grid">' +
+            '<div class="meta-block">' +
+              '<div class="ml">Agreement / Account</div>' +
+              '<div class="mv name">' + escapeHtml(agree) + '</div>' +
+            '</div>' +
+            '<div class="meta-block">' +
+              '<div class="ml">Seller / Buyer</div>' +
+              '<div class="mv">' + escapeHtml(seller) + ' &nbsp;→&nbsp; ' + escapeHtml(buyer) + '</div>' +
+            '</div>' +
+          '</div>' +
+
+          '<div class="summary-row">' +
+            '<div class="sum-card contract">' +
+              '<div class="sum-label">Contract Amount</div>' +
+              '<div class="sum-value">' + formatCurrency(hire) + '</div>' +
+            '</div>' +
+            '<div class="sum-card paid">' +
+              '<div class="sum-label">Total Paid</div>' +
+              '<div class="sum-value">' + formatCurrency(paid) + '</div>' +
+            '</div>' +
+            '<div class="sum-card remaining">' +
+              '<div class="sum-label">Balance Remaining</div>' +
+              '<div class="sum-value">' + formatCurrency(bal) + '</div>' +
+            '</div>' +
+          '</div>' +
+
+          '<div class="section-label"><span class="dot"></span> Payment Ledger</div>' +
+          (rows ?
+            '<table class="ledger">' +
+              '<thead><tr>' +
+                '<th>Date</th>' +
+                '<th>Contract</th>' +
+                '<th>Paid</th>' +
+                '<th>Running Total</th>' +
+                '<th>Balance</th>' +
+              '</tr></thead>' +
+              '<tbody>' + rows + '</tbody>' +
+            '</table>'
+            :
+            '<div class="empty-state">No payment records in this report.</div>'
+          ) +
+
+          '<div class="footer">' +
+            '<span><span class="brand-mark">PayPlan Ledger</span> · Offline-First Tracker</span>' +
+            '<span>' + records.length + ' record' + (records.length === 1 ? '' : 's') + ' · Page 1</span>' +
+          '</div>' +
+
+        '</div></body></html>';
     }
 
     async function requestPDF(records, baseTitle) {
       if (!currentAgreementId) { showToast('No agreement selected'); return; }
       const ag = agreements[currentAgreementId];
       const currentName = ag.name;
-      pdfReportTitle.value = localStorage.getItem('pmPdfTitle') || 'Payment Report';
+      pdfReportTitle.value = localStorage.getItem('pmPdfTitle') || 'Payment Statement';
       agreementNameInput.value = localStorage.getItem('pmPrintAgreement') || currentName;
       sellerNameInput.value = localStorage.getItem('pmPrintSeller') || 'Seller';
       buyerNameInput.value = localStorage.getItem('pmPrintBuyer') || 'Buyer';
       nameModal.classList.add('active');
       const yes = async () => {
         nameModal.classList.remove('active');
-        const reportTitle = pdfReportTitle.value.trim() || 'Payment Report';
+        const reportTitle = pdfReportTitle.value.trim() || 'Payment Statement';
         const newAgreementName = agreementNameInput.value.trim() || currentName;
         const seller = sellerNameInput.value.trim() || 'Seller';
         const buyer = buyerNameInput.value.trim() || 'Buyer';
@@ -4418,6 +4823,7 @@
         }
         updateRecoveryTimestampDisplay();
         updateRecoveryNudge();
+        updateInstallStatusUI();
       }, 100);
     }
     function toggleLockEye() {
@@ -4495,7 +4901,6 @@
       loader.classList.add('fade-out');
       setTimeout(() => { if (loader) loader.style.display = 'none'; }, 300);
     }
-    // Fast path for returning users — hide loader almost immediately.
     if (storedPassword) setTimeout(function() { if (!loaderHidden) hideLoader(); }, 150);
     else setTimeout(() => { if (!loaderHidden) hideLoader(); }, 1500);
 
@@ -4599,6 +5004,7 @@
       }
       if (sectionId === 'settings') {
         updateRecoveryTimestampDisplay();
+        updateInstallStatusUI();
       }
 
       closeSidebarIfMobile();
@@ -4745,6 +5151,7 @@
       updateStickyHeader();
       updateRecoveryTimestampDisplay();
       updateRecoveryNudge();
+      updateInstallStatusUI();
 
       if (Object.keys(agreements).length === 0) welcomeModal.classList.add('active');
 
@@ -4761,8 +5168,6 @@
     hideLockScreen = function() {
       _hideLockOriginal();
       if (!mainInitialized) { mainInitialized = true; hideLoader(); safeInitMainApp(); }
-      // Show the compact install toast only after the app is fully loaded
-      // and only if the browser supports native install.
       setTimeout(function() {
         if (!isStandalone() && deferredPrompt) {
           showInstallToast();
