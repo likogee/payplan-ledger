@@ -1566,6 +1566,293 @@
       line-height: 1.5;
     }
 
+    /* HP CALCULATOR STYLES */
+    .hp-calc-panel {
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px;
+      margin: 12px 0;
+      text-align: left;
+      display: none;
+    }
+    .hp-calc-panel.visible { display: block; }
+
+    .hp-calc-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 14px;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .hp-calc-header h3 {
+      font-size: 0.85rem;
+      font-weight: 800;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .hp-calc-header .hp-mode-toggle {
+      display: flex;
+      gap: 4px;
+      background: var(--surface-3);
+      padding: 3px;
+      border-radius: var(--radius-full);
+    }
+    .hp-calc-header .hp-mode-btn {
+      padding: 6px 14px;
+      border-radius: var(--radius-full);
+      border: none;
+      background: transparent;
+      color: var(--text-3);
+      font-size: 0.7rem;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: inherit;
+      width: auto;
+      margin: 0;
+      box-shadow: none;
+      transition: all 0.2s;
+    }
+    .hp-calc-header .hp-mode-btn::before { display: none; }
+    .hp-calc-header .hp-mode-btn.active {
+      background: var(--primary-gradient);
+      color: white;
+      box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
+    }
+    .hp-calc-header .hp-mode-btn:hover:not(.active) {
+      color: var(--text);
+      background: transparent;
+      transform: none;
+      box-shadow: none;
+    }
+
+    .hp-calc-row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 10px;
+    }
+    .hp-calc-row .hp-field {
+      flex: 1;
+      min-width: 120px;
+    }
+    .hp-calc-row .hp-field label {
+      font-size: 0.62rem;
+    }
+    .hp-calc-row .hp-field input,
+    .hp-calc-row .hp-field select {
+      padding: 10px 12px;
+      font-size: 0.82rem;
+      border-radius: var(--radius-sm);
+    }
+
+    .hp-calc-results {
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 12px 14px;
+      margin-top: 10px;
+    }
+    .hp-calc-results .hp-result-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 5px 0;
+      font-size: 0.8rem;
+      color: var(--text-2);
+      gap: 10px;
+    }
+    .hp-calc-results .hp-result-row:not(:last-child) {
+      border-bottom: 1px solid var(--divider);
+    }
+    .hp-calc-results .hp-result-row strong {
+      color: var(--text);
+      font-weight: 800;
+      font-variant-numeric: tabular-nums;
+      font-size: 0.9rem;
+      text-align: right;
+    }
+    .hp-calc-results .hp-result-row .hp-hi {
+      color: var(--primary);
+      font-size: 1rem;
+    }
+    .hp-calc-results .hp-result-row .hp-accent {
+      color: var(--accent);
+    }
+
+    .hp-calc-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 12px;
+    }
+    .hp-calc-actions button {
+      flex: 1;
+      padding: 10px;
+      font-size: 0.78rem;
+      border-radius: var(--radius-full);
+    }
+
+    .hp-calc-toggle-btn {
+      width: auto;
+      margin: 8px 0 0;
+      padding: 10px 18px;
+      font-size: 0.78rem;
+      border-radius: var(--radius-full);
+      background: var(--surface-3);
+      color: var(--text-2);
+      border: 1px dashed var(--border-strong);
+      box-shadow: none;
+      font-weight: 700;
+    }
+    .hp-calc-toggle-btn::before { display: none; }
+    .hp-calc-toggle-btn:hover {
+      background: var(--primary-soft);
+      color: var(--primary);
+      border-color: var(--primary);
+      transform: none;
+      box-shadow: none;
+    }
+
+    /* GUARANTOR / CUSTOMER DETAILS PANEL */
+    .party-details-panel {
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 14px 16px;
+      margin: 12px 0;
+      text-align: left;
+      display: none;
+    }
+    .party-details-panel.visible { display: block; }
+
+    .party-section-title {
+      font-size: 0.72rem;
+      font-weight: 800;
+      color: var(--text);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding-bottom: 6px;
+      border-bottom: 1px solid var(--divider);
+    }
+    .party-section-title .pst-icon {
+      font-size: 0.9rem;
+    }
+    .party-section-title.guarantor-title { color: var(--accent); }
+    .party-section-title.customer-title { color: var(--primary); }
+
+    .party-field-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+    .party-field-grid .form-group { margin-bottom: 0; }
+    .party-field-grid .form-group.full-width { grid-column: 1 / -1; }
+    .party-field-grid label {
+      font-size: 0.6rem;
+      margin-bottom: 4px;
+    }
+    .party-field-grid input {
+      padding: 9px 12px;
+      font-size: 0.8rem;
+      border-radius: var(--radius-sm);
+    }
+
+    .party-hint {
+      font-size: 0.66rem;
+      color: var(--text-3);
+      line-height: 1.5;
+      margin-top: 8px;
+      padding: 8px 10px;
+      background: var(--bg-elevated);
+      border-radius: var(--radius-sm);
+      border: 1px dashed var(--border);
+    }
+    .party-hint strong { color: var(--accent); font-weight: 800; }
+
+    .party-details-toggle-btn {
+      width: auto;
+      margin: 8px 0 0;
+      padding: 10px 18px;
+      font-size: 0.78rem;
+      border-radius: var(--radius-full);
+      background: var(--surface-3);
+      color: var(--text-2);
+      border: 1px dashed var(--border-strong);
+      box-shadow: none;
+      font-weight: 700;
+    }
+    .party-details-toggle-btn::before { display: none; }
+    .party-details-toggle-btn:hover {
+      background: var(--primary-soft);
+      color: var(--primary);
+      border-color: var(--primary);
+      transform: none;
+      box-shadow: none;
+    }
+    .party-details-toggle-btn.has-data {
+      background: var(--primary-soft);
+      color: var(--primary);
+      border-color: var(--primary);
+    }
+
+    /* CONTACT BADGES IN CUSTOMER ROW & REMINDERS */
+    .contact-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      padding: 2px 8px;
+      border-radius: var(--radius-full);
+      font-size: 0.62rem;
+      font-weight: 700;
+      text-decoration: none;
+      transition: all 0.15s;
+      white-space: nowrap;
+    }
+    .contact-badge.phone {
+      background: var(--info-soft);
+      color: var(--info);
+      border: 1px solid rgba(59, 130, 246, 0.2);
+    }
+    .contact-badge.phone:hover {
+      background: var(--info);
+      color: white;
+    }
+    .contact-badge.guarantor {
+      background: var(--accent-soft);
+      color: var(--accent);
+      border: 1px solid rgba(245, 158, 11, 0.25);
+    }
+    .contact-badge.guarantor:hover {
+      background: var(--accent);
+      color: white;
+    }
+
+    .reminder-contact-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 8px;
+      padding-top: 8px;
+      border-top: 1px dashed var(--divider);
+    }
+    .reminder-contact-row .rc-label {
+      font-size: 0.68rem;
+      color: var(--text-3);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      width: 100%;
+      margin-bottom: 2px;
+    }
+
     /* INSTALL GUIDE MODAL */
     .install-guide-overlay {
       position: fixed;
@@ -2597,6 +2884,12 @@
       .customers-summary-grid { gap: 8px; }
       .customers-summary-card { padding: 12px 10px; }
       .customers-summary-card .cs-value { font-size: 1rem; }
+
+      .hp-calc-panel { padding: 12px; }
+      .hp-calc-header { flex-direction: column; align-items: flex-start; }
+      .hp-calc-row .hp-field { min-width: 100%; }
+
+      .party-field-grid { grid-template-columns: 1fr; }
     }
 
     @media (max-width: 400px) {
@@ -2927,6 +3220,103 @@
       <div style="font-size:2.2rem;margin-bottom:10px;">📋</div>
       <div class="modal-title">New Agreement</div>
       <input type="text" id="newAgreementName" class="modal-input" placeholder="e.g. Toyota Corolla, Laptop, Land">
+
+      <button type="button" class="party-details-toggle-btn" id="togglePartyDetailsBtn">👤 Add Customer & Guarantor Details</button>
+
+      <div class="party-details-panel" id="partyDetailsPanel">
+        <div class="party-section-title customer-title">
+          <span class="pst-icon">👤</span> Customer Details
+        </div>
+        <div class="party-field-grid">
+          <div class="form-group">
+            <label>Full Name</label>
+            <input type="text" id="newCustomerName" placeholder="e.g. Kofi Mensah">
+          </div>
+          <div class="form-group">
+            <label>Phone Number</label>
+            <input type="tel" id="newCustomerPhone" placeholder="e.g. 024 123 4567">
+          </div>
+          <div class="form-group full-width">
+            <label>Address</label>
+            <input type="text" id="newCustomerAddress" placeholder="e.g. Accra, Madina Market">
+          </div>
+          <div class="form-group">
+            <label>ID Number</label>
+            <input type="text" id="newCustomerId" placeholder="Ghana Card / Passport">
+          </div>
+        </div>
+
+        <div class="party-section-title guarantor-title">
+          <span class="pst-icon">🛡️</span> Guarantor Details
+        </div>
+        <div class="party-field-grid">
+          <div class="form-group">
+            <label>Full Name</label>
+            <input type="text" id="newGuarantorName" placeholder="e.g. Ama Boateng">
+          </div>
+          <div class="form-group">
+            <label>Phone Number</label>
+            <input type="tel" id="newGuarantorPhone" placeholder="e.g. 020 987 6543">
+          </div>
+          <div class="form-group full-width">
+            <label>Address</label>
+            <input type="text" id="newGuarantorAddress" placeholder="e.g. Tema Community 4">
+          </div>
+          <div class="form-group">
+            <label>Relationship</label>
+            <input type="text" id="newGuarantorRelationship" placeholder="e.g. Uncle, Church Elder">
+          </div>
+          <div class="form-group">
+            <label>ID Number</label>
+            <input type="text" id="newGuarantorId" placeholder="Ghana Card / Passport">
+          </div>
+        </div>
+
+        <div class="party-hint">
+          <strong>Why this matters:</strong> In Ghana, the guarantor is the real security. If the customer defaults, you call the guarantor. All fields are optional — add what you have.
+        </div>
+      </div>
+
+      <button type="button" class="hp-calc-toggle-btn" id="toggleHpCalcBtn">🧮 Calculate HP Terms</button>
+      <div class="hp-calc-panel" id="hpCalcPanel">
+        <div class="hp-calc-header">
+          <h3>🧮 Hire Purchase Calculator</h3>
+          <div class="hp-mode-toggle" id="hpModeToggle">
+            <button type="button" class="hp-mode-btn active" data-mode="flat">Flat Markup</button>
+            <button type="button" class="hp-mode-btn" data-mode="reducing">Reducing Balance</button>
+          </div>
+        </div>
+        <div class="hp-calc-row">
+          <div class="hp-field">
+            <label>Cash Price</label>
+            <input type="number" id="hpCashPrice" step="any" placeholder="0.00">
+          </div>
+          <div class="hp-field">
+            <label>Deposit</label>
+            <input type="number" id="hpDeposit" step="any" placeholder="0.00">
+          </div>
+        </div>
+        <div class="hp-calc-row">
+          <div class="hp-field">
+            <label>Markup %</label>
+            <input type="number" id="hpMarkupPercent" step="any" placeholder="0">
+          </div>
+          <div class="hp-field">
+            <label>Term (months)</label>
+            <input type="number" id="hpTermMonths" step="1" min="1" placeholder="10">
+          </div>
+        </div>
+        <div class="hp-calc-results" id="hpCalcResults">
+          <div class="hp-result-row"><span>Financed</span><strong id="hpResFinanced">—</strong></div>
+          <div class="hp-result-row"><span>Markup Amount</span><strong id="hpResMarkup" class="hp-accent">—</strong></div>
+          <div class="hp-result-row"><span>Total Contract</span><strong id="hpResTotal" class="hp-hi">—</strong></div>
+          <div class="hp-result-row"><span>Installment</span><strong id="hpResInstallment" class="hp-hi">—</strong></div>
+        </div>
+        <div class="hp-calc-actions">
+          <button type="button" class="gold-btn" id="hpApplyBtn">✅ Use These Figures</button>
+          <button type="button" class="outline" id="hpResetBtn">↩ Reset</button>
+        </div>
+      </div>
       <div class="modal-buttons">
         <button id="createAgreementBtn">Create</button>
         <button id="cancelNewAgreementBtn" class="outline">Cancel</button>
@@ -3149,7 +3539,7 @@
             <div class="search-wrap">
               <div class="search-text-input">
                 <span class="search-icon">🔍</span>
-                <input type="text" id="customersSearchInput" placeholder="Search customers..." />
+                <input type="text" id="customersSearchInput" placeholder="Search by name or phone..." />
               </div>
               <button class="search-clear-btn" id="customersSearchClearBtn">✕ Clear</button>
             </div>
@@ -3194,6 +3584,7 @@
             </div>
           </div>
           <div class="card-body">
+            <div id="paymentPartyInfo" style="display:none;margin-bottom:12px;"></div>
             <div class="form-group">
               <label>📅 Payment Date</label>
               <input type="date" id="workDate" />
@@ -3309,7 +3700,7 @@
         <div class="about-card">
           <div class="about-logo">💼</div>
           <div class="about-title">PayPlan Ledger</div>
-          <div class="about-version">Version 15.2 • Single-User License</div>
+          <div class="about-version">Version 15.3 • Single-User License</div>
           <div class="about-license-badge">✓ Offline-First</div>
           <p class="about-tagline">All your data stays on your device. No cloud, no subscriptions, no tracking.</p>
           <div class="about-features">
@@ -3321,6 +3712,8 @@
             <div class="about-feature"><span class="feat-icon">🔄</span> Encrypted recovery codes</div>
             <div class="about-feature"><span class="feat-icon">🔒</span> Password protected</div>
             <div class="about-feature"><span class="feat-icon">✈️</span> Works fully offline</div>
+            <div class="about-feature"><span class="feat-icon">🧮</span> HP calculator</div>
+            <div class="about-feature"><span class="feat-icon">🛡️</span> Guarantor tracking</div>
           </div>
         </div>
 
@@ -3429,7 +3822,7 @@
         </div>
       </div>
 
-      <footer>PAYPLAN LEDGER v15.2 • OFFLINE-FIRST • ALL DATA STORED LOCALLY</footer>
+      <footer>PAYPLAN LEDGER v15.3 • OFFLINE-FIRST • ALL DATA STORED LOCALLY</footer>
     </div>
   </div>
 
@@ -3459,7 +3852,6 @@
 
     function isInAppBrowser() {
       const ua = navigator.userAgent || '';
-      // Common in-app browsers from social apps
       return /FBAN|FBAV|Instagram|Line|WhatsApp|Twitter|MicroMessenger|Snapchat|Pinterest/i.test(ua);
     }
 
@@ -3482,7 +3874,7 @@
     }
 
     // ============================================================
-    //  PWA INSTALL TOAST (bottom of screen)
+    //  PWA INSTALL TOAST
     // ============================================================
     let deferredPrompt = null;
     let installToastTimeout = null;
@@ -3524,7 +3916,6 @@
 
     pwaToastInstallBtn.addEventListener('click', async () => {
       if (!deferredPrompt) {
-        // No native prompt — show instructions modal
         renderInstallGuide();
         showInstallGuide();
         hideInstallToast(false);
@@ -3583,7 +3974,6 @@
 
       box.className = 'install-status';
 
-      // 1. Already installed
       if (isStandalone()) {
         box.classList.add('is-installed');
         icon.textContent = '✅';
@@ -3594,7 +3984,6 @@
         return;
       }
 
-      // 2. In-app browser (WhatsApp, Instagram, etc.)
       if (isInAppBrowser()) {
         box.classList.add('is-unavailable');
         icon.textContent = '🌐';
@@ -3605,7 +3994,6 @@
         return;
       }
 
-      // 3. Not secure (HTTP without localhost) — installation not possible
       if (!isSecureContext()) {
         box.classList.add('is-unavailable');
         icon.textContent = '⚠️';
@@ -3616,7 +4004,6 @@
         return;
       }
 
-      // 4. Native prompt available
       if (deferredPrompt) {
         box.classList.add('is-ready');
         icon.textContent = '📲';
@@ -3627,7 +4014,6 @@
         return;
       }
 
-      // 5. iOS or unsupported browser — manual steps
       const ios = isIOSDevice();
       const android = isAndroidDevice();
       box.classList.add('is-unavailable');
@@ -3641,7 +4027,7 @@
     }
 
     // ============================================================
-    //  INSTALL GUIDE MODAL — shows step-by-step instructions
+    //  INSTALL GUIDE MODAL
     // ============================================================
     function renderInstallGuide() {
       const icon = document.getElementById('guideIcon');
@@ -3775,10 +4161,8 @@
       dismissInstallGuide();
     }
 
-    // Wire up the "Show Me How" button
     document.getElementById('installInstructionsBtn').addEventListener('click', showInstallGuide);
 
-    // Wire up the "Install App" button
     document.getElementById('installAppBtn').addEventListener('click', async function() {
       if (!deferredPrompt) {
         showInstallGuide();
@@ -3907,6 +4291,35 @@
     const csTotalContract = document.getElementById('csTotalContract');
     const csTotalPaid = document.getElementById('csTotalPaid');
     const csTotalOutstanding = document.getElementById('csTotalOutstanding');
+    const paymentPartyInfo = document.getElementById('paymentPartyInfo');
+
+    // HP CALCULATOR ELEMENTS
+    const toggleHpCalcBtn = document.getElementById('toggleHpCalcBtn');
+    const hpCalcPanel = document.getElementById('hpCalcPanel');
+    const hpModeToggle = document.getElementById('hpModeToggle');
+    const hpCashPrice = document.getElementById('hpCashPrice');
+    const hpDeposit = document.getElementById('hpDeposit');
+    const hpMarkupPercent = document.getElementById('hpMarkupPercent');
+    const hpTermMonths = document.getElementById('hpTermMonths');
+    const hpResFinanced = document.getElementById('hpResFinanced');
+    const hpResMarkup = document.getElementById('hpResMarkup');
+    const hpResTotal = document.getElementById('hpResTotal');
+    const hpResInstallment = document.getElementById('hpResInstallment');
+    const hpApplyBtn = document.getElementById('hpApplyBtn');
+    const hpResetBtn = document.getElementById('hpResetBtn');
+
+    // PARTY DETAILS ELEMENTS
+    const togglePartyDetailsBtn = document.getElementById('togglePartyDetailsBtn');
+    const partyDetailsPanel = document.getElementById('partyDetailsPanel');
+    const newCustomerName = document.getElementById('newCustomerName');
+    const newCustomerPhone = document.getElementById('newCustomerPhone');
+    const newCustomerAddress = document.getElementById('newCustomerAddress');
+    const newCustomerId = document.getElementById('newCustomerId');
+    const newGuarantorName = document.getElementById('newGuarantorName');
+    const newGuarantorPhone = document.getElementById('newGuarantorPhone');
+    const newGuarantorAddress = document.getElementById('newGuarantorAddress');
+    const newGuarantorRelationship = document.getElementById('newGuarantorRelationship');
+    const newGuarantorId = document.getElementById('newGuarantorId');
 
     let progressChart = null;
     const chartCanvas = document.getElementById('progressChart');
@@ -3918,6 +4331,7 @@
     let editRecordTarget = null;
     let fullscreenData = null;
     let customersActiveFilter = 'all';
+    let hpCalcMode = 'flat';
 
     const rafSchedule = (() => {
       let scheduled = new Map();
@@ -4025,6 +4439,45 @@
       };
     }
 
+    // ============================================================
+    //  PARTY / GUARANTOR HELPERS
+    // ============================================================
+    function getPartyData(ag) {
+      if (!ag || !ag.party) return { customer: {}, guarantor: {} };
+      return {
+        customer: ag.party.customer || {},
+        guarantor: ag.party.guarantor || {}
+      };
+    }
+
+    function hasPartyData(ag) {
+      if (!ag || !ag.party) return false;
+      const c = ag.party.customer || {};
+      const g = ag.party.guarantor || {};
+      return !!(c.name || c.phone || c.address || c.id ||
+                g.name || g.phone || g.address || g.relationship || g.id);
+    }
+
+    function buildContactBadges(ag, options) {
+      options = options || {};
+      const includeGuarantor = options.includeGuarantor !== false;
+      const { customer, guarantor } = getPartyData(ag);
+      let html = '';
+
+      if (customer.phone) {
+        html += '<a class="contact-badge phone" href="tel:' + escapeHtmlPlain(customer.phone) + '" onclick="event.stopPropagation()">📞 ' + escapeHtmlPlain(customer.phone) + '</a>';
+      }
+      if (includeGuarantor && guarantor.phone) {
+        const rel = guarantor.relationship ? ' (' + escapeHtmlPlain(guarantor.relationship) + ')' : '';
+        const label = guarantor.name ? escapeHtmlPlain(guarantor.name) + rel : 'Guarantor';
+        html += '<a class="contact-badge guarantor" href="tel:' + escapeHtmlPlain(guarantor.phone) + '" onclick="event.stopPropagation()">🛡️ ' + label + ': ' + escapeHtmlPlain(guarantor.phone) + '</a>';
+      }
+      return html;
+    }
+
+    // ============================================================
+    //  CRYPTO HELPERS
+    // ============================================================
     async function encryptData(data, password) {
       const encoder = new TextEncoder();
       const salt = crypto.getRandomValues(new Uint8Array(16));
@@ -4238,6 +4691,13 @@
         if (!agreements[id].schedule) agreements[id].schedule = { nextDueDate: '', installmentAmount: '', frequency: 'monthly' };
         if (!Array.isArray(agreements[id].records)) agreements[id].records = [];
         if (typeof agreements[id].totalHireAmount !== 'number') agreements[id].totalHireAmount = 0;
+        // Migrate old agreements without party data
+        if (!agreements[id].party) {
+          agreements[id].party = { customer: {}, guarantor: {} };
+        } else {
+          if (!agreements[id].party.customer) agreements[id].party.customer = {};
+          if (!agreements[id].party.guarantor) agreements[id].party.guarantor = {};
+        }
       }
       celebrationShown = {};
     }
@@ -4313,6 +4773,7 @@
       updatePreviewForCurrent(); updateChartForCurrent(); loadScheduleIntoForm();
       updateReminderDisplay(); refreshAllCurrencyDisplays();
       updateDashboardStats(); updateStickyHeader();
+      renderPaymentPartyInfo();
       closeSidebarIfMobile();
       setTimeout(() => { window.scrollTo({ top: 0, behavior: 'smooth' }); }, 50);
     }
@@ -4329,17 +4790,59 @@
         updateDashboardStats(); updateStickyHeader();
         updateRecoveryNudge();
         renderCustomers();
+        renderPaymentPartyInfo();
         showToast('Agreement deleted');
       });
     }
     function addNewAgreement() {
       newAgreementNameInput.value = '';
+      resetPartyDetailsForm();
+      hpResetCalculator();
+      hpCalcPanel.classList.remove('visible');
+      toggleHpCalcBtn.textContent = '🧮 Calculate HP Terms';
+      partyDetailsPanel.classList.remove('visible');
+      togglePartyDetailsBtn.textContent = '👤 Add Customer & Guarantor Details';
+      togglePartyDetailsBtn.classList.remove('has-data');
       newAgreementModal.classList.add('active');
+    }
+    function resetPartyDetailsForm() {
+      newCustomerName.value = '';
+      newCustomerPhone.value = '';
+      newCustomerAddress.value = '';
+      newCustomerId.value = '';
+      newGuarantorName.value = '';
+      newGuarantorPhone.value = '';
+      newGuarantorAddress.value = '';
+      newGuarantorRelationship.value = '';
+      newGuarantorId.value = '';
+    }
+    function collectPartyDetails() {
+      return {
+        customer: {
+          name: newCustomerName.value.trim(),
+          phone: newCustomerPhone.value.trim(),
+          address: newCustomerAddress.value.trim(),
+          id: newCustomerId.value.trim()
+        },
+        guarantor: {
+          name: newGuarantorName.value.trim(),
+          phone: newGuarantorPhone.value.trim(),
+          address: newGuarantorAddress.value.trim(),
+          relationship: newGuarantorRelationship.value.trim(),
+          id: newGuarantorId.value.trim()
+        }
+      };
     }
     function createNewAgreement() {
       const name = newAgreementNameInput.value.trim() || 'New Agreement';
       const id = Date.now().toString();
-      agreements[id] = { name, records: [], totalHireAmount: 0, schedule: { nextDueDate: '', installmentAmount: '', frequency: 'monthly' } };
+      agreements[id] = {
+        name,
+        records: [],
+        totalHireAmount: 0,
+        schedule: { nextDueDate: '', installmentAmount: '', frequency: 'monthly' },
+        party: collectPartyDetails()
+      };
       currentAgreementId = id;
       amountPaidInput.value = '';
       celebrationShown[id] = false;
@@ -4349,8 +4852,10 @@
       updateDashboardStats(); updateStickyHeader();
       updateRecoveryNudge();
       renderCustomers();
+      renderPaymentPartyInfo();
       newAgreementModal.classList.remove('active');
-      showToast(`"${name}" created`);
+      const hasParty = hasPartyData(agreements[id]);
+      showToast(hasParty ? `"${name}" created with customer & guarantor` : `"${name}" created`);
     }
     function updateStickyHeader() {
       if (currentAgreementId && agreements[currentAgreementId]) {
@@ -4376,6 +4881,44 @@
         document.getElementById('dashCurrentAgreement').textContent = 'No agreement selected';
       }
       updateRecoveryNudge();
+    }
+
+    function renderPaymentPartyInfo() {
+      if (!paymentPartyInfo) return;
+      if (!currentAgreementId || !agreements[currentAgreementId]) {
+        paymentPartyInfo.style.display = 'none';
+        paymentPartyInfo.innerHTML = '';
+        return;
+      }
+      const ag = agreements[currentAgreementId];
+      const { customer, guarantor } = getPartyData(ag);
+      const hasAny = customer.name || customer.phone || guarantor.name || guarantor.phone;
+      if (!hasAny) {
+        paymentPartyInfo.style.display = 'none';
+        paymentPartyInfo.innerHTML = '';
+        return;
+      }
+      let html = '<div style="background:var(--surface-2);border:1px solid var(--border);border-radius:var(--radius);padding:12px 14px;font-size:0.78rem;line-height:1.6;">';
+      if (customer.name || customer.phone) {
+        html += '<div style="display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-bottom:4px;">';
+        html += '<span style="font-weight:800;color:var(--primary);">👤 ' + escapeHtmlPlain(customer.name || 'Customer') + '</span>';
+        if (customer.phone) {
+          html += '<a class="contact-badge phone" href="tel:' + escapeHtmlPlain(customer.phone) + '" style="margin-left:auto;">📞 ' + escapeHtmlPlain(customer.phone) + '</a>';
+        }
+        html += '</div>';
+      }
+      if (guarantor.name || guarantor.phone) {
+        html += '<div style="display:flex;flex-wrap:wrap;gap:6px;align-items:center;padding-top:6px;border-top:1px dashed var(--divider);">';
+        const rel = guarantor.relationship ? ' (' + escapeHtmlPlain(guarantor.relationship) + ')' : '';
+        html += '<span style="font-weight:800;color:var(--accent);">🛡️ ' + escapeHtmlPlain(guarantor.name || 'Guarantor') + rel + '</span>';
+        if (guarantor.phone) {
+          html += '<a class="contact-badge guarantor" href="tel:' + escapeHtmlPlain(guarantor.phone) + '" style="margin-left:auto;">📞 ' + escapeHtmlPlain(guarantor.phone) + '</a>';
+        }
+        html += '</div>';
+      }
+      html += '</div>';
+      paymentPartyInfo.innerHTML = html;
+      paymentPartyInfo.style.display = 'block';
     }
 
     function renderCustomers() {
@@ -4405,6 +4948,7 @@
         const hire = ag.totalHireAmount || 0;
         const { totalPaid } = calcTotals(ag.records);
         const balance = hire - totalPaid;
+        const { customer, guarantor } = getPartyData(ag);
 
         let status = 'active';
         if (balance <= 0 && hire > 0) status = 'completed';
@@ -4420,6 +4964,11 @@
         rows.push({
           id,
           name: ag.name,
+          customerName: customer.name || '',
+          customerPhone: customer.phone || '',
+          guarantorName: guarantor.name || '',
+          guarantorPhone: guarantor.phone || '',
+          guarantorRelationship: guarantor.relationship || '',
           hire,
           paid: totalPaid,
           balance,
@@ -4434,7 +4983,13 @@
       }
 
       if (searchTerm) {
-        rows = rows.filter(r => r.name.toLowerCase().includes(searchTerm));
+        rows = rows.filter(r =>
+          r.name.toLowerCase().includes(searchTerm) ||
+          r.customerName.toLowerCase().includes(searchTerm) ||
+          r.customerPhone.toLowerCase().includes(searchTerm) ||
+          r.guarantorName.toLowerCase().includes(searchTerm) ||
+          r.guarantorPhone.toLowerCase().includes(searchTerm)
+        );
       }
 
       rows.sort((a, b) => {
@@ -4470,6 +5025,9 @@
         else if (r.balance <= 0) balanceClass += ' is-complete';
         else balanceClass += ' is-outstanding';
 
+        const ag = agreements[r.id];
+        const contactBadges = buildContactBadges(ag);
+
         html +=
           '<div class="' + rowClass + '" onclick="switchAgreement(\'' + r.id + '\')">' +
             '<div class="customer-info">' +
@@ -4479,6 +5037,7 @@
                 '<span class="meta-item">💵 Paid <strong>' + formatCurrency(r.paid) + '</strong></span>' +
                 (r.nextDueDate ? '<span class="meta-item">📅 Due <strong>' + r.nextDueDate + '</strong></span>' : '') +
               '</div>' +
+              (contactBadges ? '<div class="customer-meta" style="margin-top:6px;gap:6px;">' + contactBadges + '</div>' : '') +
             '</div>' +
             '<div class="customer-balance">' +
               '<div class="cb-label">Balance</div>' +
@@ -4538,6 +5097,7 @@
       renderHistoryTable(ag.records);
       updatePreviewForCurrent();
       updateChartForCurrent();
+      renderPaymentPartyInfo();
     }
     function renderHistoryTable(records) {
       const searchTerm = searchHistoryInput ? searchHistoryInput.value.toLowerCase().trim() : '';
@@ -4834,6 +5394,24 @@
       else if (diff <= 3) h += `<div class="reminder-warning">⏰ Due in ${diff} days!</div>`;
       else h += `<div>📅 Due in ${diff} days</div>`;
       h += `<div>💰 Remaining: ${formatCurrency(bal)}</div><div>🔄 Est. installments left: ${left}</div>`;
+
+      // Add contact row if customer or guarantor phone exists
+      const { customer, guarantor } = getPartyData(ag);
+      if (customer.phone || guarantor.phone) {
+        h += '<div class="reminder-contact-row">';
+        h += '<span class="rc-label">📞 Call when overdue</span>';
+        if (customer.phone) {
+          const custLabel = customer.name ? escapeHtmlPlain(customer.name) : 'Customer';
+          h += '<a class="contact-badge phone" href="tel:' + escapeHtmlPlain(customer.phone) + '">👤 ' + custLabel + ': ' + escapeHtmlPlain(customer.phone) + '</a>';
+        }
+        if (guarantor.phone) {
+          const rel = guarantor.relationship ? ' (' + escapeHtmlPlain(guarantor.relationship) + ')' : '';
+          const guarLabel = guarantor.name ? escapeHtmlPlain(guarantor.name) + rel : 'Guarantor';
+          h += '<a class="contact-badge guarantor" href="tel:' + escapeHtmlPlain(guarantor.phone) + '">🛡️ ' + guarLabel + ': ' + escapeHtmlPlain(guarantor.phone) + '</a>';
+        }
+        h += '</div>';
+      }
+
       reminderDisplay.innerHTML = h;
     }
 
@@ -4909,6 +5487,141 @@
       });
     }
 
+    // ============================================================
+    //  HP CALCULATOR LOGIC
+    // ============================================================
+    function hpCalculate() {
+      const cashPrice = parseFloat(hpCashPrice.value) || 0;
+      const deposit = parseFloat(hpDeposit.value) || 0;
+      const markupPercent = parseFloat(hpMarkupPercent.value) || 0;
+      const termMonths = parseInt(hpTermMonths.value) || 0;
+
+      const financed = Math.max(0, cashPrice - deposit);
+      const markupAmount = hpCalcMode === 'flat' ? financed * (markupPercent / 100) : 0;
+      const totalContract = cashPrice + markupAmount;
+      const installmentBase = Math.max(0, totalContract - deposit);
+      const installment = termMonths > 0 ? installmentBase / termMonths : 0;
+
+      hpResFinanced.textContent = formatCurrency(financed);
+      hpResMarkup.textContent = formatCurrency(markupAmount);
+      hpResTotal.textContent = formatCurrency(totalContract);
+      hpResInstallment.textContent = termMonths > 0 ? formatCurrency(installment) + ' /mo' : '—';
+
+      return { cashPrice, deposit, markupPercent, termMonths, financed, markupAmount, totalContract, installment };
+    }
+
+    function hpResetCalculator() {
+      hpCashPrice.value = '';
+      hpDeposit.value = '';
+      hpMarkupPercent.value = '';
+      hpTermMonths.value = '';
+      hpResFinanced.textContent = '—';
+      hpResMarkup.textContent = '—';
+      hpResTotal.textContent = '—';
+      hpResInstallment.textContent = '—';
+      hpCalcMode = 'flat';
+      hpModeToggle.querySelectorAll('.hp-mode-btn').forEach(b => {
+        b.classList.toggle('active', b.dataset.mode === 'flat');
+      });
+    }
+
+    function hpApplyFigures() {
+      const result = hpCalculate();
+      if (!result.totalContract || result.totalContract <= 0) {
+        showToast('Enter cash price and deposit first');
+        return;
+      }
+      const name = newAgreementNameInput.value.trim() || 'New Agreement';
+      const id = Date.now().toString();
+      agreements[id] = {
+        name,
+        records: [],
+        totalHireAmount: result.totalContract,
+        schedule: {
+          nextDueDate: '',
+          installmentAmount: result.installment || '',
+          frequency: 'monthly'
+        },
+        party: collectPartyDetails()
+      };
+      currentAgreementId = id;
+      amountPaidInput.value = '';
+      celebrationShown[id] = false;
+      saveAgreements();
+      renderAgreementsList();
+      loadCurrentAgreementData();
+      updatePreviewForCurrent();
+      updateChartForCurrent();
+      loadScheduleIntoForm();
+      updateReminderDisplay();
+      refreshAllCurrencyDisplays();
+      updateDashboardStats();
+      updateStickyHeader();
+      updateRecoveryNudge();
+      renderCustomers();
+      renderPaymentPartyInfo();
+      newAgreementModal.classList.remove('active');
+      showToast(`"${name}" created with HP terms`);
+    }
+
+    function bindHpCalculator() {
+      if (toggleHpCalcBtn) {
+        toggleHpCalcBtn.addEventListener('click', function() {
+          const isVisible = hpCalcPanel.classList.toggle('visible');
+          this.textContent = isVisible ? '🧮 Hide Calculator' : '🧮 Calculate HP Terms';
+          if (isVisible) hpCalculate();
+        });
+      }
+
+      if (hpModeToggle) {
+        hpModeToggle.addEventListener('click', function(e) {
+          const btn = e.target.closest('.hp-mode-btn');
+          if (!btn) return;
+          hpCalcMode = btn.dataset.mode;
+          hpModeToggle.querySelectorAll('.hp-mode-btn').forEach(b => {
+            b.classList.toggle('active', b.dataset.mode === hpCalcMode);
+          });
+          hpCalculate();
+        });
+      }
+
+      [hpCashPrice, hpDeposit, hpMarkupPercent, hpTermMonths].forEach(input => {
+        if (input) {
+          input.addEventListener('input', debounce(hpCalculate, 80), { passive: true });
+        }
+      });
+
+      if (hpApplyBtn) hpApplyBtn.addEventListener('click', hpApplyFigures);
+      if (hpResetBtn) hpResetBtn.addEventListener('click', hpResetCalculator);
+    }
+
+    // ============================================================
+    //  PARTY DETAILS TOGGLE
+    // ============================================================
+    function bindPartyDetails() {
+      if (togglePartyDetailsBtn) {
+        togglePartyDetailsBtn.addEventListener('click', function() {
+          const isVisible = partyDetailsPanel.classList.toggle('visible');
+          this.textContent = isVisible ? '👤 Hide Customer & Guarantor Details' : '👤 Add Customer & Guarantor Details';
+        });
+      }
+      // Live indicator if any party data is filled
+      [newCustomerName, newCustomerPhone, newCustomerAddress, newCustomerId,
+       newGuarantorName, newGuarantorPhone, newGuarantorAddress, newGuarantorRelationship, newGuarantorId].forEach(el => {
+        if (el) {
+          el.addEventListener('input', () => {
+            const data = collectPartyDetails();
+            const hasData = !!(data.customer.name || data.customer.phone || data.customer.address || data.customer.id ||
+                              data.guarantor.name || data.guarantor.phone || data.guarantor.address || data.guarantor.relationship || data.guarantor.id);
+            togglePartyDetailsBtn.classList.toggle('has-data', hasData);
+          }, { passive: true });
+        }
+      });
+    }
+
+    // ============================================================
+    //  PDF GENERATION
+    // ============================================================
     let pdfOverlayEl = null;
     let pdfProgressInterval = null;
     let pdfMessageInterval = null;
@@ -5124,7 +5837,37 @@
       }) : '';
     }
 
-    function buildPDF(records, mainTitle, period, agree, seller, buyer) {
+    function buildPartyBlock(ag) {
+      const { customer, guarantor } = getPartyData(ag);
+      const hasCustomer = customer.name || customer.phone || customer.address || customer.id;
+      const hasGuarantor = guarantor.name || guarantor.phone || guarantor.address || guarantor.relationship || guarantor.id;
+      if (!hasCustomer && !hasGuarantor) return '';
+
+      let html = '<div class="meta-grid" style="grid-template-columns:1fr 1fr;">';
+
+      // Customer block
+      html += '<div class="meta-block">' +
+                '<div class="ml">👤 Customer</div>' +
+                '<div class="mv name">' + escapeHtml(customer.name || '—') + '</div>' +
+                (customer.phone ? '<div class="mv" style="font-size:11px;color:#475569;margin-top:2px;">📞 ' + escapeHtml(customer.phone) + '</div>' : '') +
+                (customer.address ? '<div class="mv" style="font-size:10px;color:#64748b;margin-top:2px;">📍 ' + escapeHtml(customer.address) + '</div>' : '') +
+                (customer.id ? '<div class="mv" style="font-size:10px;color:#64748b;margin-top:2px;">🆔 ' + escapeHtml(customer.id) + '</div>' : '') +
+              '</div>';
+
+      // Guarantor block
+      html += '<div class="meta-block" style="background:rgba(245,158,11,0.06);border-color:rgba(245,158,11,0.3);">' +
+                '<div class="ml" style="color:#c2410c;">🛡️ Guarantor</div>' +
+                '<div class="mv name">' + escapeHtml(guarantor.name || '—') + (guarantor.relationship ? ' <span style="font-size:10px;color:#c2410c;font-weight:600;">(' + escapeHtml(guarantor.relationship) + ')</span>' : '') + '</div>' +
+                (guarantor.phone ? '<div class="mv" style="font-size:11px;color:#475569;margin-top:2px;">📞 ' + escapeHtml(guarantor.phone) + '</div>' : '') +
+                (guarantor.address ? '<div class="mv" style="font-size:10px;color:#64748b;margin-top:2px;">📍 ' + escapeHtml(guarantor.address) + '</div>' : '') +
+                (guarantor.id ? '<div class="mv" style="font-size:10px;color:#64748b;margin-top:2px;">🆔 ' + escapeHtml(guarantor.id) + '</div>' : '') +
+              '</div>';
+
+      html += '</div>';
+      return html;
+    }
+
+    function buildPDF(records, mainTitle, period, agree, seller, buyer, ag) {
       const sorted = [...records].sort((a, b) => new Date(a.date) - new Date(b.date));
       let run = 0;
       let rows = '';
@@ -5151,6 +5894,8 @@
         hour: '2-digit', minute: '2-digit'
       });
       const docId = 'PPL-' + now.getTime().toString(36).toUpperCase().slice(-8);
+
+      const partyBlock = ag ? buildPartyBlock(ag) : '';
 
       return '<!DOCTYPE html><html><head><meta charset="UTF-8"><title>PayPlan Ledger Report</title><style>' +
         '*{box-sizing:border-box;margin:0;padding:0}' +
@@ -5230,6 +5975,8 @@
             '</div>' +
           '</div>' +
 
+          partyBlock +
+
           '<div class="summary-row">' +
             '<div class="sum-card contract">' +
               '<div class="sum-label">Contract Amount</div>' +
@@ -5284,6 +6031,7 @@
         const hire = ag.totalHireAmount || 0;
         const { totalPaid } = calcTotals(ag.records);
         const balance = hire - totalPaid;
+        const { customer, guarantor } = getPartyData(ag);
         let status = 'Active';
         let statusClass = 'st-active';
         if (balance <= 0 && hire > 0) {
@@ -5300,15 +6048,26 @@
             }
           }
         }
-        rows.push({ name: ag.name, hire, paid: totalPaid, balance, status, statusClass });
+        rows.push({
+          name: ag.name,
+          customerName: customer.name || '',
+          customerPhone: customer.phone || '',
+          guarantorName: guarantor.name || '',
+          guarantorPhone: guarantor.phone || '',
+          hire, paid: totalPaid, balance, status, statusClass
+        });
       }
       rows.sort((a, b) => b.balance - a.balance);
 
       let bodyRows = '';
       for (const r of rows) {
+        let contactInfo = '';
+        if (r.customerPhone) contactInfo += '<div style="font-size:9px;color:#64748b;margin-top:2px;">👤 ' + escapeHtml(r.customerPhone) + '</div>';
+        if (r.guarantorPhone) contactInfo += '<div style="font-size:9px;color:#c2410c;margin-top:2px;">🛡️ ' + escapeHtml(r.guarantorName || 'Guarantor') + ': ' + escapeHtml(r.guarantorPhone) + '</div>';
+
         bodyRows +=
           '<tr>' +
-            '<td class="c-name">' + escapeHtml(r.name) + '</td>' +
+            '<td class="c-name">' + escapeHtml(r.name) + contactInfo + '</td>' +
             '<td class="c-num">' + formatCurrency(r.hire) + '</td>' +
             '<td class="c-num c-paid">' + formatCurrency(r.paid) + '</td>' +
             '<td class="c-num c-balance">' + formatCurrency(r.balance) + '</td>' +
@@ -5430,10 +6189,11 @@
       if (!currentAgreementId) { showToast('No agreement selected'); return; }
       const ag = agreements[currentAgreementId];
       const currentName = ag.name;
+      const { customer, guarantor } = getPartyData(ag);
       pdfReportTitle.value = localStorage.getItem('pmPdfTitle') || 'Payment Statement';
       agreementNameInput.value = localStorage.getItem('pmPrintAgreement') || currentName;
       sellerNameInput.value = localStorage.getItem('pmPrintSeller') || 'Seller';
-      buyerNameInput.value = localStorage.getItem('pmPrintBuyer') || 'Buyer';
+      buyerNameInput.value = localStorage.getItem('pmPrintBuyer') || (customer.name || 'Buyer');
       nameModal.classList.add('active');
       const yes = async () => {
         nameModal.classList.remove('active');
@@ -5450,7 +6210,7 @@
           saveAgreements(); renderAgreementsList(); updateStickyHeader();
           renderCustomers();
         }
-        await generatePDF(buildPDF(records, reportTitle, baseTitle, newAgreementName, seller, buyer), 'PayPlan_' + newAgreementName.replace(/[^a-z0-9]/gi, '_') + '.pdf');
+        await generatePDF(buildPDF(records, reportTitle, baseTitle, newAgreementName, seller, buyer, ag), 'PayPlan_' + newAgreementName.replace(/[^a-z0-9]/gi, '_') + '.pdf');
         cl();
       };
       const no = () => { nameModal.classList.remove('active'); cl(); };
@@ -5564,12 +6324,19 @@
             localStorage.setItem('pmTheme', backup.theme || 'dark');
             celebrationShown = {};
             amountPaidInput.value = '';
+            // Ensure all agreements have party structure
+            for (const id in agreements) {
+              if (!agreements[id].party) agreements[id].party = { customer: {}, guarantor: {} };
+              if (!agreements[id].party.customer) agreements[id].party.customer = {};
+              if (!agreements[id].party.guarantor) agreements[id].party.guarantor = {};
+            }
             saveAgreements(); renderAgreementsList(); loadCurrentAgreementData();
             updatePreviewForCurrent(); updateChartForCurrent(); loadScheduleIntoForm();
             updateReminderDisplay(); refreshAllCurrencyDisplays();
             updateDashboardStats(); updateStickyHeader();
             updateRecoveryNudge();
             renderCustomers();
+            renderPaymentPartyInfo();
             welcomeModal.classList.remove('active');
             showToast('✅ Data restored');
           });
@@ -5636,6 +6403,7 @@
         updateRecoveryNudge();
         updateInstallStatusUI();
         renderCustomers();
+        renderPaymentPartyInfo();
       }, 100);
     }
     function toggleLockEye() {
@@ -5821,6 +6589,9 @@
       if (sectionId === 'customers') {
         renderCustomers();
       }
+      if (sectionId === 'payment') {
+        renderPaymentPartyInfo();
+      }
 
       closeSidebarIfMobile();
 
@@ -5887,7 +6658,7 @@
 
       document.getElementById('welcomeStartFresh').addEventListener('click', () => {
         const id = Date.now().toString();
-        agreements = { [id]: { name: 'My First Agreement', records: [], totalHireAmount: 0, schedule: { nextDueDate: '', installmentAmount: '', frequency: 'monthly' } } };
+        agreements = { [id]: { name: 'My First Agreement', records: [], totalHireAmount: 0, schedule: { nextDueDate: '', installmentAmount: '', frequency: 'monthly' }, party: { customer: {}, guarantor: {} } } };
         currentAgreementId = id;
         amountPaidInput.value = '';
         celebrationShown = {};
@@ -5896,6 +6667,7 @@
         updateReminderDisplay(); refreshAllCurrencyDisplays();
         updateDashboardStats(); updateStickyHeader();
         renderCustomers();
+        renderPaymentPartyInfo();
         welcomeModal.classList.remove('active');
         showToast('Welcome! Start by adding a payment.');
       });
@@ -5954,6 +6726,8 @@
       });
 
       initCustomerEvents();
+      bindHpCalculator();
+      bindPartyDetails();
     }
 
     function initMainApp() {
@@ -5974,6 +6748,7 @@
       updateRecoveryNudge();
       updateInstallStatusUI();
       renderCustomers();
+      renderPaymentPartyInfo();
 
       if (Object.keys(agreements).length === 0) welcomeModal.classList.add('active');
 
