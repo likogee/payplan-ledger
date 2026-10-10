@@ -52,6 +52,15 @@
       box-sizing: border-box;
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
       -webkit-tap-highlight-color: transparent;
+      -webkit-user-select: none;
+      user-select: none;
+      -webkit-touch-callout: none;
+    }
+
+    input, select, textarea {
+      -webkit-user-select: text;
+      user-select: text;
+      -webkit-touch-callout: default;
     }
 
     :root {
@@ -139,7 +148,6 @@
       transition: background 0.3s ease, color 0.3s ease;
     }
 
-    input, select, textarea { user-select: auto; -webkit-user-select: text; }
     ::selection { background: var(--primary); color: white; }
 
     .ambient-glow {
@@ -287,8 +295,15 @@
       transition: var(--transition-spring);
       box-shadow: var(--shadow-primary);
       flex-shrink: 0;
+      overflow: hidden;
     }
     .app-sidebar .logo:hover { transform: scale(1.08) rotate(-3deg); }
+    .app-sidebar .logo .logo-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: inherit;
+    }
 
     .sidebar-close-btn {
       position: absolute;
@@ -445,8 +460,8 @@
       top: 0;
       z-index: 100;
       background: var(--bg);
-      padding: 8px 0 16px;
-      margin: -8px 0 16px;
+      padding: 8px 0 14px;
+      margin: -8px 0 14px;
       border-bottom: 1px solid var(--divider);
     }
     .sticky-header .top-bar {
@@ -454,18 +469,18 @@
       align-items: center;
       justify-content: space-between;
       flex-wrap: wrap;
-      gap: 10px;
+      gap: 8px;
     }
     .sticky-header .greeting {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
       transition: padding-left 0.35s;
       min-width: 0;
       flex: 1;
     }
     .sticky-header .greeting h1 {
-      font-size: 1.15rem;
+      font-size: 1.05rem;
       font-weight: 800;
       color: var(--text);
       letter-spacing: -0.02em;
@@ -484,18 +499,39 @@
       flex-shrink: 0;
     }
     .sticky-header .greeting .app-logo-sm {
-      font-size: 1.3rem;
-      width: 38px;
-      height: 38px;
+      font-size: 1.15rem;
+      width: 34px;
+      height: 34px;
       background: var(--primary-gradient);
-      border-radius: 11px;
+      border-radius: 10px;
       display: flex;
       align-items: center;
       justify-content: center;
       box-shadow: var(--shadow-primary);
       flex-shrink: 0;
       color: white;
+      overflow: hidden;
     }
+    .sticky-header .greeting .app-logo-sm .logo-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: inherit;
+    }
+    #headerBusinessName {
+      font-weight: 800;
+      color: var(--text);
+      font-size: 1rem;
+      letter-spacing: -0.02em;
+      max-width: 100%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      display: none;
+    }
+    body.has-business #headerBusinessName { display: inline-block; }
+    body.has-business #headerBrandText { display: none; }
+
     #headerAgreementName {
       font-weight: 600;
       color: var(--text-2);
@@ -504,7 +540,7 @@
       padding: 0 4px;
       transition: var(--transition);
       display: inline-block;
-      font-size: 0.95rem;
+      font-size: 0.9rem;
       max-width: 100%;
       overflow: hidden;
       text-overflow: ellipsis;
@@ -978,6 +1014,54 @@
     button.pdf-btn {
       background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
       box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+    }
+
+    /* BUSINESS LOGO UPLOAD */
+    .logo-upload-row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 12px 0;
+      margin-bottom: 6px;
+    }
+    .logo-preview {
+      width: 64px;
+      height: 64px;
+      border-radius: 16px;
+      background: var(--primary-gradient);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.8rem;
+      color: white;
+      flex-shrink: 0;
+      box-shadow: var(--shadow-primary);
+      overflow: hidden;
+      border: 2px solid var(--border);
+    }
+    .logo-preview .logo-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .logo-upload-actions {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .logo-upload-actions button {
+      width: auto;
+      margin-top: 0;
+      padding: 9px 14px;
+      font-size: 0.75rem;
+      border-radius: var(--radius-full);
+      justify-content: flex-start;
+    }
+    .logo-upload-hint {
+      font-size: 0.68rem;
+      color: var(--text-3);
+      line-height: 1.5;
     }
 
     .agreement-item {
@@ -1565,6 +1649,132 @@
       color: var(--text-3);
       line-height: 1.5;
     }
+
+    /* TODAY'S COLLECTIONS CARD */
+    .today-collections-card {
+      background: linear-gradient(135deg, var(--primary-gradient));
+      border-radius: var(--radius-lg);
+      padding: 20px 22px;
+      margin-bottom: 16px;
+      color: #ffffff !important;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 12px 32px rgba(16, 185, 129, 0.35);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+    }
+    .today-collections-card * {
+      color: #ffffff !important;
+    }
+    .today-collections-card::before {
+      content: '';
+      position: absolute;
+      top: -50%; right: -30%;
+      width: 70%; height: 200%;
+      background: radial-gradient(circle, rgba(255, 255, 255, 0.15), transparent 60%);
+      pointer-events: none;
+    }
+    .today-collections-card.has-overdue {
+      background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+      box-shadow: 0 12px 32px rgba(239, 68, 68, 0.4);
+    }
+    .today-collections-card.all-clear {
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    }
+    .tc-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+      position: relative;
+      z-index: 1;
+    }
+    .tc-title {
+      font-size: 0.72rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      opacity: 0.95;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .tc-date {
+      font-size: 0.68rem;
+      font-weight: 600;
+      opacity: 0.9;
+    }
+    .tc-main {
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+      margin-bottom: 8px;
+      position: relative;
+      z-index: 1;
+    }
+    .tc-count {
+      font-size: 2.4rem;
+      font-weight: 900;
+      letter-spacing: -0.04em;
+      line-height: 1;
+      font-variant-numeric: tabular-nums;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    }
+    .tc-label {
+      font-size: 0.82rem;
+      font-weight: 700;
+      opacity: 0.95;
+      line-height: 1.3;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    }
+    .tc-sub {
+      font-size: 0.78rem;
+      font-weight: 600;
+      opacity: 0.95;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      position: relative;
+      z-index: 1;
+    }
+    .tc-sub .tc-chip {
+      background: rgba(255, 255, 255, 0.25);
+      padding: 3px 10px;
+      border-radius: var(--radius-full);
+      font-weight: 800;
+      font-size: 0.72rem;
+      backdrop-filter: blur(4px);
+    }
+    .tc-sub .tc-chip.overdue-chip {
+      background: rgba(255, 255, 255, 0.35);
+      animation: pulseChip 1.8s ease-in-out infinite;
+    }
+    @keyframes pulseChip {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.7; }
+    }
+    .tc-action {
+      margin-top: 14px;
+      background: rgba(255, 255, 255, 0.98);
+      color: #059669 !important;
+      padding: 11px 16px;
+      border-radius: var(--radius-full);
+      font-size: 0.82rem;
+      font-weight: 800;
+      border: none;
+      width: auto;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      position: relative;
+      z-index: 1;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      transition: transform 0.15s;
+      font-family: inherit;
+    }
+    .today-collections-card.has-overdue .tc-action { color: #dc2626 !important; }
+    .tc-action:hover { transform: translateY(-2px); }
 
     /* HP CALCULATOR STYLES */
     .hp-calc-panel {
@@ -2461,6 +2671,123 @@
       to { opacity: 1; transform: translateY(0) scale(1); }
     }
 
+    /* STARTUP REMINDER TOAST */
+    .startup-nudge {
+      position: fixed;
+      left: 12px;
+      right: 12px;
+      top: 12px;
+      z-index: 40000;
+      background: linear-gradient(180deg, rgba(19, 26, 44, 0.98) 0%, rgba(13, 18, 32, 0.98) 100%);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 20px;
+      padding: 14px 16px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+      color: #f1f5f9;
+      display: none;
+      align-items: flex-start;
+      gap: 12px;
+      max-width: 460px;
+      margin: 0 auto;
+      animation: nudgeIn 0.5s cubic-bezier(0.34, 1.4, 0.64, 1);
+    }
+    .startup-nudge.visible { display: flex; }
+    .startup-nudge.hiding { animation: nudgeOut 0.35s ease forwards; }
+    @keyframes nudgeIn { from { transform: translateY(-120%); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+    @keyframes nudgeOut { to { transform: translateY(-120%); opacity: 0; } }
+
+    .startup-nudge .sn-icon {
+      width: 42px;
+      height: 42px;
+      background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+      border-radius: 13px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+      flex-shrink: 0;
+      box-shadow: 0 8px 20px rgba(245, 158, 11, 0.35);
+    }
+    .startup-nudge.is-urgent .sn-icon {
+      background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+      box-shadow: 0 8px 20px rgba(239, 68, 68, 0.4);
+      animation: urgentPulse 1.6s ease-in-out infinite;
+    }
+    @keyframes urgentPulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.06); }
+    }
+    .startup-nudge .sn-body { flex: 1; min-width: 0; }
+    .startup-nudge .sn-title {
+      font-size: 0.88rem;
+      font-weight: 800;
+      letter-spacing: -0.01em;
+      margin-bottom: 3px;
+      color: #f1f5f9;
+    }
+    .startup-nudge .sn-desc {
+      font-size: 0.76rem;
+      color: #94a3b8;
+      line-height: 1.5;
+      margin-bottom: 8px;
+    }
+    .startup-nudge.is-urgent .sn-desc { color: #fca5a5; }
+    .startup-nudge .sn-actions {
+      display: flex;
+      gap: 6px;
+    }
+    .startup-nudge .sn-actions button {
+      padding: 7px 14px;
+      border-radius: var(--radius-full);
+      border: none;
+      font-family: inherit;
+      font-weight: 800;
+      font-size: 0.72rem;
+      cursor: pointer;
+      width: auto;
+      margin: 0;
+      min-height: 30px;
+      transition: transform 0.15s, background 0.2s;
+    }
+    .startup-nudge .sn-actions button::before { display: none; }
+    .startup-nudge .sn-view {
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+      color: white;
+      box-shadow: 0 4px 10px rgba(16, 185, 129, 0.35);
+    }
+    .startup-nudge.is-urgent .sn-view {
+      background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+      box-shadow: 0 4px 10px rgba(239, 68, 68, 0.35);
+    }
+    .startup-nudge .sn-dismiss {
+      background: rgba(255, 255, 255, 0.06);
+      color: #94a3b8;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .startup-nudge .sn-dismiss:hover {
+      background: rgba(255, 255, 255, 0.12);
+      color: #f1f5f9;
+    }
+    .startup-nudge .sn-close {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      width: 26px;
+      height: 26px;
+      border-radius: 8px;
+      background: transparent;
+      border: none;
+      color: #64748b;
+      font-size: 0.85rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: inherit;
+      outline: none;
+    }
+    .startup-nudge .sn-close:hover { background: rgba(255, 255, 255, 0.06); color: #f1f5f9; }
+
     .pdf-overlay {
       position: fixed;
       inset: 0;
@@ -2660,6 +2987,13 @@
       animation: loaderPulse 1.6s ease-in-out infinite;
       box-shadow: 0 20px 60px rgba(16, 185, 129, 0.5);
       margin-bottom: 18px;
+      overflow: hidden;
+    }
+    .app-loader .logo-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: inherit;
     }
     @keyframes loaderPulse {
       0%, 100% { transform: scale(1); box-shadow: 0 20px 60px rgba(16, 185, 129, 0.5); }
@@ -2694,6 +3028,8 @@
       max-height: 180px;
       overflow-y: auto;
       line-height: 1.6;
+      -webkit-user-select: text;
+      user-select: text;
     }
     .recovery-code-box span {
       background: var(--bg-elevated);
@@ -2749,6 +3085,12 @@
       color: white;
       margin-bottom: 12px;
       box-shadow: var(--shadow-primary);
+      overflow: hidden;
+    }
+    .about-logo .logo-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
     }
     .about-title {
       font-size: 1.3rem;
@@ -2826,14 +3168,15 @@
       }
       body.sidebar-closed .main-content { padding-left: 16px; }
 
-      .sticky-header { padding: 6px 0 14px; }
-      .sticky-header .greeting h1 { font-size: 1rem; }
+      .sticky-header { padding: 6px 0 12px; margin: -6px 0 12px; }
+      .sticky-header .greeting h1 { font-size: 0.98rem; }
       .sticky-header .greeting .app-logo-sm {
-        width: 34px;
-        height: 34px;
-        font-size: 1.15rem;
+        width: 32px;
+        height: 32px;
+        font-size: 1.05rem;
       }
-      #headerAgreementName { font-size: 0.88rem; }
+      #headerAgreementName { font-size: 0.85rem; }
+      #headerBusinessName { font-size: 0.95rem; }
 
       .card {
         padding: 1.15rem 1.15rem 1.25rem;
@@ -2890,6 +3233,12 @@
       .hp-calc-row .hp-field { min-width: 100%; }
 
       .party-field-grid { grid-template-columns: 1fr; }
+
+      .today-collections-card { padding: 16px 18px; }
+      .tc-count { font-size: 2rem; }
+      .tc-label { font-size: 0.78rem; }
+      .tc-sub { font-size: 0.72rem; }
+      .tc-sub .tc-chip { font-size: 0.66rem; padding: 2px 8px; }
     }
 
     @media (max-width: 400px) {
@@ -2921,6 +3270,9 @@
         left: 10px;
       }
       body.sidebar-closed .sticky-header .greeting { padding-left: 52px; }
+
+      .startup-nudge .sn-actions { flex-direction: column; }
+      .startup-nudge .sn-actions button { width: 100%; }
     }
 
     @media (min-width: 641px) and (max-width: 900px) {
@@ -2961,7 +3313,7 @@
   <div class="ambient-glow"></div>
 
   <div class="pwa-install-toast" id="pwaInstallToast">
-    <div class="pwa-toast-icon">💼</div>
+    <div class="pwa-toast-icon" id="pwaToastIcon">💼</div>
     <div class="pwa-toast-body">
       <div class="pwa-toast-title">Install PayPlan Ledger</div>
       <div class="pwa-toast-sub" id="pwaToastSub">Full-screen app, works offline</div>
@@ -2997,8 +3349,8 @@
 
   <div id="loaderOverlay" class="loader-overlay">
     <div class="loader-spinner">
-      <div class="app-loader">💼</div>
-      <div class="loader-text">PayPlan Ledger</div>
+      <div class="app-loader" id="appLoaderIcon">💼</div>
+      <div class="loader-text" id="loaderAppName">PayPlan Ledger</div>
       <div class="loader-sub">Loading your data...</div>
     </div>
   </div>
@@ -3010,10 +3362,10 @@
     <div class="lock-content">
 
       <div class="lock-hero">
-        <div class="lock-logo">
+        <div class="lock-logo" id="lockLogoIcon">
           <span class="lock-icon-svg" id="lockIconSvg">🔒</span>
         </div>
-        <div class="lock-app-name">PayPlan Ledger</div>
+        <div class="lock-app-name" id="lockAppName">PayPlan Ledger</div>
         <div class="lock-app-sub" id="lockSubtitle">Hire Purchase Tracker</div>
       </div>
 
@@ -3298,7 +3650,7 @@
         </div>
         <div class="hp-calc-row">
           <div class="hp-field">
-            <label>Markup %</label>
+            <label>Interest Rate % <span id="hpRateLabel" style="font-weight:500;text-transform:none;letter-spacing:0;">(of financed)</span></label>
             <input type="number" id="hpMarkupPercent" step="any" placeholder="0">
           </div>
           <div class="hp-field">
@@ -3308,7 +3660,7 @@
         </div>
         <div class="hp-calc-results" id="hpCalcResults">
           <div class="hp-result-row"><span>Financed</span><strong id="hpResFinanced">—</strong></div>
-          <div class="hp-result-row"><span>Markup Amount</span><strong id="hpResMarkup" class="hp-accent">—</strong></div>
+          <div class="hp-result-row"><span id="hpMarkupLabel">Markup Amount</span><strong id="hpResMarkup" class="hp-accent">—</strong></div>
           <div class="hp-result-row"><span>Total Contract</span><strong id="hpResTotal" class="hp-hi">—</strong></div>
           <div class="hp-result-row"><span>Installment</span><strong id="hpResInstallment" class="hp-hi">—</strong></div>
         </div>
@@ -3369,7 +3721,7 @@
 
     <nav class="app-sidebar" id="appSidebar">
       <button class="sidebar-close-btn" onclick="toggleSidebar()" aria-label="Close menu">✕</button>
-      <div class="logo" onclick="switchSection('dashboard')">💼</div>
+      <div class="logo" id="sidebarLogo" onclick="switchSection('dashboard')">💼</div>
       <div class="nav-icons">
         <button class="active" data-section="dashboard" onclick="switchSection('dashboard')">
           <span class="nav-icon-emoji">📊</span>
@@ -3410,13 +3762,30 @@
       <div class="sticky-header">
         <div class="top-bar">
           <div class="greeting">
-            <span class="app-logo-sm">💼</span>
-            <h1><span class="highlight">PayPlan Ledger</span> <span id="headerAgreementName">— Select</span></h1>
+            <span class="app-logo-sm" id="headerLogoIcon">💼</span>
+            <h1>
+              <span id="headerBusinessName">My Business</span>
+              <span id="headerBrandText"><span class="highlight">PayPlan Ledger</span></span>
+              <span id="headerAgreementName">— Select</span>
+            </h1>
           </div>
         </div>
       </div>
 
       <div class="section active" id="section-dashboard">
+        <div class="today-collections-card" id="todayCollectionsCard">
+          <div class="tc-header">
+            <div class="tc-title"><span>📅</span> Today's Collections</div>
+            <div class="tc-date" id="tcDate">—</div>
+          </div>
+          <div class="tc-main">
+            <div class="tc-count" id="tcCount">0</div>
+            <div class="tc-label" id="tcLabel">payments<br>due today</div>
+          </div>
+          <div class="tc-sub" id="tcSub"></div>
+          <button class="tc-action" id="tcAction" style="display:none;">View customers →</button>
+        </div>
+
         <div class="card" id="card-dashboard-overview">
           <div class="card-header">
             <h2><span class="card-icon">📈</span> Overview</h2>
@@ -3674,6 +4043,51 @@
 
       <div class="section" id="section-settings">
 
+        <div class="card" id="card-settings-business">
+          <div class="card-header">
+            <h2><span class="card-icon">🏢</span> Business Identity</h2>
+            <div class="header-actions">
+              <button class="expand-btn" onclick="openFullscreen('card-settings-business','Business Identity')">⛶</button>
+              <span class="toggle-icon" onclick="event.stopPropagation();this.closest('.card').classList.toggle('collapsed')">▼</span>
+            </div>
+          </div>
+          <div class="card-body">
+            <p style="font-size:0.8rem;color:var(--text-2);margin-bottom:12px;line-height:1.6;">
+              Add your logo and business name. They appear in the header, sidebar, and on every PDF you generate.
+            </p>
+
+            <div class="logo-upload-row">
+              <div class="logo-preview" id="businessLogoPreview">💼</div>
+              <div class="logo-upload-actions">
+                <button type="button" id="uploadLogoBtn" class="outline small-btn">🖼️ Upload Logo</button>
+                <button type="button" id="removeLogoBtn" class="outline small-btn" style="display:none;">🗑️ Remove Logo</button>
+                <div class="logo-upload-hint">PNG or JPG. Square works best. Stored on this device only.</div>
+              </div>
+            </div>
+            <input type="file" id="logoFileInput" accept="image/*" style="display:none;">
+
+            <div class="form-group">
+              <label>🏢 Business Name</label>
+              <input type="text" id="businessNameInput" placeholder="e.g. Mensah Motors, Kumasi" maxlength="60">
+            </div>
+            <div class="row-2col">
+              <div class="form-group">
+                <label>📞 Business Phone</label>
+                <input type="tel" id="businessPhoneInput" placeholder="e.g. 024 123 4567">
+              </div>
+              <div class="form-group">
+                <label>📧 Business Email</label>
+                <input type="email" id="businessEmailInput" placeholder="e.g. info@mensahmotors.com">
+              </div>
+            </div>
+            <div class="form-group">
+              <label>📍 Business Address</label>
+              <input type="text" id="businessAddressInput" placeholder="e.g. Adum, Kumasi" maxlength="100">
+            </div>
+            <button id="saveBusinessInfoBtn" class="outline small-btn" style="width:auto;">💾 Save Business Info</button>
+          </div>
+        </div>
+
         <div class="card" id="card-settings-install">
           <div class="card-header">
             <h2><span class="card-icon">📲</span> Install App</h2>
@@ -3698,9 +4112,9 @@
         </div>
 
         <div class="about-card">
-          <div class="about-logo">💼</div>
-          <div class="about-title">PayPlan Ledger</div>
-          <div class="about-version">Version 15.3 • Single-User License</div>
+          <div class="about-logo" id="aboutLogoIcon">💼</div>
+          <div class="about-title" id="aboutTitle">PayPlan Ledger</div>
+          <div class="about-version">Version 15.6 • Single-User License</div>
           <div class="about-license-badge">✓ Offline-First</div>
           <p class="about-tagline">All your data stays on your device. No cloud, no subscriptions, no tracking.</p>
           <div class="about-features">
@@ -3714,6 +4128,8 @@
             <div class="about-feature"><span class="feat-icon">✈️</span> Works fully offline</div>
             <div class="about-feature"><span class="feat-icon">🧮</span> HP calculator</div>
             <div class="about-feature"><span class="feat-icon">🛡️</span> Guarantor tracking</div>
+            <div class="about-feature"><span class="feat-icon">🏢</span> Your brand & logo</div>
+            <div class="about-feature"><span class="feat-icon">📅</span> Daily collections</div>
           </div>
         </div>
 
@@ -3822,7 +4238,7 @@
         </div>
       </div>
 
-      <footer>PAYPLAN LEDGER v15.3 • OFFLINE-FIRST • ALL DATA STORED LOCALLY</footer>
+      <footer>PAYPLAN LEDGER v15.6 • OFFLINE-FIRST • ALL DATA STORED LOCALLY</footer>
     </div>
   </div>
 
@@ -4195,6 +4611,13 @@
     const addAgreementBtn = document.getElementById('addAgreementBtn');
     const currentAgreementNameDisplay = document.getElementById('currentAgreementNameDisplay');
     const headerAgreementName = document.getElementById('headerAgreementName');
+    const headerBusinessName = document.getElementById('headerBusinessName');
+    const headerLogoIcon = document.getElementById('headerLogoIcon');
+    const sidebarLogo = document.getElementById('sidebarLogo');
+    const appLoaderIcon = document.getElementById('appLoaderIcon');
+    const loaderAppName = document.getElementById('loaderAppName');
+    const aboutLogoIcon = document.getElementById('aboutLogoIcon');
+    const aboutTitle = document.getElementById('aboutTitle');
     const dateInput = document.getElementById('workDate');
     const totalHireAmountInput = document.getElementById('totalHireAmount');
     const amountPaidInput = document.getElementById('amountPaid');
@@ -4293,6 +4716,25 @@
     const csTotalOutstanding = document.getElementById('csTotalOutstanding');
     const paymentPartyInfo = document.getElementById('paymentPartyInfo');
 
+    // BUSINESS IDENTITY ELEMENTS
+    const businessNameInput = document.getElementById('businessNameInput');
+    const businessPhoneInput = document.getElementById('businessPhoneInput');
+    const businessEmailInput = document.getElementById('businessEmailInput');
+    const businessAddressInput = document.getElementById('businessAddressInput');
+    const saveBusinessInfoBtn = document.getElementById('saveBusinessInfoBtn');
+    const businessLogoPreview = document.getElementById('businessLogoPreview');
+    const uploadLogoBtn = document.getElementById('uploadLogoBtn');
+    const removeLogoBtn = document.getElementById('removeLogoBtn');
+    const logoFileInput = document.getElementById('logoFileInput');
+
+    // TODAY'S COLLECTIONS ELEMENTS
+    const todayCollectionsCard = document.getElementById('todayCollectionsCard');
+    const tcDate = document.getElementById('tcDate');
+    const tcCount = document.getElementById('tcCount');
+    const tcLabel = document.getElementById('tcLabel');
+    const tcSub = document.getElementById('tcSub');
+    const tcAction = document.getElementById('tcAction');
+
     // HP CALCULATOR ELEMENTS
     const toggleHpCalcBtn = document.getElementById('toggleHpCalcBtn');
     const hpCalcPanel = document.getElementById('hpCalcPanel');
@@ -4307,6 +4749,8 @@
     const hpResInstallment = document.getElementById('hpResInstallment');
     const hpApplyBtn = document.getElementById('hpApplyBtn');
     const hpResetBtn = document.getElementById('hpResetBtn');
+    const hpRateLabel = document.getElementById('hpRateLabel');
+    const hpMarkupLabel = document.getElementById('hpMarkupLabel');
 
     // PARTY DETAILS ELEMENTS
     const togglePartyDetailsBtn = document.getElementById('togglePartyDetailsBtn');
@@ -4332,6 +4776,8 @@
     let fullscreenData = null;
     let customersActiveFilter = 'all';
     let hpCalcMode = 'flat';
+    let businessInfo = { name: '', phone: '', email: '', address: '', logo: '' };
+    let startupNudgeEl = null;
 
     const rafSchedule = (() => {
       let scheduled = new Map();
@@ -4440,6 +4886,375 @@
     }
 
     // ============================================================
+    //  BUSINESS INFO & LOGO
+    // ============================================================
+    function loadBusinessInfo() {
+      try {
+        const raw = localStorage.getItem('pmBusinessInfo');
+        if (raw) businessInfo = JSON.parse(raw);
+      } catch (e) { businessInfo = { name: '', phone: '', email: '', address: '', logo: '' }; }
+      if (!businessInfo) businessInfo = { name: '', phone: '', email: '', address: '', logo: '' };
+      if (!businessInfo.logo) businessInfo.logo = '';
+
+      if (businessNameInput) businessNameInput.value = businessInfo.name || '';
+      if (businessPhoneInput) businessPhoneInput.value = businessInfo.phone || '';
+      if (businessEmailInput) businessEmailInput.value = businessInfo.email || '';
+      if (businessAddressInput) businessAddressInput.value = businessInfo.address || '';
+
+      updateBusinessNameDisplay();
+      updateLogoDisplays();
+    }
+
+    function saveBusinessInfo() {
+      businessInfo.name = (businessNameInput.value || '').trim();
+      businessInfo.phone = (businessPhoneInput.value || '').trim();
+      businessInfo.email = (businessEmailInput.value || '').trim();
+      businessInfo.address = (businessAddressInput.value || '').trim();
+      localStorage.setItem('pmBusinessInfo', JSON.stringify(businessInfo));
+      updateBusinessNameDisplay();
+      updateLogoDisplays();
+      showToast(businessInfo.name ? '💾 Business info saved' : 'Business info saved');
+    }
+
+    function updateBusinessNameDisplay() {
+      if (businessInfo.name) {
+        if (headerBusinessName) headerBusinessName.textContent = businessInfo.name;
+        document.body.classList.add('has-business');
+      } else {
+        document.body.classList.remove('has-business');
+      }
+    }
+
+    function updateLogoDisplays() {
+      const logo = businessInfo.logo || '';
+
+      // Header logo icon
+      if (headerLogoIcon) {
+        if (logo) {
+          headerLogoIcon.innerHTML = '<img class="logo-img" src="' + logo + '" alt="Logo">';
+        } else {
+          headerLogoIcon.innerHTML = '💼';
+        }
+      }
+
+      // Sidebar logo
+      if (sidebarLogo) {
+        if (logo) {
+          sidebarLogo.innerHTML = '<img class="logo-img" src="' + logo + '" alt="Logo">';
+        } else {
+          sidebarLogo.innerHTML = '💼';
+        }
+      }
+
+      // Loader icon
+      if (appLoaderIcon) {
+        if (logo) {
+          appLoaderIcon.innerHTML = '<img class="logo-img" src="' + logo + '" alt="Logo">';
+        } else {
+          appLoaderIcon.innerHTML = '💼';
+        }
+      }
+
+      // Loader app name
+      if (loaderAppName) {
+        loaderAppName.textContent = businessInfo.name || 'PayPlan Ledger';
+      }
+
+      // About card logo
+      if (aboutLogoIcon) {
+        if (logo) {
+          aboutLogoIcon.innerHTML = '<img class="logo-img" src="' + logo + '" alt="Logo">';
+        } else {
+          aboutLogoIcon.innerHTML = '💼';
+        }
+      }
+
+      // About card title
+      if (aboutTitle) {
+        aboutTitle.textContent = businessInfo.name || 'PayPlan Ledger';
+      }
+
+      // Business logo preview in Settings
+      if (businessLogoPreview) {
+        if (logo) {
+          businessLogoPreview.innerHTML = '<img class="logo-img" src="' + logo + '" alt="Logo">';
+        } else {
+          businessLogoPreview.innerHTML = '💼';
+        }
+      }
+
+      // Remove logo button visibility
+      if (removeLogoBtn) {
+        removeLogoBtn.style.display = logo ? 'inline-flex' : 'none';
+      }
+
+      // PWA install toast icon
+      const pwaToastIcon = document.getElementById('pwaToastIcon');
+      if (pwaToastIcon) {
+        if (logo) {
+          pwaToastIcon.innerHTML = '<img class="logo-img" src="' + logo + '" alt="Logo" style="width:100%;height:100%;object-fit:cover;border-radius:inherit;">';
+        } else {
+          pwaToastIcon.innerHTML = '💼';
+        }
+      }
+
+      // Lock screen hero logo (only if not currently unlocking)
+      const lockLogoIcon = document.getElementById('lockLogoIcon');
+      const lockIconSvg = document.getElementById('lockIconSvg');
+      if (lockLogoIcon && lockIconSvg && !lockIconSvg.classList.contains('unlocking')) {
+        if (logo) {
+          lockLogoIcon.innerHTML = '<img class="logo-img" src="' + logo + '" alt="Logo" style="width:100%;height:100%;object-fit:cover;border-radius:inherit;">';
+        } else {
+          lockLogoIcon.innerHTML = '<span class="lock-icon-svg" id="lockIconSvg">🔒</span>';
+        }
+      }
+
+      // Lock screen app name
+      const lockAppName = document.getElementById('lockAppName');
+      if (lockAppName) {
+        lockAppName.textContent = businessInfo.name || 'PayPlan Ledger';
+      }
+    }
+
+    function handleLogoUpload(file) {
+      if (!file) return;
+      if (!file.type.startsWith('image/')) {
+        showToast('Please select an image file');
+        return;
+      }
+      // Limit to 2MB before base64 (base64 expands ~33%)
+      if (file.size > 2 * 1024 * 1024) {
+        showToast('Image too large (max 2MB)');
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        // Resize using canvas to keep localStorage small
+        const img = new Image();
+        img.onload = function() {
+          const maxSize = 256;
+          let w = img.width, h = img.height;
+          if (w > h) {
+            if (w > maxSize) { h = Math.round(h * maxSize / w); w = maxSize; }
+          } else {
+            if (h > maxSize) { w = Math.round(w * maxSize / h); h = maxSize; }
+          }
+          const canvas = document.createElement('canvas');
+          canvas.width = w;
+          canvas.height = h;
+          const ctx = canvas.getContext('2d');
+          // White background so PNG transparency doesn't turn black
+          ctx.fillStyle = '#ffffff';
+          ctx.fillRect(0, 0, w, h);
+          ctx.drawImage(img, 0, 0, w, h);
+          const dataUrl = canvas.toDataURL('image/jpeg', 0.85);
+          businessInfo.logo = dataUrl;
+          try {
+            localStorage.setItem('pmBusinessInfo', JSON.stringify(businessInfo));
+            updateLogoDisplays();
+            showToast('✅ Logo uploaded');
+          } catch (err) {
+            showToast('Storage full — try a smaller image');
+          }
+        };
+        img.onerror = function() { showToast('Could not read image'); };
+        img.src = e.target.result;
+      };
+      reader.onerror = function() { showToast('Could not read file'); };
+      reader.readAsDataURL(file);
+    }
+
+    function handleRemoveLogo() {
+      showConfirm('Remove your business logo?', (ok) => {
+        if (!ok) return;
+        businessInfo.logo = '';
+        try { localStorage.setItem('pmBusinessInfo', JSON.stringify(businessInfo)); } catch (e) {}
+        updateLogoDisplays();
+        showToast('Logo removed');
+      });
+    }
+
+    // ============================================================
+    //  TODAY'S COLLECTIONS
+    // ============================================================
+    function calcTodayCollections() {
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+
+      let dueToday = [];
+      let overdue = [];
+      let dueThisWeek = [];
+
+      for (const id in agreements) {
+        const ag = agreements[id];
+        const s = ag.schedule;
+        if (!s || !s.nextDueDate) continue;
+        const hire = ag.totalHireAmount || 0;
+        const { totalPaid } = calcTotals(ag.records);
+        const balance = hire - totalPaid;
+        if (balance <= 0) continue;
+
+        const due = new Date(s.nextDueDate);
+        due.setHours(0, 0, 0, 0);
+        const diffDays = Math.round((due - today) / 86400000);
+
+        const item = {
+          id,
+          name: ag.name,
+          amount: s.installmentAmount || 0,
+          dueDate: s.nextDueDate,
+          diffDays,
+          balance
+        };
+
+        if (diffDays < 0) overdue.push(item);
+        else if (diffDays === 0) dueToday.push(item);
+        else if (diffDays <= 7) dueThisWeek.push(item);
+      }
+
+      overdue.sort((a, b) => a.diffDays - b.diffDays);
+      dueToday.sort((a, b) => b.amount - a.amount);
+      dueThisWeek.sort((a, b) => a.diffDays - b.diffDays);
+
+      return { dueToday, overdue, dueThisWeek };
+    }
+
+    function updateTodayCollections() {
+      if (!todayCollectionsCard) return;
+      const { dueToday, overdue, dueThisWeek } = calcTodayCollections();
+
+      const now = new Date();
+      const dateStr = now.toLocaleDateString('en-US', { weekday: 'short', day: 'numeric', month: 'short' });
+      tcDate.textContent = dateStr;
+
+      const totalCount = dueToday.length + overdue.length;
+      tcCount.textContent = totalCount;
+
+      if (totalCount === 0 && dueThisWeek.length === 0) {
+        todayCollectionsCard.classList.remove('has-overdue');
+        todayCollectionsCard.classList.add('all-clear');
+        tcLabel.innerHTML = 'all clear<br>today';
+        tcSub.innerHTML = '<span class="tc-chip">✅ No payments due</span>' +
+          (Object.keys(agreements).length > 0 ? '<span>Keep it up!</span>' : '');
+        tcAction.style.display = 'none';
+      } else if (totalCount === 0) {
+        todayCollectionsCard.classList.remove('has-overdue');
+        todayCollectionsCard.classList.add('all-clear');
+        tcLabel.innerHTML = 'due<br>today';
+        tcSub.innerHTML = '<span class="tc-chip">' + dueThisWeek.length + ' due this week</span>';
+        tcAction.style.display = 'none';
+      } else {
+        if (overdue.length > 0) {
+          todayCollectionsCard.classList.add('has-overdue');
+          todayCollectionsCard.classList.remove('all-clear');
+        } else {
+          todayCollectionsCard.classList.remove('has-overdue');
+          todayCollectionsCard.classList.add('all-clear');
+        }
+        tcLabel.innerHTML = totalCount === 1 ? 'payment<br>to collect' : 'payments<br>to collect';
+
+        let subHtml = '';
+        if (overdue.length > 0) {
+          subHtml += '<span class="tc-chip overdue-chip">⚠️ ' + overdue.length + ' overdue</span>';
+        }
+        if (dueToday.length > 0) {
+          subHtml += '<span class="tc-chip">📅 ' + dueToday.length + ' due today</span>';
+        }
+        if (dueThisWeek.length > 0) {
+          subHtml += '<span class="tc-chip">🔜 ' + dueThisWeek.length + ' this week</span>';
+        }
+        tcSub.innerHTML = subHtml;
+
+        tcAction.style.display = 'inline-flex';
+        tcAction.textContent = 'View customers →';
+      }
+    }
+
+    // ============================================================
+    //  STARTUP NUDGE (daily reminder)
+    // ============================================================
+    function checkStartupNudge() {
+      if (Object.keys(agreements).length === 0) return;
+      const today = new Date().toISOString().slice(0, 10);
+      const lastShown = localStorage.getItem('pmLastNudgeDate');
+      if (lastShown === today) return;
+
+      const { dueToday, overdue } = calcTodayCollections();
+      const total = dueToday.length + overdue.length;
+      if (total === 0) {
+        localStorage.setItem('pmLastNudgeDate', today);
+        return;
+      }
+
+      localStorage.setItem('pmLastNudgeDate', today);
+
+      const isUrgent = overdue.length > 0;
+      const icon = isUrgent ? '⚠️' : '📅';
+      const title = isUrgent
+        ? overdue.length + ' overdue payment' + (overdue.length === 1 ? '' : 's')
+        : dueToday.length + ' payment' + (dueToday.length === 1 ? '' : 's') + ' due today';
+
+      let desc = '';
+      if (isUrgent && dueToday.length > 0) {
+        desc = overdue.length + ' customer' + (overdue.length === 1 ? '' : 's') + ' past due, plus ' + dueToday.length + ' due today.';
+      } else if (isUrgent) {
+        const first = overdue[0];
+        desc = 'Oldest: ' + first.name + ' (' + Math.abs(first.diffDays) + ' day' + (Math.abs(first.diffDays) === 1 ? '' : 's') + ' late)';
+      } else {
+        const first = dueToday[0];
+        desc = first ? ('Starting with ' + first.name + ' — ' + formatCurrency(first.amount)) : 'Tap to see who to call today.';
+      }
+
+      showStartupNudge({ icon, title, desc, isUrgent, total });
+    }
+
+    function showStartupNudge(data) {
+      if (startupNudgeEl) {
+        startupNudgeEl.remove();
+        startupNudgeEl = null;
+      }
+
+      const el = document.createElement('div');
+      el.className = 'startup-nudge' + (data.isUrgent ? ' is-urgent' : '');
+      el.innerHTML =
+        '<button class="sn-close" aria-label="Dismiss">✕</button>' +
+        '<div class="sn-icon">' + data.icon + '</div>' +
+        '<div class="sn-body">' +
+          '<div class="sn-title">' + escapeHtmlPlain(data.title) + '</div>' +
+          '<div class="sn-desc">' + escapeHtmlPlain(data.desc) + '</div>' +
+          '<div class="sn-actions">' +
+            '<button class="sn-view">View customers</button>' +
+            '<button class="sn-dismiss">Later</button>' +
+          '</div>' +
+        '</div>';
+
+      document.body.appendChild(el);
+      startupNudgeEl = el;
+
+      requestAnimationFrame(() => el.classList.add('visible'));
+
+      const dismiss = () => {
+        el.classList.add('hiding');
+        setTimeout(() => {
+          if (el.parentNode) el.parentNode.removeChild(el);
+          if (startupNudgeEl === el) startupNudgeEl = null;
+        }, 400);
+      };
+
+      el.querySelector('.sn-close').addEventListener('click', dismiss);
+      el.querySelector('.sn-dismiss').addEventListener('click', dismiss);
+      el.querySelector('.sn-view').addEventListener('click', () => {
+        dismiss();
+        switchSection('customers');
+      });
+
+      setTimeout(() => {
+        if (startupNudgeEl === el) dismiss();
+      }, 14000);
+    }
+
+    // ============================================================
     //  PARTY / GUARANTOR HELPERS
     // ============================================================
     function getPartyData(ag) {
@@ -4505,7 +5320,7 @@
     }
 
     async function generateRecoveryCode(password) {
-      const data = { a: agreements, c: currentAgreementId, s: currentCurrencySymbol, t: document.body.classList.contains('dark') ? 'd' : 'l' };
+      const data = { a: agreements, c: currentAgreementId, s: currentCurrencySymbol, t: document.body.classList.contains('dark') ? 'd' : 'l', b: businessInfo };
       try { return 'PMR2:' + await encryptData(data, password); }
       catch (e) { showToast('Error: ' + e.message); return null; }
     }
@@ -4518,11 +5333,11 @@
         if (version === 'PMR1') {
           const data = JSON.parse(decodeURIComponent(escape(atob(encoded))));
           if (!data.a) throw new Error('Invalid data');
-          return { agreements: data.a, currentAgreementId: data.c, currencySymbol: data.s || '$', theme: data.t === 'd' ? 'dark' : 'light' };
+          return { agreements: data.a, currentAgreementId: data.c, currencySymbol: data.s || '$', theme: data.t === 'd' ? 'dark' : 'light', businessInfo: data.b || null };
         } else if (version === 'PMR2') {
           const data = await decryptData(encoded, password);
           if (!data.a) throw new Error('Invalid data');
-          return { agreements: data.a, currentAgreementId: data.c, currencySymbol: data.s || '$', theme: data.t === 'd' ? 'dark' : 'light' };
+          return { agreements: data.a, currentAgreementId: data.c, currencySymbol: data.s || '$', theme: data.t === 'd' ? 'dark' : 'light', businessInfo: data.b || null };
         } else throw new Error('Unsupported version');
       } catch (e) { throw new Error('Invalid recovery code: ' + e.message); }
     }
@@ -4569,12 +5384,24 @@
           currentAgreementId = data.currentAgreementId || Object.keys(agreements)[0];
           currentCurrencySymbol = data.currencySymbol || '$';
           if (data.theme) { document.body.classList.toggle('dark', data.theme === 'dark'); localStorage.setItem('pmTheme', data.theme); }
+          if (data.businessInfo) {
+            businessInfo = data.businessInfo;
+            if (!businessInfo.logo) businessInfo.logo = '';
+            localStorage.setItem('pmBusinessInfo', JSON.stringify(businessInfo));
+            if (businessNameInput) businessNameInput.value = businessInfo.name || '';
+            if (businessPhoneInput) businessPhoneInput.value = businessInfo.phone || '';
+            if (businessEmailInput) businessEmailInput.value = businessInfo.email || '';
+            if (businessAddressInput) businessAddressInput.value = businessInfo.address || '';
+            updateBusinessNameDisplay();
+            updateLogoDisplays();
+          }
           celebrationShown = {};
           amountPaidInput.value = '';
           saveAgreements(); renderAgreementsList(); loadCurrentAgreementData();
           updatePreviewForCurrent(); updateChartForCurrent(); loadScheduleIntoForm();
           updateReminderDisplay(); refreshAllCurrencyDisplays();
           updateDashboardStats(); updateStickyHeader();
+          updateTodayCollections();
           renderCustomers();
           document.getElementById('recoveryModal').classList.remove('active');
           showToast('✅ Data restored!');
@@ -4691,7 +5518,6 @@
         if (!agreements[id].schedule) agreements[id].schedule = { nextDueDate: '', installmentAmount: '', frequency: 'monthly' };
         if (!Array.isArray(agreements[id].records)) agreements[id].records = [];
         if (typeof agreements[id].totalHireAmount !== 'number') agreements[id].totalHireAmount = 0;
-        // Migrate old agreements without party data
         if (!agreements[id].party) {
           agreements[id].party = { customer: {}, guarantor: {} };
         } else {
@@ -4789,6 +5615,7 @@
         updateReminderDisplay(); refreshAllCurrencyDisplays();
         updateDashboardStats(); updateStickyHeader();
         updateRecoveryNudge();
+        updateTodayCollections();
         renderCustomers();
         renderPaymentPartyInfo();
         showToast('Agreement deleted');
@@ -4851,6 +5678,7 @@
       updateReminderDisplay(); refreshAllCurrencyDisplays();
       updateDashboardStats(); updateStickyHeader();
       updateRecoveryNudge();
+      updateTodayCollections();
       renderCustomers();
       renderPaymentPartyInfo();
       newAgreementModal.classList.remove('active');
@@ -4881,6 +5709,7 @@
         document.getElementById('dashCurrentAgreement').textContent = 'No agreement selected';
       }
       updateRecoveryNudge();
+      updateTodayCollections();
     }
 
     function renderPaymentPartyInfo() {
@@ -5147,6 +5976,7 @@
       saveAgreements(); renderHistoryTable(agreements[currentAgreementId].records);
       updatePreviewForCurrent(); updateChartForCurrent(); updateReminderDisplay();
       refreshAllCurrencyDisplays(); updateDashboardStats();
+      updateTodayCollections();
       renderCustomers();
       showToast('Record deleted');
     }
@@ -5221,6 +6051,7 @@
         saveAgreements(); renderHistoryTable(ag.records);
         updatePreviewForCurrent(); updateChartForCurrent(); updateReminderDisplay();
         refreshAllCurrencyDisplays();
+        updateTodayCollections();
         renderCustomers();
         showToast('✅ Record updated');
       }
@@ -5371,6 +6202,7 @@
       agreements[currentAgreementId].schedule = { nextDueDate: nd, installmentAmount: ia, frequency: frequencySelect.value };
       saveAgreements(); updateReminderDisplay();
       renderCustomers();
+      updateTodayCollections();
       showToast('Schedule saved');
     }
     function updateReminderDisplay() {
@@ -5395,7 +6227,6 @@
       else h += `<div>📅 Due in ${diff} days</div>`;
       h += `<div>💰 Remaining: ${formatCurrency(bal)}</div><div>🔄 Est. installments left: ${left}</div>`;
 
-      // Add contact row if customer or guarantor phone exists
       const { customer, guarantor } = getPartyData(ag);
       if (customer.phone || guarantor.phone) {
         h += '<div class="reminder-contact-row">';
@@ -5469,6 +6300,7 @@
       amountPaidInput.value = '';
       updatePreviewForCurrent(); updateChartForCurrent(); updateReminderDisplay();
       refreshAllCurrencyDisplays(); updateDashboardStats();
+      updateTodayCollections();
       renderCustomers();
       showToast(`✅ Saved — ${formatCurrency(paid)} on ${date}`);
       if (navigator.vibrate) navigator.vibrate(20);
@@ -5482,6 +6314,7 @@
         saveAgreements(); renderHistoryTable([]);
         updatePreviewForCurrent(); updateChartForCurrent(); updateReminderDisplay();
         refreshAllCurrencyDisplays(); updateDashboardStats();
+        updateTodayCollections();
         renderCustomers();
         showToast('History cleared');
       });
@@ -5490,24 +6323,79 @@
     // ============================================================
     //  HP CALCULATOR LOGIC
     // ============================================================
-    function hpCalculate() {
-      const cashPrice = parseFloat(hpCashPrice.value) || 0;
-      const deposit = parseFloat(hpDeposit.value) || 0;
-      const markupPercent = parseFloat(hpMarkupPercent.value) || 0;
-      const termMonths = parseInt(hpTermMonths.value) || 0;
-
+    function hpCalculateFlat(cashPrice, deposit, markupPercent, termMonths) {
       const financed = Math.max(0, cashPrice - deposit);
-      const markupAmount = hpCalcMode === 'flat' ? financed * (markupPercent / 100) : 0;
+      const markupAmount = financed * (markupPercent / 100);
       const totalContract = cashPrice + markupAmount;
       const installmentBase = Math.max(0, totalContract - deposit);
       const installment = termMonths > 0 ? installmentBase / termMonths : 0;
+      return { financed, markupAmount, totalContract, installment };
+    }
 
-      hpResFinanced.textContent = formatCurrency(financed);
-      hpResMarkup.textContent = formatCurrency(markupAmount);
-      hpResTotal.textContent = formatCurrency(totalContract);
-      hpResInstallment.textContent = termMonths > 0 ? formatCurrency(installment) + ' /mo' : '—';
+    function hpCalculateReducing(cashPrice, deposit, annualRatePercent, termMonths) {
+      const principal = Math.max(0, cashPrice - deposit);
+      if (principal <= 0 || termMonths <= 0) {
+        return {
+          financed: principal,
+          markupAmount: 0,
+          totalContract: cashPrice,
+          installment: 0
+        };
+      }
+      const monthlyRate = (annualRatePercent / 100) / 12;
+      let installment;
+      if (monthlyRate === 0) {
+        installment = principal / termMonths;
+      } else {
+        const factor = Math.pow(1 + monthlyRate, termMonths);
+        installment = principal * (monthlyRate * factor) / (factor - 1);
+      }
+      const totalRepaid = installment * termMonths;
+      const markupAmount = totalRepaid - principal;
+      const totalContract = cashPrice + markupAmount;
+      return {
+        financed: principal,
+        markupAmount: markupAmount,
+        totalContract: totalContract,
+        installment: installment
+      };
+    }
 
-      return { cashPrice, deposit, markupPercent, termMonths, financed, markupAmount, totalContract, installment };
+    function hpCalculate() {
+      const cashPrice = parseFloat(hpCashPrice.value) || 0;
+      const deposit = parseFloat(hpDeposit.value) || 0;
+      const rateInput = parseFloat(hpMarkupPercent.value) || 0;
+      const termMonths = parseInt(hpTermMonths.value) || 0;
+
+      let result;
+      if (hpCalcMode === 'flat') {
+        result = hpCalculateFlat(cashPrice, deposit, rateInput, termMonths);
+      } else {
+        result = hpCalculateReducing(cashPrice, deposit, rateInput, termMonths);
+      }
+
+      hpResFinanced.textContent = formatCurrency(result.financed);
+      hpResMarkup.textContent = formatCurrency(result.markupAmount);
+      hpResTotal.textContent = formatCurrency(result.totalContract);
+      hpResInstallment.textContent = termMonths > 0 ? formatCurrency(result.installment) + ' /mo' : '—';
+
+      return {
+        cashPrice, deposit, rateInput, termMonths,
+        financed: result.financed,
+        markupAmount: result.markupAmount,
+        totalContract: result.totalContract,
+        installment: result.installment
+      };
+    }
+
+    function hpUpdateModeUI() {
+      if (hpCalcMode === 'flat') {
+        if (hpRateLabel) hpRateLabel.textContent = '(of financed)';
+        if (hpMarkupLabel) hpMarkupLabel.textContent = 'Markup Amount';
+      } else {
+        if (hpRateLabel) hpRateLabel.textContent = '(per year)';
+        if (hpMarkupLabel) hpMarkupLabel.textContent = 'Interest Amount';
+      }
     }
 
     function hpResetCalculator() {
@@ -5523,6 +6411,7 @@
       hpModeToggle.querySelectorAll('.hp-mode-btn').forEach(b => {
         b.classList.toggle('active', b.dataset.mode === 'flat');
       });
+      hpUpdateModeUI();
     }
 
     function hpApplyFigures() {
@@ -5558,10 +6447,12 @@
       updateDashboardStats();
       updateStickyHeader();
       updateRecoveryNudge();
+      updateTodayCollections();
       renderCustomers();
       renderPaymentPartyInfo();
       newAgreementModal.classList.remove('active');
-      showToast(`"${name}" created with HP terms`);
+      const modeLabel = hpCalcMode === 'flat' ? 'flat markup' : 'reducing balance';
+      showToast(`"${name}" created with ${modeLabel} terms`);
     }
 
     function bindHpCalculator() {
@@ -5581,6 +6472,7 @@
           hpModeToggle.querySelectorAll('.hp-mode-btn').forEach(b => {
             b.classList.toggle('active', b.dataset.mode === hpCalcMode);
           });
+          hpUpdateModeUI();
           hpCalculate();
         });
       }
@@ -5605,7 +6497,6 @@
           this.textContent = isVisible ? '👤 Hide Customer & Guarantor Details' : '👤 Add Customer & Guarantor Details';
         });
       }
-      // Live indicator if any party data is filled
       [newCustomerName, newCustomerPhone, newCustomerAddress, newCustomerId,
        newGuarantorName, newGuarantorPhone, newGuarantorAddress, newGuarantorRelationship, newGuarantorId].forEach(el => {
         if (el) {
@@ -5617,6 +6508,29 @@
           }, { passive: true });
         }
       });
+    }
+
+    // ============================================================
+    //  LOGO / BUSINESS SETTINGS BINDINGS
+    // ============================================================
+    function bindBusinessSettings() {
+      if (uploadLogoBtn && logoFileInput) {
+        uploadLogoBtn.addEventListener('click', function() {
+          logoFileInput.click();
+        });
+        logoFileInput.addEventListener('change', function(e) {
+          if (e.target.files && e.target.files[0]) {
+            handleLogoUpload(e.target.files[0]);
+            e.target.value = '';
+          }
+        });
+      }
+      if (removeLogoBtn) {
+        removeLogoBtn.addEventListener('click', handleRemoveLogo);
+      }
+      if (saveBusinessInfoBtn) {
+        saveBusinessInfoBtn.addEventListener('click', saveBusinessInfo);
+      }
     }
 
     // ============================================================
@@ -5845,7 +6759,6 @@
 
       let html = '<div class="meta-grid" style="grid-template-columns:1fr 1fr;">';
 
-      // Customer block
       html += '<div class="meta-block">' +
                 '<div class="ml">👤 Customer</div>' +
                 '<div class="mv name">' + escapeHtml(customer.name || '—') + '</div>' +
@@ -5854,7 +6767,6 @@
                 (customer.id ? '<div class="mv" style="font-size:10px;color:#64748b;margin-top:2px;">🆔 ' + escapeHtml(customer.id) + '</div>' : '') +
               '</div>';
 
-      // Guarantor block
       html += '<div class="meta-block" style="background:rgba(245,158,11,0.06);border-color:rgba(245,158,11,0.3);">' +
                 '<div class="ml" style="color:#c2410c;">🛡️ Guarantor</div>' +
                 '<div class="mv name">' + escapeHtml(guarantor.name || '—') + (guarantor.relationship ? ' <span style="font-size:10px;color:#c2410c;font-weight:600;">(' + escapeHtml(guarantor.relationship) + ')</span>' : '') + '</div>' +
@@ -5897,17 +6809,24 @@
 
       const partyBlock = ag ? buildPartyBlock(ag) : '';
 
-      return '<!DOCTYPE html><html><head><meta charset="UTF-8"><title>PayPlan Ledger Report</title><style>' +
+      const brandName = businessInfo.name ? businessInfo.name : 'PayPlan Ledger';
+      const brandSub = 'Payment Statement';
+      const logoImg = businessInfo.logo
+        ? '<img src="' + businessInfo.logo + '" alt="Logo" style="width:44px;height:44px;border-radius:12px;object-fit:cover;box-shadow:0 6px 16px rgba(16,185,129,0.35);flex-shrink:0;">'
+        : '<div class="brand-icon">💼</div>';
+
+      return '<!DOCTYPE html><html><head><meta charset="UTF-8"><title>' + escapeHtml(brandName) + ' — ' + escapeHtml(mainTitle) + '</title><style>' +
         '*{box-sizing:border-box;margin:0;padding:0}' +
         'body{font-family:-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:#fff;color:#0f172a;padding:0;width:794px}' +
         '.page{padding:56px 56px 48px;background:#fff;min-height:1123px;position:relative}' +
-        '.header{display:flex;align-items:center;justify-content:space-between;padding-bottom:18px;border-bottom:2px solid #10b981;margin-bottom:24px}' +
-        '.brand{display:flex;align-items:center;gap:12px}' +
-        '.brand-icon{width:44px;height:44px;background:linear-gradient(135deg,#10b981 0%,#059669 100%);border-radius:12px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:22px;box-shadow:0 6px 16px rgba(16,185,129,0.35)}' +
-        '.brand-text{line-height:1.2}' +
-        '.brand-name{font-size:15px;font-weight:900;color:#0f172a;letter-spacing:-0.02em}' +
+        '.header{display:flex;align-items:center;justify-content:space-between;padding-bottom:18px;border-bottom:2px solid #10b981;margin-bottom:24px;gap:16px}' +
+        '.brand{display:flex;align-items:center;gap:12px;flex:1;min-width:0}' +
+        '.brand-icon{width:44px;height:44px;background:linear-gradient(135deg,#10b981 0%,#059669 100%);border-radius:12px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:22px;box-shadow:0 6px 16px rgba(16,185,129,0.35);flex-shrink:0}' +
+        '.brand-text{line-height:1.3;min-width:0}' +
+        '.brand-name{font-size:15px;font-weight:900;color:#0f172a;letter-spacing:-0.02em;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}' +
         '.brand-sub{font-size:10px;font-weight:700;color:#10b981;letter-spacing:0.14em;text-transform:uppercase;margin-top:2px}' +
-        '.doc-meta{text-align:right;font-size:10px;color:#64748b;line-height:1.6}' +
+        '.brand-contact{font-size:9px;color:#64748b;font-weight:600;margin-top:2px;line-height:1.4}' +
+        '.doc-meta{text-align:right;font-size:10px;color:#64748b;line-height:1.6;flex-shrink:0}' +
         '.doc-meta .id{font-family:"Courier New",monospace;color:#0f172a;font-weight:800;letter-spacing:0.02em}' +
         '.doc-title{font-size:26px;font-weight:900;color:#0f172a;letter-spacing:-0.03em;margin-bottom:4px}' +
         '.doc-sub{font-size:12px;color:#64748b;font-weight:600;margin-bottom:20px}' +
@@ -5949,10 +6868,17 @@
 
           '<div class="header">' +
             '<div class="brand">' +
-              '<div class="brand-icon">💼</div>' +
+              logoImg +
               '<div class="brand-text">' +
-                '<div class="brand-name">PayPlan Ledger</div>' +
-                '<div class="brand-sub">Payment Statement</div>' +
+                '<div class="brand-name">' + escapeHtml(brandName) + '</div>' +
+                '<div class="brand-sub">' + escapeHtml(brandSub) + '</div>' +
+                (businessInfo.phone || businessInfo.email || businessInfo.address ?
+                  '<div class="brand-contact">' +
+                    [businessInfo.phone ? '📞 ' + escapeHtml(businessInfo.phone) : '',
+                     businessInfo.email ? '📧 ' + escapeHtml(businessInfo.email) : '',
+                     businessInfo.address ? '📍 ' + escapeHtml(businessInfo.address) : '']
+                     .filter(Boolean).join(' &nbsp;·&nbsp; ') +
+                  '</div>' : '') +
               '</div>' +
             '</div>' +
             '<div class="doc-meta">' +
@@ -6009,7 +6935,7 @@
           ) +
 
           '<div class="footer">' +
-            '<span><span class="brand-mark">PayPlan Ledger</span> · Offline-First Tracker</span>' +
+            '<span><span class="brand-mark">' + escapeHtml(businessInfo.name || 'PayPlan Ledger') + '</span> · Powered by PayPlan Ledger</span>' +
             '<span>' + records.length + ' record' + (records.length === 1 ? '' : 's') + ' · Page 1</span>' +
           '</div>' +
 
@@ -6075,17 +7001,23 @@
           '</tr>';
       }
 
-      return '<!DOCTYPE html><html><head><meta charset="UTF-8"><title>PayPlan Ledger — Portfolio</title><style>' +
+      const brandName = businessInfo.name ? businessInfo.name : 'PayPlan Ledger';
+      const logoImg = businessInfo.logo
+        ? '<img src="' + businessInfo.logo + '" alt="Logo" style="width:44px;height:44px;border-radius:12px;object-fit:cover;box-shadow:0 6px 16px rgba(16,185,129,0.35);flex-shrink:0;">'
+        : '<div class="brand-icon">💼</div>';
+
+      return '<!DOCTYPE html><html><head><meta charset="UTF-8"><title>' + escapeHtml(brandName) + ' — Portfolio</title><style>' +
         '*{box-sizing:border-box;margin:0;padding:0}' +
         'body{font-family:-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:#fff;color:#0f172a;padding:0;width:794px}' +
         '.page{padding:56px 56px 48px;background:#fff;min-height:1123px;position:relative}' +
-        '.header{display:flex;align-items:center;justify-content:space-between;padding-bottom:18px;border-bottom:2px solid #10b981;margin-bottom:24px}' +
-        '.brand{display:flex;align-items:center;gap:12px}' +
-        '.brand-icon{width:44px;height:44px;background:linear-gradient(135deg,#10b981 0%,#059669 100%);border-radius:12px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:22px;box-shadow:0 6px 16px rgba(16,185,129,0.35)}' +
-        '.brand-text{line-height:1.2}' +
-        '.brand-name{font-size:15px;font-weight:900;color:#0f172a;letter-spacing:-0.02em}' +
+        '.header{display:flex;align-items:center;justify-content:space-between;padding-bottom:18px;border-bottom:2px solid #10b981;margin-bottom:24px;gap:16px}' +
+        '.brand{display:flex;align-items:center;gap:12px;flex:1;min-width:0}' +
+        '.brand-icon{width:44px;height:44px;background:linear-gradient(135deg,#10b981 0%,#059669 100%);border-radius:12px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:22px;box-shadow:0 6px 16px rgba(16,185,129,0.35);flex-shrink:0}' +
+        '.brand-text{line-height:1.3;min-width:0}' +
+        '.brand-name{font-size:15px;font-weight:900;color:#0f172a;letter-spacing:-0.02em;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}' +
         '.brand-sub{font-size:10px;font-weight:700;color:#10b981;letter-spacing:0.14em;text-transform:uppercase;margin-top:2px}' +
-        '.doc-meta{text-align:right;font-size:10px;color:#64748b;line-height:1.6}' +
+        '.brand-contact{font-size:9px;color:#64748b;font-weight:600;margin-top:2px;line-height:1.4}' +
+        '.doc-meta{text-align:right;font-size:10px;color:#64748b;line-height:1.6;flex-shrink:0}' +
         '.doc-meta .id{font-family:"Courier New",monospace;color:#0f172a;font-weight:800;letter-spacing:0.02em}' +
         '.doc-title{font-size:26px;font-weight:900;color:#0f172a;letter-spacing:-0.03em;margin-bottom:4px}' +
         '.doc-sub{font-size:12px;color:#64748b;font-weight:600;margin-bottom:22px}' +
@@ -6127,10 +7059,17 @@
 
           '<div class="header">' +
             '<div class="brand">' +
-              '<div class="brand-icon">💼</div>' +
+              logoImg +
               '<div class="brand-text">' +
-                '<div class="brand-name">PayPlan Ledger</div>' +
+                '<div class="brand-name">' + escapeHtml(brandName) + '</div>' +
                 '<div class="brand-sub">Portfolio Statement</div>' +
+                (businessInfo.phone || businessInfo.email || businessInfo.address ?
+                  '<div class="brand-contact">' +
+                    [businessInfo.phone ? '📞 ' + escapeHtml(businessInfo.phone) : '',
+                     businessInfo.email ? '📧 ' + escapeHtml(businessInfo.email) : '',
+                     businessInfo.address ? '📍 ' + escapeHtml(businessInfo.address) : '']
+                     .filter(Boolean).join(' &nbsp;·&nbsp; ') +
+                  '</div>' : '') +
               '</div>' +
             '</div>' +
             '<div class="doc-meta">' +
@@ -6178,7 +7117,7 @@
           ) +
 
           '<div class="footer">' +
-            '<span><span class="brand-mark">PayPlan Ledger</span> · Offline-First Tracker</span>' +
+            '<span><span class="brand-mark">' + escapeHtml(businessInfo.name || 'PayPlan Ledger') + '</span> · Powered by PayPlan Ledger</span>' +
             '<span>' + stats.count + ' customer' + (stats.count === 1 ? '' : 's') + ' · Page 1</span>' +
           '</div>' +
 
@@ -6192,7 +7131,7 @@
       const { customer, guarantor } = getPartyData(ag);
       pdfReportTitle.value = localStorage.getItem('pmPdfTitle') || 'Payment Statement';
       agreementNameInput.value = localStorage.getItem('pmPrintAgreement') || currentName;
-      sellerNameInput.value = localStorage.getItem('pmPrintSeller') || 'Seller';
+      sellerNameInput.value = localStorage.getItem('pmPrintSeller') || (businessInfo.name || 'Seller');
       buyerNameInput.value = localStorage.getItem('pmPrintBuyer') || (customer.name || 'Buyer');
       nameModal.classList.add('active');
       const yes = async () => {
@@ -6294,7 +7233,8 @@
         agreements: agreements,
         currentAgreementId: currentAgreementId,
         currencySymbol: currentCurrencySymbol,
-        theme: document.body.classList.contains('dark') ? 'dark' : 'light'
+        theme: document.body.classList.contains('dark') ? 'dark' : 'light',
+        businessInfo: businessInfo
       };
       const jsonStr = JSON.stringify(backup, null, 2);
       const blob = new Blob([jsonStr], { type: 'application/json' });
@@ -6322,9 +7262,19 @@
               document.body.classList.add('dark');
             }
             localStorage.setItem('pmTheme', backup.theme || 'dark');
+            if (backup.businessInfo) {
+              businessInfo = backup.businessInfo;
+              if (!businessInfo.logo) businessInfo.logo = '';
+              localStorage.setItem('pmBusinessInfo', JSON.stringify(businessInfo));
+              if (businessNameInput) businessNameInput.value = businessInfo.name || '';
+              if (businessPhoneInput) businessPhoneInput.value = businessInfo.phone || '';
+              if (businessEmailInput) businessEmailInput.value = businessInfo.email || '';
+              if (businessAddressInput) businessAddressInput.value = businessInfo.address || '';
+              updateBusinessNameDisplay();
+              updateLogoDisplays();
+            }
             celebrationShown = {};
             amountPaidInput.value = '';
-            // Ensure all agreements have party structure
             for (const id in agreements) {
               if (!agreements[id].party) agreements[id].party = { customer: {}, guarantor: {} };
               if (!agreements[id].party.customer) agreements[id].party.customer = {};
@@ -6335,6 +7285,7 @@
             updateReminderDisplay(); refreshAllCurrencyDisplays();
             updateDashboardStats(); updateStickyHeader();
             updateRecoveryNudge();
+            updateTodayCollections();
             renderCustomers();
             renderPaymentPartyInfo();
             welcomeModal.classList.remove('active');
@@ -6361,6 +7312,18 @@
       const eyeBtn = document.getElementById('lockEyeBtn');
       const change = document.getElementById('passwordChangeBtn');
       const forgot = document.getElementById('forgotPasswordBtn');
+      // Update lock screen branding
+      const lockAppName = document.getElementById('lockAppName');
+      if (lockAppName) lockAppName.textContent = businessInfo.name || 'PayPlan Ledger';
+      const lockLogoIcon = document.getElementById('lockLogoIcon');
+      if (lockLogoIcon) {
+        if (businessInfo.logo) {
+          lockLogoIcon.innerHTML = '<img class="logo-img" src="' + businessInfo.logo + '" alt="Logo" style="width:100%;height:100%;object-fit:cover;border-radius:inherit;">';
+        } else {
+          lockLogoIcon.innerHTML = '<span class="lock-icon-svg" id="lockIconSvg">🔒</span>';
+        }
+      }
+
       if (isFirstTime) {
         subtitle.textContent = 'Create a password';
         badge.style.display = 'inline-block';
@@ -6402,8 +7365,10 @@
         updateRecoveryTimestampDisplay();
         updateRecoveryNudge();
         updateInstallStatusUI();
+        updateTodayCollections();
         renderCustomers();
         renderPaymentPartyInfo();
+        checkStartupNudge();
       }, 100);
     }
     function toggleLockEye() {
@@ -6423,12 +7388,12 @@
       if (!storedPassword) {
         if (v.length < 3) { errEl.textContent = 'Password must be at least 3 characters'; input.classList.add('error'); return; }
         setPassword(v);
-        icon.textContent = '🔓'; icon.classList.add('unlocking');
+        if (icon) { icon.textContent = '🔓'; icon.classList.add('unlocking'); }
         btn.textContent = 'Welcome!'; btn.classList.add('loading');
         setTimeout(() => { hideLoader(); hideLockScreen(); }, 400);
       } else {
         if (checkPassword(v)) {
-          icon.textContent = '🔓'; icon.classList.add('unlocking');
+          if (icon) { icon.textContent = '🔓'; icon.classList.add('unlocking'); }
           btn.textContent = 'Unlocking...'; btn.classList.add('loading');
           setTimeout(() => { hideLockScreen(); }, 300);
         } else {
@@ -6578,13 +7543,14 @@
       const btn = document.querySelector('.nav-icons button[data-section="' + sectionId + '"]');
       if (btn) btn.classList.add('active');
 
-      if (sectionId === 'dashboard') setTimeout(() => { updateChartForCurrent(); updateDashboardStats(); }, 60);
+      if (sectionId === 'dashboard') setTimeout(() => { updateChartForCurrent(); updateDashboardStats(); updateTodayCollections(); }, 60);
       if (sectionId === 'history' && currentAgreementId && agreements[currentAgreementId]) {
         renderHistoryTable(agreements[currentAgreementId].records);
       }
       if (sectionId === 'settings') {
         updateRecoveryTimestampDisplay();
         updateInstallStatusUI();
+        loadBusinessInfo();
       }
       if (sectionId === 'customers') {
         renderCustomers();
@@ -6631,6 +7597,12 @@
       saveCurrencyBtn.addEventListener('click', saveCurrency);
       exportBackupBtn.addEventListener('click', exportBackup);
 
+      if (tcAction) {
+        tcAction.addEventListener('click', () => {
+          switchSection('customers');
+        });
+      }
+
       document.getElementById('generateRecoveryBtn').addEventListener('click', showRecoveryCode);
       document.getElementById('copyRecoveryBtn').addEventListener('click', copyRecoveryCode);
       document.getElementById('openRecoveryModalBtn').addEventListener('click', () => {
@@ -6666,6 +7638,7 @@
         updatePreviewForCurrent(); updateChartForCurrent(); loadScheduleIntoForm();
         updateReminderDisplay(); refreshAllCurrencyDisplays();
         updateDashboardStats(); updateStickyHeader();
+        updateTodayCollections();
         renderCustomers();
         renderPaymentPartyInfo();
         welcomeModal.classList.remove('active');
@@ -6728,11 +7701,13 @@
       initCustomerEvents();
       bindHpCalculator();
       bindPartyDetails();
+      bindBusinessSettings();
     }
 
     function initMainApp() {
       dateInput.value = getTodayDate();
       loadAgreements();
+      loadBusinessInfo();
       renderAgreementsList();
       loadCurrentAgreementData();
       bindEvents();
@@ -6747,8 +7722,10 @@
       updateRecoveryTimestampDisplay();
       updateRecoveryNudge();
       updateInstallStatusUI();
+      updateTodayCollections();
       renderCustomers();
       renderPaymentPartyInfo();
+      hpUpdateModeUI();
 
       if (Object.keys(agreements).length === 0) welcomeModal.classList.add('active');
 
@@ -6822,6 +7799,15 @@
         });
       }
     })();
+
+    document.addEventListener('contextmenu', function(e) {
+      const tag = (e.target && e.target.tagName) || '';
+      if (tag === 'INPUT' || tag === 'TEXTAREA') return;
+      e.preventDefault();
+    });
+
+    // Load business info early so lock screen shows logo/name
+    loadBusinessInfo();
 
     if (storedPassword) { showLockScreen(false); } else { showLockScreen(true); }
     document.getElementById('passwordInput').addEventListener('keypress', function(e) {
